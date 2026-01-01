@@ -4,7 +4,8 @@ import { useEffect, useMemo, useRef, useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
-import { useLanguage, type Lang, useUser } from '../providers';
+import { useLanguage, useUser } from '../providers';
+import { translations } from '../../lib/translations';
 
 type Card = {
   korean: string;
@@ -1240,54 +1241,15 @@ function FlashcardsPageContent() {
   }, [cards, mastered]);
 
   const ui = useMemo(() => {
-    const byLang: Record<Lang, {
-      all: string;
-      shuffle: string;
-      prev: string;
-      next: string;
-      again: string;
-      mastered: string;
-      reset: string;
-    }> = {
-      uz: {
-        all: 'Hammasi',
-        shuffle: 'Aralashtirish',
-        prev: 'Oldingi',
-        next: 'Keyingi',
-        again: 'Yodlanmagan',
-        mastered: 'Yodladim',
-        reset: 'Reset'
-      },
-      ru: {
-        all: 'Все',
-        shuffle: 'Перемешать',
-        prev: 'Назад',
-        next: 'Далее',
-        again: 'Повторить',
-        mastered: 'Выучил',
-        reset: 'Сброс'
-      },
-      en: {
-        all: 'All',
-        shuffle: 'Shuffle',
-        prev: 'Prev',
-        next: 'Next',
-        again: 'Again',
-        mastered: 'Mastered',
-        reset: 'Reset'
-      },
-      ko: {
-        all: '전체',
-        shuffle: '섞기',
-        prev: '이전',
-        next: '다음',
-        again: '다시',
-        mastered: '암기',
-        reset: '초기화'
-      }
+    return {
+      all: translations[lang].all,
+      shuffle: translations[lang].shuffle,
+      prev: translations[lang].previous,
+      next: translations[lang].next,
+      again: translations[lang].again,
+      mastered: translations[lang].mastered,
+      reset: translations[lang].reset
     };
-
-    return byLang[lang];
   }, [lang]);
 
   const translationText = useMemo(() => {
@@ -1539,11 +1501,11 @@ function FlashcardsPageContent() {
           <div className="mb-6 rounded-lg border border-orange-500/30 bg-orange-500/10 p-4">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <div className="font-semibold text-orange-300">⚠️ Progress saqlanmaydi</div>
-                <div className="text-sm text-orange-200/70">Mehmon sifatida foydalanmoqda. <Link href="/login" className="underline hover:text-orange-200 font-semibold">Ro'yxatdan o'ting</Link> va progressni saqlang!</div>
+                <div className="font-semibold text-orange-300">⚠️ Progress not saved</div>
+                <div className="text-sm text-orange-200/70">Using guest mode. <Link href="/login" className="underline hover:text-orange-200 font-semibold">Sign up</Link> to save your progress!</div>
               </div>
               <Link href="/login" className="rounded-lg bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-500 transition">
-                Ro'yxatdan o'tish
+                {translations[lang].signup}
               </Link>
             </div>
           </div>
@@ -1689,7 +1651,7 @@ function FlashcardsPageContent() {
                       <div className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white leading-none tracking-tight drop-shadow-lg animate-pulse-once">
                         {currentCard.korean}
                       </div>
-                      <div className="mt-4 text-sm text-white/50 font-medium">Click to flip • Tab/Enter/Space</div>
+                      <div className="mt-4 text-sm text-white/50 font-medium">{translations[lang].clickToFlip}</div>
                     </div>
                   ) : (
                     <div className="text-center text-white/50">

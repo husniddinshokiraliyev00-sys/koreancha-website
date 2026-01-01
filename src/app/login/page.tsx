@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { useLanguage, type Lang } from '../providers';
+import { translations } from '../../lib/translations';
 
 type AuthTranslations = {
   headerSignup: string;
