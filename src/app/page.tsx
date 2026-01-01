@@ -27,6 +27,7 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
         <div className="text-white">Redirecting to dashboard...</div>
+        <div className="text-white/60 text-sm mt-2">Please wait...</div>
       </div>
     );
   }

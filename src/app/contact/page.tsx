@@ -106,10 +106,35 @@ const contactTranslations: Record<Lang, ContactTranslations> = {
     emailContact: 'Email',
     emailContactDesc: 'Contact via email.',
     backHome: 'Back to home'
+  },
+  ko: {
+    title: '연락하기',
+    subtitle: '질문이 있으신가요? 기꺼이 도와드리겠습니다!',
+    sendMessageTitle: '메시지 보내기',
+    sendMessageDesc: '아래 양식을 작성하시면 최대한 빨리 답변해드리겠습니다.',
+    name: '이름',
+    yourName: '당신의 이름',
+    email: '이메일',
+    yourEmail: 'your@email.com',
+    message: '메시지',
+    messagePlaceholder: '도움이 필요한 내용을 작성해주세요...',
+    send: '메시지 보내기',
+    preferChat: '직접 채팅하고 싶으신가요?',
+    messageOnTelegram: '텔레그램으로 메시지',
+    contactVia: '연락 방법',
+    telegramChannel: '텔레그램 채널',
+    telegramChannelDesc: '웹사이트 소식과 업데이트가 이 채널에 게시됩니다.',
+    instagram: '인스타그램',
+    instagramDesc: '개인 프로필 (콘텐츠 및 업데이트).',
+    supportTelegram: '불만 / 구독 텔레그램',
+    supportTelegramDesc: '결제 확인 및 구독 문의용.',
+    emailContact: '이메일',
+    emailContactDesc: '이메일로 연락.',
+    backHome: '홈으로'
   }
 };
 
-const getLangName = (code: Lang) => (code === 'uz' ? "O'Z" : code === 'ru' ? 'РУ' : 'EN');
+const getLangName = (code: Lang) => (code === 'uz' ? "O'Z" : code === 'ru' ? 'РУ' : code === 'ko' ? 'KO' : 'EN');
 
 export default function ContactPage() {
   const { lang, setLang } = useLanguage();
