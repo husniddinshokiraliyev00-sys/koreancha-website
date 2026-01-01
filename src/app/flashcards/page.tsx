@@ -1318,7 +1318,7 @@ function FlashcardsPageContent() {
         setMode('all');
         setShuffleEnabled(false);
         setDeckOrder(allIndices);
-        setDeckPosition(0);
+        // Don't reset position when loading from backend - keep it at 0 for fresh load
         setIsFlipped(false);
       } else {
         const raw = localStorage.getItem(FLASHCARDS_PROGRESS_KEY);
@@ -1721,9 +1721,11 @@ function FlashcardsPageContent() {
                       type="button"
                       onClick={() => {
                         const indices = mode === 'all' ? allIndices : againClean;
+                        const currentCardIndex = deckOrder[deckPosition];
                         const shuffled = [...indices].sort(() => Math.random() - 0.5);
+                        const newPosition = shuffled.indexOf(currentCardIndex);
                         setDeckOrder(shuffled);
-                        setDeckPosition(0);
+                        setDeckPosition(newPosition >= 0 ? newPosition : 0);
                         setIsFlipped(false);
                       }}
                       className="px-3 py-2 rounded-lg border border-white/10 bg-white/5 text-white text-sm font-semibold hover:bg-white/10 transition"
@@ -1738,19 +1740,12 @@ function FlashcardsPageContent() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <input
-                    type="range"
-                    min={0}
-                    max={Math.max(0, deckSize - 1)}
-                    value={Math.min(deckPosition, Math.max(0, deckSize - 1))}
-                    onChange={(e) => {
-                      const v = Number(e.target.value);
-                      if (!Number.isFinite(v)) return;
-                      setDeckPosition(v);
-                      setIsFlipped(false);
-                    }}
-                    className="w-full"
-                  />
+                  <div className="w-full bg-white/10 rounded-full h-2">
+                    <div 
+                      className="bg-blue-500 h-2 rounded-full transition-all duration-300" 
+                      style={{ width: `${deckSize > 0 ? ((deckPosition + 1) / deckSize) * 100 : 0}%` }}
+                    />
+                  </div>
                 </div>
 
                 <div className="flex flex-wrap items-center justify-center gap-3">
