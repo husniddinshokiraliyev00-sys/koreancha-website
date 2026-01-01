@@ -1168,7 +1168,16 @@ const unitTranslationQueues: Record<string, Record<string, UnitTranslation[]>> =
 function FlashcardsPageContent() {
   const searchParams = useSearchParams();
   const { lang } = useLanguage();
-  const { user, logActivity, isPremium } = useUser();
+  const { user, logActivity, isPremium, loading: userLoading, saveFlashcardProgress, loadFlashcardProgress, syncLocalProgress } = useUser();
+
+  // Show loading while user authentication is being checked
+  if (userLoading) {
+    return (
+      <main className="min-h-screen bg-[#0b0f1a] text-white flex items-center justify-center">
+        <div className="text-white">Loading flashcards...</div>
+      </main>
+    );
+  }
 
   const unitKeys = useMemo(() => Object.keys(units), []);
   const initialUnitFromQuery = searchParams.get('unit');
@@ -1209,6 +1218,8 @@ function FlashcardsPageContent() {
   const [isFlipped, setIsFlipped] = useState(false);
   const [mastered, setMastered] = useState<number[]>([]);
   const [again, setAgain] = useState<number[]>([]);
+  const [masteryAnimation, setMasteryAnimation] = useState<'success' | 'again' | null>(null);
+  const [cardKey, setCardKey] = useState(0);
 
   const keyboardScopeRef = useRef<HTMLDivElement>(null);
 
@@ -1220,7 +1231,9 @@ function FlashcardsPageContent() {
   const activeIndices = mode === 'again' ? againClean : allIndices;
   const currentIndex = deckOrder[deckPosition] ?? activeIndices[0] ?? 0;
 
-  const currentCard = cards[currentIndex];
+  // Safety check: ensure currentIndex is valid
+  const safeCurrentIndex = (currentIndex >= 0 && currentIndex < cards.length) ? currentIndex : 0;
+  const currentCard = cards[safeCurrentIndex];
 
   const unmasteredIndices = useMemo(() => {
     return cards.map((_, i) => i).filter((i) => !mastered.includes(i));
@@ -1305,75 +1318,83 @@ function FlashcardsPageContent() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    try {
-      const raw = localStorage.getItem(FLASHCARDS_PROGRESS_KEY);
-      if (!raw) {
-        setMastered([]);
-        setAgain([]);
+    
+    const loadProgress = async () => {
+      if (user) {
+        const backendProgress = await loadFlashcardProgress(selectedUnit);
+        
+        const raw = localStorage.getItem(FLASHCARDS_PROGRESS_KEY);
+        let localProgress: FlashcardsProgressV1 | null = null;
+        if (raw) {
+          try {
+            const parsed = JSON.parse(raw) as FlashcardsProgressV1;
+            if (parsed && parsed.version === 1 && parsed.units) {
+              localProgress = parsed;
+            }
+          } catch {
+            // Ignore parsing errors
+          }
+        }
+        
+        if (localProgress && localProgress.units[selectedUnit]) {
+          const unitProgress = localProgress.units[selectedUnit];
+          await syncLocalProgress(selectedUnit, unitProgress.masteredIndices, unitProgress.againIndices || []);
+        }
+        
+        setMastered(backendProgress.mastered);
+        setAgain(backendProgress.again);
         setMode('all');
         setShuffleEnabled(false);
         setDeckOrder(allIndices);
         setDeckPosition(0);
         setIsFlipped(false);
-        return;
-      }
-      const parsed = JSON.parse(raw) as FlashcardsProgressV1;
-      if (!parsed || parsed.version !== 1 || !parsed.units) {
-        setMastered([]);
-        setAgain([]);
-        setMode('all');
-        setShuffleEnabled(false);
-        setDeckOrder(allIndices);
-        setDeckPosition(0);
+      } else {
+        const raw = localStorage.getItem(FLASHCARDS_PROGRESS_KEY);
+        if (!raw) {
+          setMastered([]);
+          setAgain([]);
+          setMode('all');
+          setShuffleEnabled(false);
+          setDeckOrder(allIndices);
+          setDeckPosition(0);
+          setIsFlipped(false);
+          return;
+        }
+        const parsed = JSON.parse(raw) as FlashcardsProgressV1;
+        if (!parsed || parsed.version !== 1 || !parsed.units) {
+          setMastered([]);
+          setAgain([]);
+          setMode('all');
+          setShuffleEnabled(false);
+          setDeckOrder(allIndices);
+          setDeckPosition(0);
+          setIsFlipped(false);
+          return;
+        }
+        const unitData = parsed.units[selectedUnit] || {
+          masteredIndices: [],
+          lastIndex: 0,
+          totalCards: cards.length,
+          againIndices: [],
+          mode: 'all' as const,
+          shuffleEnabled: false,
+          deckOrder: [],
+          deckPosition: 0,
+          updatedAt: new Date().toISOString()
+        };
+        setMastered(unitData.masteredIndices);
+        setAgain(unitData.againIndices || []);
+        setMode(unitData.mode || 'all');
+        setShuffleEnabled(unitData.shuffleEnabled || false);
+        setDeckOrder(unitData.deckOrder || allIndices);
+        setDeckPosition(unitData.deckPosition || 0);
         setIsFlipped(false);
-        return;
       }
+    };
 
-      const unitProgress = parsed.units[selectedUnit];
-      if (!unitProgress) {
-        setMastered([]);
-        setAgain([]);
-        setMode('all');
-        setShuffleEnabled(false);
-        setDeckOrder(allIndices);
-        setDeckPosition(0);
-        setIsFlipped(false);
-        return;
-      }
-
-      const savedMastered = Array.isArray(unitProgress.masteredIndices) ? unitProgress.masteredIndices : [];
-      const savedIndex = typeof unitProgress.lastIndex === 'number' ? unitProgress.lastIndex : 0;
-      const savedAgain = Array.isArray(unitProgress.againIndices) ? unitProgress.againIndices : [];
-      const savedMode = unitProgress.mode === 'again' ? 'again' : 'all';
-      const savedShuffle = !!unitProgress.shuffleEnabled;
-      const savedDeckOrder = Array.isArray(unitProgress.deckOrder) ? unitProgress.deckOrder : [];
-      const savedDeckPosition = typeof unitProgress.deckPosition === 'number' ? unitProgress.deckPosition : 0;
-
-      setMastered(savedMastered.filter((n) => Number.isFinite(n)));
-      setAgain(savedAgain.filter((n) => Number.isFinite(n)));
-      setMode(savedMode);
-      setShuffleEnabled(savedShuffle);
-
-      const sanitizedOrder = savedDeckOrder
-        .filter((n) => Number.isFinite(n) && n >= 0 && n < cards.length)
-        .map((n) => Number(n));
-      const uniqueOrder = Array.from(new Set(sanitizedOrder));
-      const fullOrder = uniqueOrder.length ? uniqueOrder : allIndices;
-
-      const safeDeckPosition = Math.max(0, Math.min(savedDeckPosition, Math.max(0, fullOrder.length - 1)));
-      setDeckOrder(fullOrder);
-      setDeckPosition(safeDeckPosition);
-
-      if (!uniqueOrder.length && typeof savedIndex === 'number' && cards.length > 0) {
-        const found = fullOrder.indexOf(Math.max(0, Math.min(savedIndex, cards.length - 1)));
-        setDeckPosition(found >= 0 ? found : 0);
-      }
-      setIsFlipped(false);
-    } catch {
-      return;
-    }
+    loadProgress();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedUnit]);
+  }, [selectedUnit, user, cards.length]);
 
   useEffect(() => {
     if (deckOrder.length > 0) return;
@@ -1448,12 +1469,14 @@ function FlashcardsPageContent() {
   const nextCard = () => {
     if (deckSize === 0) return;
     setIsFlipped(false);
+    setCardKey(prev => prev + 1); // Trigger re-render for animation
     setDeckPosition((p) => (p + 1) % deckSize);
   };
 
   const prevCard = () => {
     if (deckSize === 0) return;
     setIsFlipped(false);
+    setCardKey(prev => prev + 1); // Trigger re-render for animation
     setDeckPosition((p) => (p - 1 + deckSize) % deckSize);
   };
 
@@ -1461,10 +1484,14 @@ function FlashcardsPageContent() {
     if (deckSize === 0) return;
     if (!mastered.includes(currentIndex)) {
       setAgain((a) => (a.includes(currentIndex) ? a : [...a, currentIndex]));
+      // Save to backend if authenticated
+      if (user) {
+        saveFlashcardProgress(selectedUnit, currentIndex, false, true);
+        logActivity('flashcard_review', { unit: selectedUnit, cardIndex: currentIndex, action: 'again' }, 1);
+      }
     }
-    if (user) {
-      logActivity('flashcard_review', { unit: selectedUnit, cardIndex: currentIndex, action: 'again' }, 1);
-    }
+    setMasteryAnimation('again');
+    setTimeout(() => setMasteryAnimation(null), 500);
     nextCard();
   };
 
@@ -1472,11 +1499,15 @@ function FlashcardsPageContent() {
     if (deckSize === 0) return;
     if (!mastered.includes(currentIndex)) {
       setMastered((m) => [...m, currentIndex]);
+      setAgain((a) => a.filter((i) => i !== currentIndex));
+      // Save to backend if authenticated
+      if (user) {
+        saveFlashcardProgress(selectedUnit, currentIndex, true, false);
+        logActivity('flashcard_review', { unit: selectedUnit, cardIndex: currentIndex, action: 'mastered' }, 2);
+      }
     }
-    setAgain((a) => a.filter((i) => i !== currentIndex));
-    if (user) {
-      logActivity('flashcard_review', { unit: selectedUnit, cardIndex: currentIndex, action: 'mastered' }, 2);
-    }
+    setMasteryAnimation('success');
+    setTimeout(() => setMasteryAnimation(null), 1000);
     nextCard();
   };
 
@@ -1493,6 +1524,21 @@ function FlashcardsPageContent() {
   return (
     <main className="min-h-screen bg-[#0b0f1a] text-white">
       <div className="mx-auto max-w-6xl px-4 sm:px-8 pt-6 pb-28">
+        {/* Demo mode banner for unauthenticated users */}
+        {!user && (
+          <div className="mb-6 rounded-lg border border-orange-500/30 bg-orange-500/10 p-4">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <div className="font-semibold text-orange-300">⚠️ Progress saqlanmaydi</div>
+                <div className="text-sm text-orange-200/70">Mehmon sifatida foydalanmoqda. <Link href="/login" className="underline hover:text-orange-200 font-semibold">Ro'yxatdan o'ting</Link> va progressni saqlang!</div>
+              </div>
+              <Link href="/login" className="rounded-lg bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-500 transition">
+                Ro'yxatdan o'tish
+              </Link>
+            </div>
+          </div>
+        )}
+
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight">Flashcards</h1>
@@ -1614,29 +1660,56 @@ function FlashcardsPageContent() {
                   setIsFlipped((v) => !v);
                 }
               }}
-              className="mx-auto w-full max-w-3xl h-80 sm:h-96 cursor-pointer outline-none focus:ring-2 focus:ring-indigo-500/60 focus:ring-offset-2 focus:ring-offset-transparent rounded-3xl"
+              className="mx-auto w-full max-w-4xl h-96 sm:h-[28rem] cursor-pointer outline-none focus:ring-2 focus:ring-indigo-500/60 focus:ring-offset-2 focus:ring-offset-transparent rounded-3xl transition-all duration-300 hover:scale-[1.02]"
               style={{ perspective: '1000px' }}
               onClick={() => setIsFlipped((v) => !v)}
             >
               <div
-                className="relative w-full h-full transition-transform duration-500"
+                className="relative w-full h-full transition-transform duration-700 ease-in-out"
                 style={{ transformStyle: 'preserve-3d', transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
+                key={cardKey}
               >
+                {/* Front of card */}
                 <div
-                  className="absolute inset-0 w-full h-full bg-white/5 border border-white/10 rounded-3xl shadow-2xl flex items-center justify-center p-8"
+                  className="absolute inset-0 w-full h-full bg-gradient-to-br from-slate-800/90 to-slate-900/90 border border-white/10 rounded-3xl shadow-2xl flex items-center justify-center p-8 backdrop-blur-sm"
                   style={{ backfaceVisibility: 'hidden' }}
                 >
-                  <div className="text-7xl sm:text-8xl lg:text-9xl font-bold text-white text-center leading-tight">{currentCard.korean}</div>
+                  {currentCard ? (
+                    <div className="text-center">
+                      <div className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-white leading-none tracking-tight drop-shadow-lg animate-pulse-once">
+                        {currentCard.korean}
+                      </div>
+                      <div className="mt-4 text-sm text-white/50 font-medium">Click to flip • Tab/Enter/Space</div>
+                    </div>
+                  ) : (
+                    <div className="text-center text-white/50">
+                      <div className="text-2xl mb-2">No card available</div>
+                      <div className="text-sm">Please select a unit</div>
+                    </div>
+                  )}
                 </div>
 
+                {/* Back of card */}
                 <div
-                  className="absolute inset-0 w-full h-full bg-gradient-to-br from-indigo-600/90 to-fuchsia-600/90 rounded-3xl shadow-2xl flex items-center justify-center p-8"
+                  className="absolute inset-0 w-full h-full bg-gradient-to-br from-indigo-600/95 via-purple-600/95 to-fuchsia-600/95 rounded-3xl shadow-2xl flex items-center justify-center p-8 backdrop-blur-sm"
                   style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
                 >
-                  <div className="text-center text-white max-w-full">
-                    <div className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">{currentCard.korean}</div>
-                    <div className="text-2xl sm:text-3xl lg:text-4xl leading-relaxed">{translationText}</div>
-                  </div>
+                  {currentCard ? (
+                    <div className="text-center text-white max-w-full">
+                      <div className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-8 leading-none tracking-tight drop-shadow-lg">
+                        {currentCard.korean}
+                      </div>
+                      <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-relaxed drop-shadow-md">
+                        {translationText}
+                      </div>
+                      <div className="mt-6 text-sm text-white/70 font-medium">Click to flip back</div>
+                    </div>
+                  ) : (
+                    <div className="text-center text-white/50">
+                      <div className="text-2xl mb-2">No card available</div>
+                      <div className="text-sm">Please select a unit</div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -1730,14 +1803,18 @@ function FlashcardsPageContent() {
                   <button
                     type="button"
                     onClick={markAgain}
-                    className="px-5 py-2.5 rounded-xl font-bold bg-orange-600 hover:bg-orange-500 text-white"
+                    className={`px-5 py-2.5 rounded-xl font-bold bg-orange-600 hover:bg-orange-500 text-white transition-all duration-300 ${
+                      masteryAnimation === 'again' ? 'animate-again scale-95' : 'hover:scale-105'
+                    }`}
                   >
                     {ui.again}
                   </button>
                   <button
                     type="button"
                     onClick={markMastered}
-                    className="px-5 py-2.5 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-500 text-white"
+                    className={`px-5 py-2.5 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-500 text-white transition-all duration-300 ${
+                      masteryAnimation === 'success' ? 'animate-success scale-105' : 'hover:scale-105'
+                    }`}
                   >
                     {ui.mastered}
                   </button>

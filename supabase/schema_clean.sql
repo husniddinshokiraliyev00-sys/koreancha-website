@@ -69,6 +69,23 @@ create table public.daily_usage (
   unique (user_id, date)
 );
 
+-- Flashcard progress for SRS
+create table public.flashcard_progress (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references public.profiles not null,
+  unit text not null,
+  card_index integer not null,
+  mastered boolean default false,
+  again boolean default false,
+  last_reviewed timestamp with time zone default timezone('utc'::text, now()) not null,
+  ease_factor float default 2.5,
+  interval integer default 1,
+  repetitions integer default 0,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  unique (user_id, unit, card_index)
+);
+
 -- RLS policies
 alter table public.profiles enable row level security;
 alter table public.activity_log enable row level security;
@@ -76,6 +93,7 @@ alter table public.user_stats enable row level security;
 alter table public.badges enable row level security;
 alter table public.user_badges enable row level security;
 alter table public.daily_usage enable row level security;
+alter table public.flashcard_progress enable row level security;
 
 create policy "Users can view own profile" on public.profiles for select using (auth.uid() = id);
 create policy "Users can update own profile" on public.profiles for update using (auth.uid() = id);
@@ -95,6 +113,10 @@ create policy "Users can insert own badges" on public.user_badges for insert wit
 create policy "Users can view own daily usage" on public.daily_usage for select using (auth.uid() = user_id);
 create policy "Users can update own daily usage" on public.daily_usage for update using (auth.uid() = user_id);
 create policy "Users can insert own daily usage" on public.daily_usage for insert with check (auth.uid() = user_id);
+
+create policy "Users can view own flashcard progress" on public.flashcard_progress for select using (auth.uid() = user_id);
+create policy "Users can update own flashcard progress" on public.flashcard_progress for update using (auth.uid() = user_id);
+create policy "Users can insert own flashcard progress" on public.flashcard_progress for insert with check (auth.uid() = user_id);
 
 -- Functions for XP and streaks
 create or replace function calculate_level(xp_input integer)
@@ -196,61 +218,9 @@ create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.handle_new_user();
 
-create or replace function handle_new_user()
-returns trigger as $$
-begin
-  insert into public.profiles (id, email, full_name)
-  values (new.id, new.email, new.raw_user_meta_data->>'full_name');
-  insert into public.user_stats (user_id, total_xp)
-  values (new.id, 0);
-  return new;
-end;
-$$ language plpgsql security definer set search_path = public;
-
-create or replace function update_user_stats()
-returns trigger as $$
-begin
-  insert into public.user_stats (user_id, flashcards_reviewed, quizzes_completed, total_xp)
-  values (
-    new.user_id,
-    case when new.activity_type = 'flashcard_review' then 1 else 0 end,
-    case when new.activity_type = 'quiz_complete' then 1 else 0 end,
-    new.xp_earned
-  )
-  on conflict (user_id) do update set
-    flashcards_reviewed = user_stats.flashcards_reviewed + excluded.flashcards_reviewed,
-    quizzes_completed = user_stats.quizzes_completed + excluded.quizzes_completed,
-    total_xp = user_stats.total_xp + excluded.total_xp,
-    updated_at = now();
-  return new;
-end;
-$$ language plpgsql;
-
 create trigger update_stats_on_activity
   after insert on public.activity_log
   for each row execute procedure update_user_stats();
-
--- Function to increment daily usage
-create or replace function increment_daily_usage(p_user_id uuid, p_date date, p_field text)
-returns void as $$
-begin
-  insert into public.daily_usage (user_id, date, flashcards_reviewed, quizzes_taken)
-  values (p_user_id, p_date, 
-    case when p_field = 'flashcards_reviewed' then 1 else 0 end,
-    case when p_field = 'quizzes_taken' then 1 else 0 end
-  )
-  on conflict (user_id, date) do update set
-    flashcards_reviewed = case when p_field = 'flashcards_reviewed' 
-      then daily_usage.flashcards_reviewed + 1 
-      else daily_usage.flashcards_reviewed 
-    end,
-    quizzes_taken = case when p_field = 'quizzes_taken' 
-      then daily_usage.quizzes_taken + 1 
-      else daily_usage.quizzes_taken 
-    end,
-    updated_at = now();
-end;
-$$ language plpgsql;
 
 -- Initial badges
 insert into public.badges (slug, name, description, icon, xp_reward, condition_type, condition_value) values

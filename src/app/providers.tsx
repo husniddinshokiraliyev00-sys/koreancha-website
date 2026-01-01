@@ -25,6 +25,9 @@ type UserContextValue = {
   logActivity: (type: Database['public']['Tables']['activity_log']['Row']['activity_type'], metadata?: Record<string, any>, xp?: number) => Promise<void>;
   isPremium: boolean;
   canAccessFeature: (feature: 'flashcards' | 'quiz') => boolean;
+  saveFlashcardProgress: (unit: string, cardIndex: number, mastered: boolean, again: boolean) => Promise<void>;
+  loadFlashcardProgress: (unit: string) => Promise<{ mastered: number[]; again: number[] }>;
+  syncLocalProgress: (unit: string, localMastered: number[], localAgain: number[]) => Promise<void>;
 };
 
 const UserContext = createContext<UserContextValue | null>(null);
@@ -146,6 +149,68 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     return true;
   };
 
+  const saveFlashcardProgress = async (unit: string, cardIndex: number, mastered: boolean, again: boolean) => {
+    if (!user) return;
+
+    const { error } = await supabase.from('flashcard_progress').upsert({
+      user_id: user.id,
+      unit,
+      card_index: cardIndex,
+      mastered,
+      again,
+      last_reviewed: new Date().toISOString(),
+    });
+
+    if (error) {
+      console.error('Error saving flashcard progress:', error);
+    }
+  };
+
+  const loadFlashcardProgress = async (unit: string) => {
+    if (!user) return { mastered: [], again: [] };
+
+    const { data, error } = await supabase
+      .from('flashcard_progress')
+      .select('card_index, mastered, again')
+      .eq('user_id', user.id)
+      .eq('unit', unit);
+
+    if (error) {
+      console.error('Error loading flashcard progress:', error);
+      return { mastered: [], again: [] };
+    }
+
+    const mastered = data?.filter(item => item.mastered).map(item => item.card_index) || [];
+    const again = data?.filter(item => item.again).map(item => item.card_index) || [];
+
+    return { mastered, again };
+  };
+
+  const syncLocalProgress = async (unit: string, localMastered: number[], localAgain: number[]) => {
+    if (!user) return;
+
+    // Save all local progress to backend
+    const progressData = [
+      ...localMastered.map(index => ({ unit, card_index: index, mastered: true, again: false })),
+      ...localAgain.map(index => ({ unit, card_index: index, mastered: false, again: true }))
+    ];
+
+    const { error } = await supabase.from('flashcard_progress').upsert(
+      progressData.map(item => ({
+        user_id: user.id,
+        unit: item.unit,
+        card_index: item.card_index,
+        mastered: item.mastered,
+        again: item.again,
+        last_reviewed: new Date().toISOString(),
+      }))
+    );
+
+    if (error) {
+      console.error('Error syncing local progress:', error);
+    }
+  };
+
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
@@ -173,6 +238,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     logActivity,
     isPremium,
     canAccessFeature,
+    saveFlashcardProgress,
+    loadFlashcardProgress,
+    syncLocalProgress,
   }), [user, profile, stats, loading, isPremium]);
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useLanguage } from './providers';
+
+import { useLanguage, type Lang, useUser } from './providers';
 
 const translations = {
   uz: {
@@ -106,6 +108,7 @@ const translations = {
 export default function Home() {
   const router = useRouter();
   const { lang, setLang } = useLanguage();
+  const { user } = useUser();
   const [showLangDropdown, setShowLangDropdown] = useState(false);
   const [openNavDropdown, setOpenNavDropdown] = useState<null | 'exercises' | 'mock'>(null);
   const closeNavDropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -445,6 +448,30 @@ export default function Home() {
             >
               Donate
             </button>
+            
+            {user ? (
+              <Link
+                href="/dashboard"
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition"
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg font-medium transition border border-white/20"
+                >
+                  Kirish
+                </Link>
+                <Link
+                  href="/login"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition"
+                >
+                  Ro'yxatdan o'tish
+                </Link>
+              </>
+            )}
           </nav>
           
           <div className="flex items-center gap-3 sm:gap-4">

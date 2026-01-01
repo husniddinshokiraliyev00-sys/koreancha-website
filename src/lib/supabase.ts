@@ -1,7 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error('Missing Supabase environment variables. Please check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.');
+}
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -83,6 +87,24 @@ export type Database = {
         };
         Insert: Omit<Database['public']['Tables']['daily_usage']['Row'], 'user_id' | 'date' | 'updated_at'>;
         Update: Partial<Database['public']['Tables']['daily_usage']['Insert']>;
+      };
+      flashcard_progress: {
+        Row: {
+          id: string;
+          user_id: string;
+          unit: string;
+          card_index: number;
+          mastered: boolean;
+          again: boolean;
+          last_reviewed: string;
+          ease_factor: number;
+          interval: number;
+          repetitions: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['flashcard_progress']['Row'], 'id' | 'user_id' | 'created_at' | 'updated_at'>;
+        Update: Partial<Database['public']['Tables']['flashcard_progress']['Insert']>;
       };
     };
   };
