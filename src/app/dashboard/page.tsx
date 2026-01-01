@@ -1,471 +1,240 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { useLanguage, type Lang, useUser } from '../providers';
-
-type DashboardTranslations = {
-  welcome: string;
-  title: string;
-  overallStats: string;
-  totalCardsStudied: string;
-  masteryRate: string;
-  currentStreak: string;
-  topikLevel: string;
-  masteryByUnit: string;
-  recentActivity: string;
-  noActivity: string;
-  daysAgo: string;
-  today: string;
-  yesterday: string;
-  premium: string;
-  free: string;
-  logout: string;
-  upgrade: string;
-  activities: string;
-  unlimited: string;
-  limitedPerDay: string;
-  limitedAccess: string;
-  flashcardProgress: string;
-  flashcardDesc: string;
-  continue: string;
-  noFlashcardProgress: string;
-  guestMode: string;
-  loginRequired: string;
-  signIn: string;
-};
-
-const dashboardTranslations: Record<Lang, DashboardTranslations> = {
-  uz: {
-    welcome: 'Xush kelibsiz',
-    title: 'Progress Dashboard',
-    overallStats: 'Umumiy statistika',
-    totalCardsStudied: 'Jami o\'rganilgan kartalar',
-    masteryRate: 'Ustalik darajasi',
-    currentStreak: 'Joriy seriya',
-    topikLevel: 'TOPIK darajasi',
-    masteryByUnit: 'Bo\'limlar bo\'yicha ustalik',
-    recentActivity: 'So\'nggi faoliyat',
-    noActivity: 'Faoliyat yo\'q',
-    daysAgo: 'kun oldin',
-    today: 'Bugun',
-    yesterday: 'Kecha',
-    premium: 'Premium',
-    free: 'Bepul',
-    logout: 'Chiqish',
-    upgrade: 'Yangilash',
-    activities: 'Faoliyatlar',
-    unlimited: 'Cheksiz',
-    limitedPerDay: 'Kuniga cheklangan',
-    limitedAccess: 'Cheklangan kirish',
-    flashcardProgress: 'Flashcard progress',
-    flashcardDesc: 'Continue learning where you left off',
-    continue: 'Davom eting',
-    noFlashcardProgress: 'No flashcard progress yet',
-    guestMode: 'Mehmon rejimi',
-    loginRequired: 'To\'liq statistika uchun tizimga kiring',
-    signIn: 'Kirish'
-  },
-  ru: {
-    welcome: 'Добро пожаловать',
-    title: 'Панель прогресса',
-    overallStats: 'Общая статистика',
-    totalCardsStudied: 'Всего изучено карточек',
-    masteryRate: 'Уровень владения',
-    currentStreak: 'Текущая серия',
-    topikLevel: 'Уровень TOPIK',
-    masteryByUnit: 'Владение по юнитам',
-    recentActivity: 'Последняя активность',
-    noActivity: 'Нет активности',
-    daysAgo: 'дней назад',
-    today: 'Сегодня',
-    yesterday: 'Вчера',
-    premium: 'Премиум',
-    free: 'Бесплатный',
-    logout: 'Выйти',
-    upgrade: 'Обновить',
-    activities: 'Активности',
-    unlimited: 'Безлимитный',
-    limitedPerDay: 'Ограничено в день',
-    limitedAccess: 'Ограниченный доступ',
-    flashcardProgress: 'Прогресс карточек',
-    flashcardDesc: 'Продолжайте обучение с того места, где остановились',
-    continue: 'Продолжить',
-    noFlashcardProgress: 'Прогресса по карточкам пока нет',
-    guestMode: 'Гостевой режим',
-    loginRequired: 'Войдите для полной статистики',
-    signIn: 'Войти'
-  },
-  en: {
-    welcome: 'Welcome',
-    title: 'Progress Dashboard',
-    overallStats: 'Overall Statistics',
-    totalCardsStudied: 'Total Cards Studied',
-    masteryRate: 'Mastery Rate',
-    currentStreak: 'Current Streak',
-    topikLevel: 'TOPIK Level',
-    masteryByUnit: 'Mastery by Unit',
-    recentActivity: 'Recent Activity',
-    noActivity: 'No activity',
-    daysAgo: 'days ago',
-    today: 'Today',
-    yesterday: 'Yesterday',
-    premium: 'Premium',
-    free: 'Free',
-    logout: 'Logout',
-    upgrade: 'Upgrade',
-    activities: 'Activities',
-    unlimited: 'Unlimited',
-    limitedPerDay: 'Limited per day',
-    limitedAccess: 'Limited access',
-    flashcardProgress: 'Flashcard progress',
-    flashcardDesc: 'Continue learning where you left off',
-    continue: 'Continue',
-    noFlashcardProgress: 'No flashcard progress yet',
-    guestMode: 'Guest Mode',
-    loginRequired: 'Sign in for full statistics',
-    signIn: 'Sign In'
-  }
-};
-
-type FlashcardsProgressV1 = {
-  version: 1;
-  units: Record<
-    string,
-    {
-      masteredIndices: number[];
-      lastIndex: number;
-      totalCards: number;
-      updatedAt: string;
-    }
-  >;
-};
-
-const FLASHCARDS_PROGRESS_KEY = 'koreancha_flashcards_progress_v1';
+import { useLanguage, useUser } from '../providers';
+import { translations } from '../../lib/translations';
+import LanguageSwitcher from '../../components/LanguageSwitcher';
 
 export default function DashboardPage() {
-  const { lang } = useLanguage();
-  const { user, profile, stats, loading, isPremium, getDisplayName } = useUser();
   const router = useRouter();
+  const { lang } = useLanguage();
+  const { user, profile, stats, loading, isPremium, getDisplayName, logout } = useUser();
 
-  const t = dashboardTranslations[lang];
+  const t = translations[lang];
 
-  const [flashcardsProgress, setFlashcardsProgress] = useState<FlashcardsProgressV1 | null>(null);
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
+  };
 
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(FLASHCARDS_PROGRESS_KEY);
-      if (!raw) {
-        setFlashcardsProgress(null);
-        return;
-      }
-      const parsed = JSON.parse(raw) as FlashcardsProgressV1;
-      if (!parsed || parsed.version !== 1 || !parsed.units) {
-        setFlashcardsProgress(null);
-        return;
-      }
-      setFlashcardsProgress(parsed);
-    } catch {
-      setFlashcardsProgress(null);
+  const quickStats = [
+    {
+      icon: '📚',
+      label: 'Flashcards Studied',
+      value: stats?.flashcards_reviewed || 0,
+      color: 'from-blue-500 to-blue-600'
+    },
+    {
+      icon: '🎯',
+      label: 'Quizzes Completed',
+      value: stats?.quizzes_completed || 0,
+      color: 'from-purple-500 to-purple-600'
+    },
+    {
+      icon: '⭐',
+      label: 'Total XP',
+      value: profile?.xp || 0,
+      color: 'from-yellow-500 to-yellow-600'
+    },
+    {
+      icon: '🔥',
+      label: 'Current Streak',
+      value: profile?.streak_current || 0,
+      color: 'from-orange-500 to-orange-600'
     }
-  }, []);
+  ];
 
-  const flashcardsUnits = useMemo(() => {
-    if (!flashcardsProgress?.units) return [];
+  const recentActivity = [
+    { type: 'Flashcard Review', unit: '1과', time: '2 hours ago', xp: 10 },
+    { type: 'Quiz Complete', unit: '2과', time: '5 hours ago', xp: 25 },
+    { type: 'Flashcard Review', unit: '1과', time: '1 day ago', xp: 8 },
+  ];
 
-    return Object.entries(flashcardsProgress.units)
-      .map(([unit, u]) => {
-        const total = typeof u.totalCards === 'number' ? u.totalCards : 0;
-        const masteredCount = Array.isArray(u.masteredIndices) ? u.masteredIndices.length : 0;
-        const updatedAt = typeof u.updatedAt === 'string' ? u.updatedAt : '';
-        return { unit, total, masteredCount, updatedAt };
-      })
-      .filter((u) => u.total > 0)
-      .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
-  }, [flashcardsProgress]);
-
-  const mostRecentFlashcardsUnit = flashcardsUnits[0] || null;
-
-  // Guest mode handling
-  if (!user) {
-    return (
-      <main className="min-h-screen bg-gray-50">
-        <div className="max-w-4xl mx-auto px-6 py-12">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">{t.guestMode}</h1>
-            <p className="text-gray-600 mb-8">{t.loginRequired}</p>
-            <Link
-              href="/login"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition"
-            >
-              {t.signIn}
-            </Link>
-          </div>
-        </div>
-      </main>
-    );
-  }
+  const upcomingUnits = [
+    { unit: '3과', title: 'Family & People', progress: 65 },
+    { unit: '4과', title: 'Food & Drinks', progress: 30 },
+    { unit: '5과', title: 'Daily Life', progress: 0 },
+  ];
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-gray-700 font-semibold">Loading...</div>
-      </main>
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
+        <div className="text-white">Loading dashboard...</div>
+      </div>
     );
   }
 
-  const displayName = getDisplayName();
-  const plan = isPremium ? 'premium' : 'free';
-
   return (
-    <main className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-gray-900 text-white">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between gap-4">
-          <div>
-            <div className="text-sm text-white/80">{t.welcome}</div>
-            <div className="text-xl font-bold">{displayName}</div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div
-              className={`px-3 py-1 rounded-full text-sm font-semibold border ${
-                plan === 'premium'
-                  ? 'bg-yellow-400/10 border-yellow-400/40 text-yellow-200'
-                  : 'bg-white/10 border-white/20 text-white'
-              }`}
-            >
-              {plan === 'premium' ? t.premium : t.free}
-            </div>
-
-            <Link
-              href="/login"
-              onClick={() => {
-                // Handle logout logic here
-                router.replace('/login');
-              }}
-              className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg font-semibold transition"
-            >
-              {t.logout}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+      {/* Navigation */}
+      <nav className="bg-white/5 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
+            <Link href="/" className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">KO</span>
+              </div>
+              <span className="text-white font-semibold text-lg">Koreancha.uz</span>
             </Link>
-          </div>
-        </div>
-      </header>
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        {/* Stats Widgets */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          {/* Streak Widget */}
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex-1">
-                <div className="text-xs font-semibold text-gray-800">🔥 {t.currentStreak}</div>
-                <div className="text-xs text-gray-600 mt-1">Daily learning</div>
-              </div>
-              <div className="text-xl font-bold text-orange-600">{profile?.streak_current || 0}</div>
-            </div>
-            <div className="mt-2 text-xs text-gray-500">
-              Longest: {profile?.streak_longest || 0} days
-            </div>
-          </div>
-
-          {/* XP Widget */}
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex-1">
-                <div className="text-xs font-semibold text-gray-800">⭐ XP</div>
-                <div className="text-xs text-gray-600 mt-1">Experience</div>
-              </div>
-              <div className="text-xl font-bold text-purple-600">{profile?.xp || 0}</div>
-            </div>
-            <div className="mt-2 text-xs text-gray-500">
-              Level {profile?.level || 1}
-            </div>
-          </div>
-
-          {/* Stats Widget */}
-          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex-1">
-                <div className="text-xs font-semibold text-gray-800">📊 {t.totalCardsStudied}</div>
-                <div className="text-xs text-gray-600 mt-1">Progress</div>
-              </div>
-              <div className="text-xl font-bold text-blue-600">{stats?.flashcards_reviewed || 0}</div>
-            </div>
-            <div className="mt-2 text-xs text-gray-500">
-              Flashcards reviewed
-            </div>
-          </div>
-        </div>
-
-        {/* Flashcards Progress */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
-            <div>
-              <div className="text-sm font-semibold text-gray-800">{t.flashcardProgress}</div>
-              <div className="mt-1 text-sm text-gray-600">{t.flashcardDesc}</div>
-            </div>
-
-            {mostRecentFlashcardsUnit && (
-              <Link
-                href={`/flashcards?unit=${encodeURIComponent(mostRecentFlashcardsUnit.unit)}`}
-                className="bg-blue-700 hover:bg-blue-800 text-white px-5 py-3 rounded-xl font-bold transition"
-              >
-                {t.continue}
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-8">
+              <Link href="/" className="text-white/80 hover:text-white transition">
+                {t.home}
               </Link>
-            )}
-          </div>
-
-          {flashcardsUnits.length === 0 ? (
-            <div className="text-sm text-gray-700">{t.noFlashcardProgress}</div>
-          ) : (
-            <div className="space-y-3">
-              {flashcardsUnits.slice(0, 3).map(({ unit, total, masteredCount, updatedAt }) => {
-                const percentage = total > 0 ? Math.round((masteredCount / total) * 100) : 0;
-                return (
-                  <div key={unit} className="flex items-center justify-between gap-4 p-3 bg-gray-50 rounded-lg">
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="font-medium text-gray-900">{unit}</span>
-                        <span className="text-xs text-gray-500">{masteredCount}/{total}</span>
-                      </div>
-                      <div className="mt-1 w-full bg-gray-200 rounded-full h-2">
-                        <div
-                          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                          style={{ width: `${percentage}%` }}
-                        />
-                      </div>
-                    </div>
-                    <div className="text-xs text-gray-500">{percentage}%</div>
-                  </div>
-                );
-              })}
+              <Link href="/exercises" className="text-white hover:text-white transition">
+                {t.exercises}
+              </Link>
+              <Link href="/progress" className="text-white/80 hover:text-white transition">
+                {t.progress}
+              </Link>
             </div>
-          )}
+
+            {/* Right side */}
+            <div className="flex items-center space-x-4">
+              <LanguageSwitcher />
+              
+              <Link href="/dashboard" className="hidden md:block text-white hover:text-white transition font-medium">
+                {t.dashboard}
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+              >
+                {t.logout}
+              </button>
+
+              {/* Mobile menu button */}
+              <button className="md:hidden p-2 rounded-lg hover:bg-white/10 transition">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Welcome Section */}
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+            Welcome back, {getDisplayName()}!
+          </h1>
+          <p className="text-white/70 text-lg">
+            {isPremium ? 'Premium Member' : 'Free Member'} • Level {profile?.level || 1}
+          </p>
         </div>
 
-        {/* Enhanced Statistics */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Mastery Chart */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">{t.masteryByUnit}</h3>
-            {flashcardsUnits.length > 0 ? (
-              <div className="h-64">
-                <div className="relative h-full flex items-end justify-between gap-2 px-2">
-                  {flashcardsUnits.slice(0, 6).map(({ unit, masteredCount, total }, index) => {
-                    const masteredHeight = total > 0 ? (masteredCount / total) * 100 : 0;
-                    const remainingHeight = 100 - masteredHeight;
-                    
-                    return (
-                      <div key={unit} className="flex-1 flex flex-col items-center justify-end">
-                        <div className="text-xs text-gray-600 mb-1 text-center">
-                          {masteredCount}/{total}
-                        </div>
-                        <div className="w-full flex flex-col-reverse" style={{ height: '200px' }}>
-                          <div 
-                            className="w-full bg-blue-500 rounded-t"
-                            style={{ height: `${masteredHeight * 2}px` }}
-                            title={`Mastered: ${masteredCount}`}
-                          />
-                          <div 
-                            className="w-full bg-gray-200 rounded-b"
-                            style={{ height: `${remainingHeight * 2}px` }}
-                            title={`Remaining: ${total - masteredCount}`}
-                          />
-                        </div>
-                        <div className="text-xs text-gray-700 mt-1 text-center font-medium">
-                          {unit}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="flex justify-center gap-6 mt-4 text-xs">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-blue-500 rounded"></div>
-                    <span className="text-gray-600">Mastered</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 bg-gray-200 rounded"></div>
-                    <span className="text-gray-600">Remaining</span>
-                  </div>
-                </div>
+        {/* Quick Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {quickStats.map((stat, index) => (
+            <div key={index} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+              <div className={`w-12 h-12 bg-gradient-to-r ${stat.color} rounded-lg flex items-center justify-center mb-4`}>
+                <span className="text-2xl">{stat.icon}</span>
               </div>
-            ) : (
-              <div className="h-64 flex items-center justify-center text-gray-500">
-                {t.noActivity}
-              </div>
-            )}
-          </div>
+              <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+              <div className="text-white/60 text-sm">{stat.label}</div>
+            </div>
+          ))}
+        </div>
 
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Recent Activity */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">{t.recentActivity}</h3>
-            <div className="space-y-3">
-              {flashcardsUnits.slice(0, 5).map(({ unit, masteredCount, updatedAt }) => {
-                const date = new Date(updatedAt);
-                const now = new Date();
-                const daysDiff = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-                
-                let timeAgo = t.today;
-                if (daysDiff === 1) timeAgo = t.yesterday;
-                else if (daysDiff > 1) timeAgo = `${daysDiff} ${t.daysAgo}`;
-                
-                return (
-                  <div key={unit} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                    <div>
-                      <div className="font-medium text-gray-900">{unit}</div>
-                      <div className="text-sm text-gray-600">{masteredCount} cards mastered</div>
+          <div className="lg:col-span-2">
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+              <h2 className="text-xl font-semibold text-white mb-6">Recent Activity</h2>
+              <div className="space-y-4">
+                {recentActivity.map((activity, index) => (
+                  <div key={index} className="flex items-center justify-between p-4 bg-white/5 rounded-lg">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                        <span className="text-blue-400">📝</span>
+                      </div>
+                      <div>
+                        <div className="text-white font-medium">{activity.type}</div>
+                        <div className="text-white/60 text-sm">{activity.unit} • {activity.time}</div>
+                      </div>
                     </div>
-                    <div className="text-xs text-gray-500">{timeAgo}</div>
+                    <div className="text-right">
+                      <div className="text-green-400 font-medium">+{activity.xp} XP</div>
+                    </div>
                   </div>
-                );
-              })}
-              {flashcardsUnits.length === 0 && (
-                <div className="text-center text-gray-500 py-8">
-                  {t.noActivity}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* TOPIK Level */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl border border-gray-100 shadow-sm p-6 text-white mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-semibold mb-2">{t.topikLevel}</h3>
-              <div className="text-3xl font-bold">
-                {profile?.level && profile.level >= 10 ? 'TOPIK II' : 'TOPIK I'}
+                ))}
               </div>
-              <div className="text-sm opacity-80 mt-1">
-                Based on your XP and progress
+              
+              <div className="mt-6 text-center">
+                <Link href="/progress" className="inline-flex items-center text-blue-400 hover:text-blue-300 transition">
+                  <span className="text-sm font-medium">View All Activity</span>
+                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
               </div>
             </div>
-            <div className="text-6xl opacity-20">
-              🎯
-            </div>
           </div>
-        </div>
 
-        {/* Navigation */}
-        <div className="flex justify-between items-center">
-          <Link
-            href="/exercises"
-            className="text-blue-600 hover:text-blue-700 font-medium transition"
-          >
-            ← {t.activities}
-          </Link>
-          <Link
-            href="/"
-            className="text-blue-600 hover:text-blue-700 font-medium transition"
-          >
-            {t.home}
-          </Link>
+          {/* Side Panel */}
+          <div className="space-y-6">
+            {/* Continue Learning */}
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">Continue Learning</h3>
+              <div className="space-y-3">
+                <Link href="/flashcards" className="block w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-medium transition">
+                  📚 Flashcards
+                </Link>
+                <Link href="/listening" className="block w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg font-medium transition">
+                  🎧 Listening
+                </Link>
+                <Link href="/reading" className="block w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg font-medium transition">
+                  📖 Reading
+                </Link>
+              </div>
+            </div>
+
+            {/* Upcoming Units */}
+            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+              <h3 className="text-lg font-semibold text-white mb-4">Upcoming Units</h3>
+              <div className="space-y-3">
+                {upcomingUnits.map((unit, index) => (
+                  <div key={index} className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-white font-medium">{unit.unit}</span>
+                      <span className="text-white/60 text-sm">{unit.progress}%</span>
+                    </div>
+                    <div className="w-full bg-white/10 rounded-full h-2">
+                      <div 
+                        className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full" 
+                        style={{ width: `${unit.progress}%` }}
+                      />
+                    </div>
+                    <div className="text-white/60 text-sm">{unit.title}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Premium Banner (if not premium) */}
+            {!isPremium && (
+              <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl p-6">
+                <h3 className="text-lg font-semibold text-white mb-2">Upgrade to Premium</h3>
+                <p className="text-white/80 text-sm mb-4">
+                  Get unlimited access to all features and remove daily limits.
+                </p>
+                <Link href="/donate" className="block w-full bg-white text-purple-600 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium transition text-center">
+                  Upgrade Now
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
