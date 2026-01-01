@@ -2,10 +2,11 @@
 
 import { useEffect, useMemo, useRef, useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 import { useLanguage, useUser } from '../providers';
 import { translations } from '../../lib/translations';
+import LanguageSwitcher from '../../components/LanguageSwitcher';
 
 type Card = {
   korean: string;
@@ -1168,8 +1169,9 @@ const unitTranslationQueues: Record<string, Record<string, UnitTranslation[]>> =
 
 function FlashcardsPageContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const { lang } = useLanguage();
-  const { user, logActivity, isPremium, loading: userLoading, saveFlashcardProgress, loadFlashcardProgress, syncLocalProgress } = useUser();
+  const { user, logActivity, isPremium, loading: userLoading, saveFlashcardProgress, loadFlashcardProgress, syncLocalProgress, logout } = useUser();
 
   const unitKeys = useMemo(() => Object.keys(units), []);
   const initialUnitFromQuery = searchParams.get('unit');
@@ -1180,9 +1182,9 @@ function FlashcardsPageContent() {
   // Show loading while user authentication is being checked
   if (userLoading) {
     return (
-      <main className="min-h-screen bg-[#0b0f1a] text-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
         <div className="text-white">Loading flashcards...</div>
-      </main>
+      </div>
     );
   }
 
@@ -1493,8 +1495,76 @@ function FlashcardsPageContent() {
     setIsFlipped(false);
   };
 
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
+  };
+
   return (
-    <main className="min-h-screen bg-[#0b0f1a] text-white">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+      {/* Navigation */}
+      <nav className="bg-white/5 backdrop-blur-md border-b border-white/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
+            <Link href="/" className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">KO</span>
+              </div>
+              <span className="text-white font-semibold text-lg">Koreancha.uz</span>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-8">
+              <Link href="/" className="text-white/80 hover:text-white transition">
+                {translations[lang].home}
+              </Link>
+              <Link href="/exercises" className="text-white hover:text-white transition">
+                {translations[lang].exercises}
+              </Link>
+              <Link href="/progress" className="text-white/80 hover:text-white transition">
+                {translations[lang].progress}
+              </Link>
+            </div>
+
+            {/* Right side */}
+            <div className="flex items-center space-x-4">
+              <LanguageSwitcher />
+              
+              {user ? (
+                <>
+                  <Link href="/dashboard" className="hidden md:block text-white/80 hover:text-white transition">
+                    {translations[lang].dashboard}
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
+                  >
+                    {translations[lang].logout}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" className="hidden md:block text-white/80 hover:text-white transition">
+                    {translations[lang].login}
+                  </Link>
+                  <Link href="/signup" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+                    {translations[lang].signup}
+                  </Link>
+                </>
+              )}
+
+              {/* Mobile menu button */}
+              <button className="md:hidden p-2 rounded-lg hover:bg-white/10 transition">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
       <div className="mx-auto max-w-6xl px-4 sm:px-8 pt-6 pb-28">
         {/* Demo mode banner for unauthenticated users */}
         {!user && (
@@ -1805,16 +1875,16 @@ function FlashcardsPageContent() {
           <div className="h-32"></div>
         )}
       </div>
-    </main>
+    </div>
   );
 }
 
 export default function FlashcardsPage() {
   return (
     <Suspense fallback={
-      <main className="min-h-screen bg-[#0b0f1a] text-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
         <div className="text-white">Loading flashcards...</div>
-      </main>
+      </div>
     }>
       <FlashcardsPageContent />
     </Suspense>
