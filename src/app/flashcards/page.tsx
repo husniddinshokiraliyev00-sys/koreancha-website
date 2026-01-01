@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
@@ -1165,7 +1165,7 @@ const unitTranslationQueues: Record<string, Record<string, UnitTranslation[]>> =
   })
 );
 
-export default function FlashcardsPage() {
+function FlashcardsPageContent() {
   const searchParams = useSearchParams();
   const { lang } = useLanguage();
   const { user, logActivity, isPremium } = useUser();
@@ -1765,5 +1765,17 @@ export default function FlashcardsPage() {
         )}
       </div>
     </main>
+  );
+}
+
+export default function FlashcardsPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen bg-[#0b0f1a] text-white flex items-center justify-center">
+        <div className="text-white">Loading flashcards...</div>
+      </main>
+    }>
+      <FlashcardsPageContent />
+    </Suspense>
   );
 }
