@@ -51,7 +51,7 @@ const translations = {
 
 export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
   const router = useRouter();
-  const { lang, user } = useLanguage();
+  const { lang, user, logout } = useLanguage();
   const [exercisesOpen, setExercisesOpen] = useState(false);
   const [mockOpen, setMockOpen] = useState(false);
 
@@ -59,6 +59,12 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
 
   const handleLinkClick = (href: string) => {
     router.push(href);
+    onClose();
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
     onClose();
   };
 
@@ -185,7 +191,7 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
                 {t.dashboard}
               </button>
               <button
-                onClick={() => handleLinkClick('/login')}
+                onClick={handleLogout}
                 className="w-full text-left px-4 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 transition font-medium"
               >
                 Chiqish

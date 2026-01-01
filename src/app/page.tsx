@@ -109,7 +109,7 @@ const translations = {
 export default function Home() {
   const router = useRouter();
   const { lang, setLang } = useLanguage();
-  const { user } = useUser();
+  const { user, logout } = useUser();
   const [showLangDropdown, setShowLangDropdown] = useState(false);
   const [openNavDropdown, setOpenNavDropdown] = useState<null | 'exercises' | 'mock'>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -118,6 +118,11 @@ export default function Home() {
   const navDropdownRef = useRef<HTMLDivElement>(null);
 
   const t = translations[lang];
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
+  };
 
   const scrollToId = (id: string) => {
     const element = document.getElementById(id);
@@ -404,12 +409,12 @@ export default function Home() {
                 >
                   {t.progressCheck}
                 </Link>
-                <Link
-                  href="/login"
+                <button
+                  onClick={handleLogout}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition"
                 >
                   Chiqish
-                </Link>
+                </button>
               </>
             ) : (
               <>

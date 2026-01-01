@@ -5,152 +5,12 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
 import { useLanguage, type Lang, useUser } from '../providers';
-
-type ReadingQuestion = {
-  id: string;
-  question: string;
-  options: {
-    uz: string;
-    ru: string;
-    en: string;
-  }[];
-  correctAnswer: number;
-};
-
-type ReadingExercise = {
-  id: string;
-  unit: string;
-  title: string;
-  passage: {
-    korean: string;
-    romanization: string;
-  };
-  questions: ReadingQuestion[];
-};
-
-// Sample reading exercises data
-const readingExercises: Record<string, ReadingExercise[]> = {
-  '1과': [
-    {
-      id: '1-1',
-      unit: '1과',
-      title: 'Self Introduction',
-      passage: {
-        korean: '안녕하세요. 제 이름은 김민수입니다. 저는 한국 사람입니다. 저는 서울에서 삽니다. 저는 학생입니다. 저는 한국어를 공부합니다.',
-        romanization: 'Annyeonghaseyo. Je ireum-eun Kim Minsu-imnida. Jeo-eun hanguk saram-imnida. Jeo-eun seoul-eseo samnida. Jeo-eun haksaeng-imnida. Jeo-eun hangugeo-reul gongbuhapnida.'
-      },
-      questions: [
-        {
-          id: '1-1-q1',
-          question: '이 사람의 이름은 무엇입니까?',
-          options: [
-            { uz: 'Kim Minso', ru: 'Ким Минсу', en: 'Kim Minsu' },
-            { uz: 'Lee Jihyun', ru: 'Ли Чихён', en: 'Lee Jihyun' },
-            { uz: 'Park Jimin', ru: 'Пак Чимин', en: 'Park Jimin' },
-            { uz: 'Jeong Hoseok', ru: 'Чон Хосок', en: 'Jeong Hoseok' }
-          ],
-          correctAnswer: 0
-        },
-        {
-          id: '1-1-q2',
-          question: '이 사람은 어디에 삽니까?',
-          options: [
-            { uz: 'Busan', ru: 'Пусан', en: 'Busan' },
-            { uz: 'Seoul', ru: 'Сеул', en: 'Seoul' },
-            { uz: 'Daegu', ru: 'Тэгу', en: 'Daegu' },
-            { uz: 'Incheon', ru: 'Инчхон', en: 'Incheon' }
-          ],
-          correctAnswer: 1
-        },
-        {
-          id: '1-1-q3',
-          question: '이 사람의 직업은 무엇입니까?',
-          options: [
-            { uz: 'O\'qituvchi', ru: 'Учитель', en: 'Teacher' },
-            { uz: 'Shifokor', ru: 'Врач', en: 'Doctor' },
-            { uz: 'O\'quvchi', ru: 'Студент', en: 'Student' },
-            { uz: 'Muhandis', ru: 'Инженер', en: 'Engineer' }
-          ],
-          correctAnswer: 2
-        }
-      ]
-    },
-    {
-      id: '1-2',
-      unit: '1과',
-      title: 'Daily Life',
-      passage: {
-        korean: '저는 매일 아침 6시에 일어납니다. 그리고 아침을 먹습니다. 저는 빵과 우유를 먹습니다. 저는 8시에 학교에 갑니다. 저는 한국어 수업을 좋아합니다.',
-        romanization: 'Jeo-eun maeil achim yeoseot-si-e ireonapnida. Geurigo achim-eul meokseupnida. Jeo-eun ppang-gu uyureul meokseupnida. Jeo-eun yeodeol-si-e hakgyo-e gapnida. Jeo-eun hangugeo sueop-eul joahapnida.'
-      },
-      questions: [
-        {
-          id: '1-2-q1',
-          question: '이 사람은 몇 시에 일어납니까?',
-          options: [
-            { uz: '5 soat', ru: '5 часов', en: '5 o\'clock' },
-            { uz: '6 soat', ru: '6 часов', en: '6 o\'clock' },
-            { uz: '7 soat', ru: '7 часов', en: '7 o\'clock' },
-            { uz: '8 soat', ru: '8 часов', en: '8 o\'clock' }
-          ],
-          correctAnswer: 1
-        },
-        {
-          id: '1-2-q2',
-          question: '이 사람은 아침에 무엇을 먹습니까?',
-          options: [
-            { uz: 'Guruch va go\'sht', ru: 'Рис и мясо', en: 'Rice and meat' },
-            { uz: 'Non va sut', ru: 'Хлеб и молоко', en: 'Bread and milk' },
-            { uz: 'Meva', ru: 'Фрукты', en: 'Fruits' },
-            { uz: 'Sabzavot', ru: 'Овощи', en: 'Vegetables' }
-          ],
-          correctAnswer: 1
-        }
-      ]
-    }
-  ],
-  '2과': [
-    {
-      id: '2-1',
-      unit: '2과',
-      title: 'Weekend Plans',
-      passage: {
-        korean: '이번 주말에 친구를 만납니다. 우리는 영화를 보러 갈 것입니다. 영화는 재미있습니다. 영화 후에 우리는 식당에 갈 것입니다. 우리는 김치찌개를 먹을 것입니다.',
-        romanization: 'Ibeon jumal-e chingu-reul mannampnida. Uri-eun yeonghwa-reul boreo gal geosimnida. Yeonghwa-neun jaemi-iseupnida. Yeonghwa hue uri-eun sikdang-e gal geosimnida. Uri-eun gimchijjigae-reul meogeul geosimnida.'
-      },
-      questions: [
-        {
-          id: '2-1-q1',
-          question: '이번 주말에 무엇을 합니까?',
-          options: [
-            { uz: 'Uyda qolaman', ru: 'Останусь дома', en: 'I will stay home' },
-            { uz: 'Do\'kon boraman', ru: 'Пойду в магазин', en: 'I will go shopping' },
-            { uz: 'Do\'st bilan uchrashaman', ru: 'Встречусь с другом', en: 'I will meet a friend' },
-            { uz: 'Kutubxonaga boraman', ru: 'Пойду в библиотеку', en: 'I will go to the library' }
-          ],
-          correctAnswer: 2
-        },
-        {
-          id: '2-1-q2',
-          question: '영화 후에 어디에 갑니까?',
-          options: [
-            { uz: 'Uyga', ru: 'Домой', en: 'Home' },
-            { uz: 'Parkga', ru: 'В парк', en: 'To the park' },
-            { uz: 'Oshxonaga', ru: 'На кухню', en: 'To the kitchen' },
-            { uz: 'Restoranga', ru: 'В ресторан', en: 'To the restaurant' }
-          ],
-          correctAnswer: 3
-        }
-      ]
-    }
-  ]
-};
+import { getReadingExercisesByUnit, getAllReadingUnits, type ReadingExercise } from '../../data/readingExercises';
 
 type ReadingTranslations = {
   title: string;
-  unit: string;
   selectUnit: string;
-  selectExercise: string;
+  startExercise: string;
   passage: string;
   questions: string;
   submit: string;
@@ -160,69 +20,114 @@ type ReadingTranslations = {
   incorrect: string;
   score: string;
   completed: string;
-  tryAgain: string;
+  progress: string;
+  noExercises: string;
   backToExercises: string;
-  showResults: string;
-  hideResults: string;
+  reading: string;
+  comprehension: string;
+  shortPassage: string;
+  trueFalse: string;
+  matching: string;
+  easy: string;
+  medium: string;
+  hard: string;
+  grammarPoint: string;
+  vocabulary: string;
+  explanation: string;
+  true: string;
+  false: string;
 };
 
 const translations: Record<Lang, ReadingTranslations> = {
   uz: {
-    title: 'O\'qish mashqlari',
-    unit: 'Bo\'lim',
-    selectUnit: 'Bo\'limni tanlang',
-    selectExercise: 'Mashqni tanlang',
-    passage: 'Matn',
-    questions: 'Savollar',
-    submit: 'Javobni tekshirish',
-    next: 'Keyingi',
-    previous: 'Oldingi',
-    correct: 'To\'g\'ri!',
-    incorrect: 'Noto\'g\'ri',
-    score: 'Ball',
-    completed: 'Tamomlandi',
-    tryAgain: 'Qayta urinish',
-    backToExercises: 'Mashqlarga qaytish',
-    showResults: 'Natijalarni ko\'rsatish',
-    hideResults: 'Natijalarni yashirish'
-  },
-  ru: {
-    title: 'Упражнения на чтение',
-    unit: 'Урок',
-    selectUnit: 'Выберите урок',
-    selectExercise: 'Выберите упражнение',
-    passage: 'Текст',
-    questions: 'Вопросы',
-    submit: 'Проверить ответы',
-    next: 'Следующий',
-    previous: 'Предыдущий',
-    correct: 'Правильно!',
-    incorrect: 'Неправильно',
-    score: 'Баллы',
-    completed: 'Завершено',
-    tryAgain: 'Попробовать снова',
-    backToExercises: 'Вернуться к упражнениям',
-    showResults: 'Показать результаты',
-    hideResults: 'Скрыть результаты'
+    title: "O'qish mashqlari",
+    selectUnit: "Bo'limni tanlang",
+    startExercise: "Mashqni boshlang",
+    passage: "Matn",
+    questions: "Savollar",
+    submit: "Javobni tekshiring",
+    next: "Keyingi",
+    previous: "Oldingi",
+    correct: "To'g'ri!",
+    incorrect: "Noto'g'ri!",
+    score: "Ball",
+    completed: "Tamomlandi",
+    progress: "Progress",
+    noExercises: "Bu bo'lim uchun o'qish mashqlari hali tayyor emas.",
+    backToExercises: "Mashqlarga qaytish",
+    reading: "O'qish",
+    comprehension: "Tushunish",
+    shortPassage: "Qisqa matn",
+    trueFalse: "To'g'ri/Noto'g'ri",
+    matching: "Moslashtirish",
+    easy: "Oson",
+    medium: "O'rta",
+    hard: "Qiyin",
+    grammarPoint: "Grammatika nuqtasi",
+    vocabulary: "Lug'at",
+    explanation: "Tushuntirish",
+    true: "To'g'ri",
+    false: "Noto'g'ri"
   },
   en: {
-    title: 'Reading Exercises',
-    unit: 'Unit',
-    selectUnit: 'Select unit',
-    selectExercise: 'Select exercise',
-    passage: 'Passage',
-    questions: 'Questions',
-    submit: 'Check answers',
-    next: 'Next',
-    previous: 'Previous',
-    correct: 'Correct!',
-    incorrect: 'Incorrect',
-    score: 'Score',
-    completed: 'Completed',
-    tryAgain: 'Try again',
-    backToExercises: 'Back to exercises',
-    showResults: 'Show results',
-    hideResults: 'Hide results'
+    title: "Reading Exercises",
+    selectUnit: "Select Unit",
+    startExercise: "Start Exercise",
+    passage: "Passage",
+    questions: "Questions",
+    submit: "Submit Answer",
+    next: "Next",
+    previous: "Previous",
+    correct: "Correct!",
+    incorrect: "Incorrect!",
+    score: "Score",
+    completed: "Completed",
+    progress: "Progress",
+    noExercises: "No reading exercises available for this unit yet.",
+    backToExercises: "Back to Exercises",
+    reading: "Reading",
+    comprehension: "Comprehension",
+    shortPassage: "Short Passage",
+    trueFalse: "True/False",
+    matching: "Matching",
+    easy: "Easy",
+    medium: "Medium",
+    hard: "Hard",
+    grammarPoint: "Grammar Point",
+    vocabulary: "Vocabulary",
+    explanation: "Explanation",
+    true: "True",
+    false: "False"
+  },
+  ko: {
+    title: "읽기 연습",
+    selectUnit: "단원 선택",
+    startExercise: "연습 시작",
+    passage: "본문",
+    questions: "질문",
+    submit: "답변 제출",
+    next: "다음",
+    previous: "이전",
+    correct: "정답!",
+    incorrect: "오답!",
+    score: "점수",
+    completed: "완료",
+    progress: "진행률",
+    noExercises: "이 단원에 대한 읽기 연습이 아직 준비되지 않았습니다.",
+    backToExercises: "연습으로 돌아가기",
+    reading: "읽기",
+    comprehension: "이해",
+    shortPassage: "짧은 본문",
+    trueFalse: "참/거짓",
+    matching: "일치",
+    easy: "쉬움",
+    medium: "보통",
+    hard: "어려움",
+    grammarPoint: "문법 포인트",
+    vocabulary: "어휘",
+    explanation: "설명",
+    true: "참",
+    false: "거짓"
   }
 };
 
@@ -230,63 +135,108 @@ function ReadingPageContent() {
   const searchParams = useSearchParams();
   const { lang } = useLanguage();
   const { user, logActivity } = useUser();
+  
   const t = translations[lang];
-
-  const unitKeys = useMemo(() => Object.keys(readingExercises), []);
+  
+  const units = useMemo(() => getAllReadingUnits(), []);
   const initialUnitFromQuery = searchParams.get('unit');
   const [selectedUnit, setSelectedUnit] = useState<string>(
-    initialUnitFromQuery && readingExercises[initialUnitFromQuery] ? initialUnitFromQuery : unitKeys[0] || '1과'
+    initialUnitFromQuery && units.includes(initialUnitFromQuery) ? initialUnitFromQuery : units[0] || '1과'
   );
-
-  const exercises = useMemo(() => readingExercises[selectedUnit] || [], [selectedUnit]);
-  const [selectedExerciseIndex, setSelectedExerciseIndex] = useState(0);
-  const [answers, setAnswers] = useState<(number | null)[]>([]);
+  
+  const exercises = useMemo(() => getReadingExercisesByUnit(selectedUnit), [selectedUnit]);
+  const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number | boolean>>({});
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
   const [completed, setCompleted] = useState(false);
 
-  const currentExercise = exercises[selectedExerciseIndex];
+  const currentExercise = exercises[currentExerciseIndex];
 
   useEffect(() => {
-    if (currentExercise) {
-      setAnswers(new Array(currentExercise.questions.length).fill(null));
-      setShowResults(false);
-    }
-  }, [currentExercise]);
-
-  const handleSubmit = () => {
-    if (answers.includes(null)) return;
-
-    let correctCount = 0;
-    currentExercise.questions.forEach((question, index) => {
-      if (answers[index] === question.correctAnswer) {
-        correctCount++;
-      }
-    });
-
-    setScore(correctCount);
-    setShowResults(true);
-    setCompleted(true);
-
-    if (user) {
+    if (user && currentExercise) {
       logActivity('reading_exercise', { 
         unit: selectedUnit, 
-        exerciseId: currentExercise.id, 
-        score: correctCount,
-        total: currentExercise.questions.length
-      }, correctCount * 2);
+        exerciseId: currentExercise.id,
+        exerciseType: currentExercise.type 
+      }, 1);
+    }
+  }, [user, currentExercise, selectedUnit, logActivity]);
+
+  const handleAnswerSelect = (questionId: string, answer: number | boolean) => {
+    if (showResults) return;
+    
+    setSelectedAnswers(prev => ({
+      ...prev,
+      [questionId]: answer
+    }));
+  };
+
+  const handleSubmit = () => {
+    if (!currentExercise.questions) return;
+    
+    let correctCount = 0;
+    currentExercise.questions.forEach(question => {
+      const userAnswer = selectedAnswers[question.id];
+      if (userAnswer === question.correctAnswer) {
+        correctCount++;
+        if (user) {
+          logActivity('reading_correct', { 
+            unit: selectedUnit, 
+            exerciseId: currentExercise.id,
+            questionId: question.id 
+          }, 2);
+        }
+      }
+    });
+    
+    setScore(score + correctCount);
+    setShowResults(true);
+  };
+
+  const handleNext = () => {
+    if (currentExerciseIndex < exercises.length - 1) {
+      setCurrentExerciseIndex(currentExerciseIndex + 1);
+      setSelectedAnswers({});
+      setShowResults(false);
+    } else {
+      setCompleted(true);
     }
   };
 
-  const handleReset = () => {
-    setAnswers(new Array(currentExercise.questions.length).fill(null));
+  const handlePrevious = () => {
+    if (currentExerciseIndex > 0) {
+      setCurrentExerciseIndex(currentExerciseIndex - 1);
+      setSelectedAnswers({});
+      setShowResults(false);
+    }
+  };
+
+  const resetExercise = () => {
+    setCurrentExerciseIndex(0);
+    setSelectedAnswers({});
     setShowResults(false);
     setScore(0);
     setCompleted(false);
   };
 
-  const handleExerciseChange = (index: number) => {
-    setSelectedExerciseIndex(index);
+  const getExerciseTypeLabel = (type: string) => {
+    switch (type) {
+      case 'short-passage': return t.shortPassage;
+      case 'comprehension': return t.comprehension;
+      case 'true-false': return t.trueFalse;
+      case 'matching': return t.matching;
+      default: return type;
+    }
+  };
+
+  const getDifficultyLabel = (difficulty: string) => {
+    switch (difficulty) {
+      case 'easy': return t.easy;
+      case 'medium': return t.medium;
+      case 'hard': return t.hard;
+      default: return difficulty;
+    }
   };
 
   if (exercises.length === 0) {
@@ -295,10 +245,41 @@ function ReadingPageContent() {
         <div className="mx-auto max-w-4xl px-4 sm:px-8 pt-6 pb-28">
           <div className="text-center py-20">
             <h1 className="text-3xl font-bold mb-4">{t.title}</h1>
-            <p className="text-white/70">Bu bo\'lim uchun o\'qish mashqlari hali tayyor emas.</p>
+            <p className="text-white/70">{t.noExercises}</p>
             <Link href="/exercises" className="inline-block mt-6 text-blue-400 hover:text-blue-300">
-              ← Mashqlarga qaytish
+              ← {t.backToExercises}
             </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (completed) {
+    const totalQuestions = exercises.reduce((sum, ex) => sum + (ex.questions?.length || 0), 0);
+    const percentage = totalQuestions > 0 ? Math.round((score / totalQuestions) * 100) : 0;
+    
+    return (
+      <main className="min-h-screen bg-[#0b0f1a] text-white">
+        <div className="mx-auto max-w-4xl px-4 sm:px-8 pt-6 pb-28">
+          <div className="text-center py-20">
+            <h1 className="text-3xl font-bold mb-4">{t.completed}</h1>
+            <div className="text-6xl font-bold text-blue-400 mb-4">{score}/{totalQuestions}</div>
+            <div className="text-2xl text-white/70 mb-8">{percentage}%</div>
+            <div className="flex gap-4 justify-center">
+              <button
+                onClick={resetExercise}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition"
+              >
+                Qayta boshlash
+              </button>
+              <Link
+                href="/exercises"
+                className="bg-white hover:bg-gray-100 text-gray-900 px-6 py-3 rounded-lg font-semibold transition"
+              >
+                {t.backToExercises}
+              </Link>
+            </div>
           </div>
         </div>
       </main>
@@ -311,162 +292,249 @@ function ReadingPageContent() {
         {/* Header */}
         <div className="flex items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold">{t.title}</h1>
-            <div className="text-white/60">{selectedUnit}</div>
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight">{t.title}</h1>
+            <div className="hidden sm:block text-sm text-white/60">{selectedUnit}</div>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/exercises" className="text-white/70 hover:text-white transition">
-              ← Mashqlar
+            <Link href="/exercises" className="text-sm font-semibold text-white/70 hover:text-white transition">
+              Exercises
             </Link>
-            <Link href="/" className="text-white/70 hover:text-white transition">
-              Bosh sahifa
+            <Link href="/" className="text-sm font-semibold text-white/70 hover:text-white transition">
+              Home
             </Link>
           </div>
         </div>
 
-        {/* Unit and Exercise Selectors */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          <div>
-            <label className="block text-sm font-medium text-white/70 mb-2">{t.selectUnit}</label>
-            <select
-              value={selectedUnit}
-              onChange={(e) => {
-                setSelectedUnit(e.target.value);
-                setSelectedExerciseIndex(0);
-              }}
-              className="w-full px-4 py-2 rounded-lg border border-white/10 bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60"
-            >
-              {unitKeys.map((unit) => (
-                <option key={unit} value={unit} className="bg-[#0b0f1a]">
-                  {unit}
-                </option>
-              ))}
-            </select>
+        {/* Unit Selection */}
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-white/70 mb-2">{t.selectUnit}</label>
+          <select
+            value={selectedUnit}
+            onChange={(e) => {
+              setSelectedUnit(e.target.value);
+              resetExercise();
+            }}
+            className="px-4 py-2 rounded-lg border border-white/10 text-sm bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60"
+          >
+            {units.map((unit) => (
+              <option key={unit} value={unit} className="bg-[#0b0f1a]">
+                {unit}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Progress */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between text-sm text-white/60 mb-2">
+            <span>{t.progress}: {currentExerciseIndex + 1} / {exercises.length}</span>
+            <span>{t.score}: {score}</span>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-white/70 mb-2">{t.selectExercise}</label>
-            <select
-              value={selectedExerciseIndex}
-              onChange={(e) => handleExerciseChange(Number(e.target.value))}
-              className="w-full px-4 py-2 rounded-lg border border-white/10 bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60"
-            >
-              {exercises.map((exercise, index) => (
-                <option key={exercise.id} value={index} className="bg-[#0b0f1a]">
-                  {exercise.title}
-                </option>
-              ))}
-            </select>
+          <div className="w-full bg-white/10 rounded-full h-2">
+            <div
+              className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+              style={{ width: `${((currentExerciseIndex + 1) / exercises.length) * 100}%` }}
+            />
           </div>
         </div>
 
-        {/* Exercise Content */}
-        <div className="bg-white/5 border border-white/10 rounded-xl p-8">
-          {/* Title */}
-          <h2 className="text-xl font-bold mb-6 text-center">{currentExercise.title}</h2>
+        {/* Exercise */}
+        <div className="bg-white/5 border border-white/10 rounded-xl p-6 mb-6">
+          {/* Exercise Header */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-white/70">{getExerciseTypeLabel(currentExercise.type)}</span>
+              <span className="text-xs px-2 py-1 bg-blue-500/20 text-blue-300 rounded-full">
+                {getDifficultyLabel(currentExercise.difficulty)}
+              </span>
+            </div>
+            <span className="text-sm text-white/50">#{currentExerciseIndex + 1}</span>
+          </div>
 
-          {/* Passage */}
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold mb-4 text-blue-400">{t.passage}</h3>
-            <div className="bg-white/5 rounded-lg p-6">
-              <div className="text-lg leading-relaxed mb-4">
-                {currentExercise.passage.korean}
-              </div>
-              <div className="text-sm text-white/60 italic">
-                {currentExercise.passage.romanization}
-              </div>
+          {/* Korean Passage */}
+          <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-6">
+            <h3 className="text-lg font-semibold mb-3 text-blue-300">{t.passage}</h3>
+            <div className="text-lg leading-relaxed text-white">
+              {currentExercise.korean}
             </div>
           </div>
 
+          {/* Translation */}
+          <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-6">
+            <h3 className="text-sm font-medium mb-2 text-white/70">Translation ({lang === 'uz' ? 'Uzbek' : lang === 'en' ? 'English' : 'Korean'})</h3>
+            <div className="text-base leading-relaxed text-white/90">
+              {lang === 'uz' ? currentExercise.uzbek : currentExercise.english}
+            </div>
+          </div>
+
+          {/* Grammar Point */}
+          {currentExercise.grammarPoint && (
+            <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3 mb-6">
+              <div className="text-sm text-blue-300">
+                <strong>{t.grammarPoint}:</strong> {currentExercise.grammarPoint}
+              </div>
+            </div>
+          )}
+
+          {/* Vocabulary */}
+          {currentExercise.vocabulary && currentExercise.vocabulary.length > 0 && (
+            <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-3 mb-6">
+              <div className="text-sm text-purple-300">
+                <strong>{t.vocabulary}:</strong> {currentExercise.vocabulary.join(', ')}
+              </div>
+            </div>
+          )}
+
           {/* Questions */}
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold mb-4 text-blue-400">{t.questions}</h3>
-            <div className="space-y-6">
+          {currentExercise.questions && (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-white">{t.questions}</h3>
               {currentExercise.questions.map((question, qIndex) => (
-                <div key={question.id} className="bg-white/5 rounded-lg p-6">
-                  <div className="font-medium mb-4">
-                    {qIndex + 1}. {question.question}
+                <div key={question.id} className="bg-white/5 border border-white/10 rounded-lg p-4">
+                  <div className="mb-3">
+                    <span className="text-sm text-white/70">Question {qIndex + 1}:</span>
+                    <p className="text-white mt-1">{question.question}</p>
                   </div>
-                  <div className="space-y-3">
-                    {question.options.map((option, oIndex) => (
+
+                  {question.options ? (
+                    // Multiple choice
+                    <div className="space-y-2">
+                      {question.options.map((option, oIndex) => (
+                        <button
+                          key={oIndex}
+                          onClick={() => handleAnswerSelect(question.id, oIndex)}
+                          disabled={showResults}
+                          className={`w-full text-left p-3 rounded-lg border transition ${
+                            showResults
+                              ? oIndex === question.correctAnswer
+                                ? 'bg-green-500/20 border-green-500 text-green-300'
+                                : selectedAnswers[question.id] === oIndex
+                                ? 'bg-red-500/20 border-red-500 text-red-300'
+                                : 'bg-white/5 border-white/10 text-white/70'
+                              : selectedAnswers[question.id] === oIndex
+                              ? 'bg-blue-500/20 border-blue-500 text-blue-300'
+                              : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span>{option}</span>
+                            {showResults && oIndex === question.correctAnswer && (
+                              <svg className="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M20 6L9 17l-5-5" />
+                              </svg>
+                            )}
+                            {showResults && selectedAnswers[question.id] === oIndex && oIndex !== question.correctAnswer && (
+                              <svg className="w-5 h-5 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M18 6L6 18M6 6l12 12" />
+                              </svg>
+                            )}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    // True/False
+                    <div className="flex gap-4">
                       <button
-                        key={oIndex}
-                        onClick={() => !showResults && setAnswers(prev => {
-                          const newAnswers = [...prev];
-                          newAnswers[qIndex] = oIndex;
-                          return newAnswers;
-                        })}
+                        onClick={() => handleAnswerSelect(question.id, true)}
                         disabled={showResults}
-                        className={`w-full text-left p-3 rounded-lg border transition ${
+                        className={`flex-1 p-3 rounded-lg border transition ${
                           showResults
-                            ? oIndex === question.correctAnswer
-                              ? 'bg-green-600/20 border-green-500 text-green-400'
-                              : answers[qIndex] === oIndex
-                              ? 'bg-red-600/20 border-red-500 text-red-400'
-                              : 'bg-white/5 border-white/10 text-white/50'
-                            : answers[qIndex] === oIndex
-                            ? 'bg-blue-600/20 border-blue-500 text-blue-400'
-                            : 'bg-white/5 border-white/10 hover:bg-white/10 text-white'
+                            ? question.correctAnswer === true
+                              ? 'bg-green-500/20 border-green-500 text-green-300'
+                              : selectedAnswers[question.id] === true
+                              ? 'bg-red-500/20 border-red-500 text-red-300'
+                              : 'bg-white/5 border-white/10 text-white/70'
+                            : selectedAnswers[question.id] === true
+                            ? 'bg-blue-500/20 border-blue-500 text-blue-300'
+                            : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
                         }`}
                       >
-                        <div className="font-medium">
-                          {String.fromCharCode(65 + oIndex)}. {lang === 'uz' && option.uz}
-                          {lang === 'ru' && option.ru}
-                          {lang === 'en' && option.en}
+                        <div className="flex items-center justify-center gap-2">
+                          <span>{t.true}</span>
+                          {showResults && question.correctAnswer === true && (
+                            <svg className="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M20 6L9 17l-5-5" />
+                            </svg>
+                          )}
+                          {showResults && selectedAnswers[question.id] === true && question.correctAnswer !== true && (
+                            <svg className="w-5 h-5 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M18 6L6 18M6 6l12 12" />
+                            </svg>
+                          )}
                         </div>
                       </button>
-                    ))}
-                  </div>
-                  {showResults && answers[qIndex] !== question.correctAnswer && (
-                    <div className="mt-3 text-sm text-green-400">
-                      To'g'ri javob: {String.fromCharCode(65 + question.correctAnswer)}. {
-                        lang === 'uz' && question.options[question.correctAnswer].uz
-                      }
-                      {lang === 'ru' && question.options[question.correctAnswer].ru}
-                      {lang === 'en' && question.options[question.correctAnswer].en}
+                      <button
+                        onClick={() => handleAnswerSelect(question.id, false)}
+                        disabled={showResults}
+                        className={`flex-1 p-3 rounded-lg border transition ${
+                          showResults
+                            ? question.correctAnswer === false
+                              ? 'bg-green-500/20 border-green-500 text-green-300'
+                              : selectedAnswers[question.id] === false
+                              ? 'bg-red-500/20 border-red-500 text-red-300'
+                              : 'bg-white/5 border-white/10 text-white/70'
+                            : selectedAnswers[question.id] === false
+                            ? 'bg-blue-500/20 border-blue-500 text-blue-300'
+                            : 'bg-white/5 border-white/10 text-white hover:bg-white/10'
+                        }`}
+                      >
+                        <div className="flex items-center justify-center gap-2">
+                          <span>{t.false}</span>
+                          {showResults && question.correctAnswer === false && (
+                            <svg className="w-5 h-5 text-green-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M20 6L9 17l-5-5" />
+                            </svg>
+                          )}
+                          {showResults && selectedAnswers[question.id] === false && question.correctAnswer !== false && (
+                            <svg className="w-5 h-5 text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M18 6L6 18M6 6l12 12" />
+                            </svg>
+                          )}
+                        </div>
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Explanation */}
+                  {showResults && question.explanation && (
+                    <div className="mt-3 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                      <div className="text-sm text-blue-300">
+                        <strong>{t.explanation}:</strong> {question.explanation}
+                      </div>
                     </div>
                   )}
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* Results */}
-          {showResults && (
-            <div className="bg-blue-600/10 border border-blue-500/30 rounded-lg p-6 mb-6">
-              <div className="text-center">
-                <div className="text-2xl font-bold mb-2">
-                  {t.score}: {score} / {currentExercise.questions.length}
-                </div>
-                <div className="text-lg text-blue-400">
-                  {Math.round((score / currentExercise.questions.length) * 100)}%
-                </div>
-              </div>
-            </div>
           )}
 
-          {/* Action Buttons */}
-          <div className="flex justify-between items-center">
-            <div className="flex gap-3">
-              <button
-                onClick={handleReset}
-                className="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg font-semibold transition border border-white/20"
-              >
-                {t.tryAgain}
-              </button>
-              <button
-                onClick={() => setShowResults(!showResults)}
-                disabled={answers.includes(null)}
-                className="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
-              >
-                {showResults ? t.hideResults : t.showResults}
-              </button>
-            </div>
-            <Link
-              href="/exercises"
-              className="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg font-semibold transition border border-white/20"
+          {/* Actions */}
+          <div className="flex items-center justify-between mt-6">
+            <button
+              onClick={handlePrevious}
+              disabled={currentExerciseIndex === 0}
+              className="px-4 py-2 rounded-lg border border-white/10 bg-white/5 text-white hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition"
             >
-              {t.backToExercises}
-            </Link>
+              ← {t.previous}
+            </button>
+
+            {!showResults ? (
+              <button
+                onClick={handleSubmit}
+                disabled={!currentExercise.questions || currentExercise.questions.some(q => selectedAnswers[q.id] === undefined)}
+                className="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-semibold transition"
+              >
+                {t.submit}
+              </button>
+            ) : (
+              <button
+                onClick={handleNext}
+                className="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition"
+              >
+                {currentExerciseIndex === exercises.length - 1 ? t.completed : t.next}
+              </button>
+            )}
           </div>
         </div>
       </div>

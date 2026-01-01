@@ -28,6 +28,7 @@ type UserContextValue = {
   saveFlashcardProgress: (unit: string, cardIndex: number, mastered: boolean, again: boolean) => Promise<void>;
   loadFlashcardProgress: (unit: string) => Promise<{ mastered: number[]; again: number[] }>;
   syncLocalProgress: (unit: string, localMastered: number[], localAgain: number[]) => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 const UserContext = createContext<UserContextValue | null>(null);
@@ -229,6 +230,13 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     }
   }, [user]);
 
+  const logout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
   const value = useMemo<UserContextValue>(() => ({
     user,
     profile,
@@ -241,6 +249,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     saveFlashcardProgress,
     loadFlashcardProgress,
     syncLocalProgress,
+    logout,
   }), [user, profile, stats, loading, isPremium]);
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

@@ -1275,6 +1275,15 @@ function FlashcardsPageContent() {
         again: 'Again',
         mastered: 'Mastered',
         reset: 'Reset'
+      },
+      ko: {
+        all: '전체',
+        shuffle: '섞기',
+        prev: '이전',
+        next: '다음',
+        again: '다시',
+        mastered: '암기',
+        reset: '초기화'
       }
     };
 
@@ -1749,9 +1758,10 @@ function FlashcardsPageContent() {
                     <button
                       type="button"
                       onClick={() => {
-                        const shuffled = [...(mode === 'all' ? deck : againClean)].sort(() => Math.random() - 0.5);
-                        setDeck(shuffled);
-                        setCurrentIndex(0);
+                        const indices = mode === 'all' ? allIndices : againClean;
+                        const shuffled = [...indices].sort(() => Math.random() - 0.5);
+                        setDeckOrder(shuffled);
+                        setDeckPosition(0);
                         setIsFlipped(false);
                       }}
                       className="px-3 py-2 rounded-lg border border-white/10 bg-white/5 text-white text-sm font-semibold hover:bg-white/10 transition"
