@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { useLanguage, type Lang, useUser } from './providers';
-import { translations as i18nTranslations } from '../lib/translations';
+import MobileNav from '../components/MobileNav';
 
 const translations = {
   uz: {
@@ -39,38 +39,6 @@ const translations = {
     password: "Parol",
     modalLogin: "Kirish",
     modalSignup: "Ro'yxatdan o'tish"
-  },
-  ru: {
-    logo: "Koreancha.uz",
-    nav: ["Главная", "Упражнения", "Тесты", "О нас"],
-    heroTitle: "Профессиональная платформа для подготовки к TOPIK",
-    heroDesc: "Изучайте корейский язык с помощью упражнений по хангылю, лексике, аудированию, чтению и письму.",
-    cta: "Начать",
-    activitiesTitle: "Самые популярные разделы",
-    activities: [
-      { title: "Слова", icon: 'book' },
-      { title: "Аудирование", icon: 'headphones' },
-      { title: "Чтение", icon: 'file' },
-      { title: "Письмо", icon: 'pencil' },
-      { title: "Примеры TOPIK", icon: 'star' },
-      { title: "Пробный тест", icon: 'timer' },
-      { title: "Говорение", icon: 'mic' }
-    ],
-    login: "Войти",
-    signup: "Регистрация",
-    progressCheck: "Прогресс",
-    featuresTitle: "Основные возможности",
-    features: [
-      { title: "Флэшкарты", desc: "Запоминайте слова надолго" },
-      { title: "Аудирование", desc: "Настоящие диалоги и аудио" },
-      { title: "Чтение и письмо", desc: "Упражнения в формате TOPIK" },
-      { title: "Пробные тесты", desc: "С таймером и оценкой" }
-    ],
-    modalTitle: "Вход / Регистрация",
-    email: "Email",
-    password: "Пароль",
-    modalLogin: "Войти",
-    modalSignup: "Зарегистрироваться"
   },
   en: {
     logo: "Koreancha.uz",
@@ -144,19 +112,34 @@ export default function Home() {
   const { user } = useUser();
   const [showLangDropdown, setShowLangDropdown] = useState(false);
   const [openNavDropdown, setOpenNavDropdown] = useState<null | 'exercises' | 'mock'>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const closeNavDropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const langDropdownRef = useRef<HTMLDivElement>(null);
+  const navDropdownRef = useRef<HTMLDivElement>(null);
+
   const t = translations[lang];
+
+  const scrollToId = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
         setShowLangDropdown(false);
       }
+      if (navDropdownRef.current && !navDropdownRef.current.contains(event.target as Node)) {
+        setOpenNavDropdown(null);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   const handleLangChange = (newLang: 'uz' | 'en' | 'ko') => {
@@ -164,18 +147,8 @@ export default function Home() {
     setShowLangDropdown(false);
   };
 
-  const getLangName = (code: string) => {
-    switch (code) {
-      case 'uz': return 'O\'Z';
-      case 'ru': return 'РУ';
-      case 'en': return 'EN';
-      default: return code;
-    }
-  };
-
-  const renderActivityIcon = (name: string) => {
-    const className = 'w-4 h-4';
-
+  const renderIcon = (name: string) => {
+    const className = 'w-6 h-6';
     switch (name) {
       case 'book':
         return (
@@ -235,42 +208,6 @@ export default function Home() {
     }
   };
 
-  const scrollToId = (id: string) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
-  const getActivityTitleByIcon = (icon: string) => {
-    const found = (t.activities as any[]).find((a) => a.icon === icon);
-    return found?.title || '';
-  };
-
-  const cancelCloseNavDropdown = () => {
-    if (closeNavDropdownTimeoutRef.current) {
-      clearTimeout(closeNavDropdownTimeoutRef.current);
-      closeNavDropdownTimeoutRef.current = null;
-    }
-  };
-
-  const openNav = (key: 'exercises' | 'mock') => {
-    cancelCloseNavDropdown();
-    setOpenNavDropdown(key);
-  };
-
-  const scheduleCloseNavDropdown = () => {
-    cancelCloseNavDropdown();
-    closeNavDropdownTimeoutRef.current = setTimeout(() => {
-      setOpenNavDropdown(null);
-    }, 250);
-  };
-
-  useEffect(() => {
-    return () => {
-      cancelCloseNavDropdown();
-    };
-  }, []);
-
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -316,292 +253,276 @@ export default function Home() {
             </div>
           </div>
           
-          <nav className="hidden md:flex gap-6 lg:gap-10 text-base lg:text-lg">
+          <nav className="hidden md:flex gap-4 lg:gap-8 text-base lg:text-lg">
             <button
               type="button"
               onClick={() => scrollToId('home')}
-              className="text-white hover:text-blue-300 transition whitespace-nowrap font-medium"
+              className="text-white hover:text-blue-300 transition whitespace-nowrap font-medium px-3 py-2 rounded-lg hover:bg-white/10"
             >
               {t.nav[0]}
             </button>
 
             <div
               className="relative"
-              onMouseEnter={() => openNav('exercises')}
-              onMouseLeave={scheduleCloseNavDropdown}
+              ref={navDropdownRef}
+              onMouseEnter={() => {
+                if (closeNavDropdownTimeoutRef.current) {
+                  clearTimeout(closeNavDropdownTimeoutRef.current);
+                  closeNavDropdownTimeoutRef.current = null;
+                }
+                setOpenNavDropdown('exercises');
+              }}
+              onMouseLeave={() => {
+                closeNavDropdownTimeoutRef.current = setTimeout(() => {
+                  setOpenNavDropdown(null);
+                }, 150);
+              }}
             >
               <button
                 type="button"
-                onClick={() => scrollToId('activities')}
-                className="text-white hover:text-blue-300 transition whitespace-nowrap font-medium inline-flex items-center gap-1"
+                className="text-white hover:text-blue-300 transition whitespace-nowrap font-medium px-3 py-2 rounded-lg hover:bg-white/10 flex items-center gap-1"
               >
                 {t.nav[1]}
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
 
               {openNavDropdown === 'exercises' && (
-                <div
-                  className="absolute left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50"
-                  onMouseEnter={cancelCloseNavDropdown}
-                  onMouseLeave={scheduleCloseNavDropdown}
-                >
-                  {(t.activities as any[])
-                    .filter((a) => a.icon !== 'star' && a.icon !== 'timer')
-                    .map((a: any) => (
-                      <button
-                        key={a.title}
-                        type="button"
-                        onClick={() => {
-                          setOpenNavDropdown(null);
-                          if (a.icon === 'book') {
-                            router.push('/flashcards');
-                            return;
-                          }
-                          if (a.icon === 'headphones') {
-                            router.push('/listening');
-                            return;
-                          }
-                          if (a.icon === 'file') {
-                            router.push('/reading');
-                            return;
-                          }
-
-                          scrollToId('activities');
-                        }}
-                        className="w-full text-left px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50 transition inline-flex items-center gap-2"
-                      >
-                        <span className="text-blue-700">{renderActivityIcon(a.icon)}</span>
-                        <span className="font-semibold">{a.title}</span>
-                      </button>
-                  ))}
+                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2 z-50 border border-gray-100">
+                  <Link
+                    href="/flashcards"
+                    className="block px-4 py-3 text-gray-800 hover:bg-gray-50 transition font-medium"
+                  >
+                    <div className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M4 19a2 2 0 0 0 2 2h12" />
+                        <path d="M6 3h12a2 2 0 0 1 2 2v16" />
+                        <path d="M6 3a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h12" />
+                      </svg>
+                      <span>{t.activities[0].title}</span>
+                    </div>
+                  </Link>
+                  <Link
+                    href="/listening"
+                    className="block px-4 py-3 text-gray-800 hover:bg-gray-50 transition font-medium"
+                  >
+                    <div className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M4 13a8 8 0 0 1 16 0" />
+                        <path d="M4 13v6a2 2 0 0 0 2 2h1v-8H6a2 2 0 0 0-2 2" />
+                        <path d="M20 13v6a2 2 0 0 1-2 2h-1v-8h1a2 2 0 0 1 2 2" />
+                      </svg>
+                      <span>{t.activities[1].title}</span>
+                    </div>
+                  </Link>
+                  <Link
+                    href="/reading"
+                    className="block px-4 py-3 text-gray-800 hover:bg-gray-50 transition font-medium"
+                  >
+                    <div className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <path d="M14 2v6h6" />
+                      </svg>
+                      <span>{t.activities[2].title}</span>
+                    </div>
+                  </Link>
                 </div>
               )}
             </div>
 
             <div
               className="relative"
-              onMouseEnter={() => openNav('mock')}
-              onMouseLeave={scheduleCloseNavDropdown}
+              ref={navDropdownRef}
+              onMouseEnter={() => {
+                if (closeNavDropdownTimeoutRef.current) {
+                  clearTimeout(closeNavDropdownTimeoutRef.current);
+                  closeNavDropdownTimeoutRef.current = null;
+                }
+                setOpenNavDropdown('mock');
+              }}
+              onMouseLeave={() => {
+                closeNavDropdownTimeoutRef.current = setTimeout(() => {
+                  setOpenNavDropdown(null);
+                }, 150);
+              }}
             >
               <button
                 type="button"
-                onClick={() => scrollToId('activities')}
-                className="text-white hover:text-blue-300 transition whitespace-nowrap font-medium inline-flex items-center gap-1"
+                className="text-white hover:text-blue-300 transition whitespace-nowrap font-medium px-3 py-2 rounded-lg hover:bg-white/10 flex items-center gap-1"
               >
                 {t.nav[2]}
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
 
               {openNavDropdown === 'mock' && (
-                <div
-                  className="absolute left-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50"
-                  onMouseEnter={cancelCloseNavDropdown}
-                  onMouseLeave={scheduleCloseNavDropdown}
-                >
-                  <div className="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                    TOPIK Level 1
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setOpenNavDropdown(null);
-                      scrollToId('activities');
-                    }}
-                    className="w-full text-left px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50 transition inline-flex items-center gap-2"
+                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl py-2 z-50 border border-gray-100">
+                  <Link
+                    href="/mock/topik1"
+                    className="block px-4 py-3 text-gray-800 hover:bg-gray-50 transition font-medium"
                   >
-                    <span className="text-blue-700">{renderActivityIcon('headphones')}</span>
-                    <span className="font-semibold">{getActivityTitleByIcon('headphones')}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setOpenNavDropdown(null);
-                      scrollToId('activities');
-                    }}
-                    className="w-full text-left px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50 transition inline-flex items-center gap-2"
+                    TOPIK I
+                  </Link>
+                  <Link
+                    href="/mock/topik2"
+                    className="block px-4 py-3 text-gray-800 hover:bg-gray-50 transition font-medium"
                   >
-                    <span className="text-blue-700">{renderActivityIcon('file')}</span>
-                    <span className="font-semibold">{getActivityTitleByIcon('file')}</span>
-                  </button>
-
-                  <div className="mt-1 px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide border-t border-gray-100">
-                    TOPIK Level 2
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setOpenNavDropdown(null);
-                      scrollToId('activities');
-                    }}
-                    className="w-full text-left px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50 transition inline-flex items-center gap-2"
-                  >
-                    <span className="text-blue-700">{renderActivityIcon('headphones')}</span>
-                    <span className="font-semibold">{getActivityTitleByIcon('headphones')}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setOpenNavDropdown(null);
-                      scrollToId('activities');
-                    }}
-                    className="w-full text-left px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50 transition inline-flex items-center gap-2"
-                  >
-                    <span className="text-blue-700">{renderActivityIcon('file')}</span>
-                    <span className="font-semibold">{getActivityTitleByIcon('file')}</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setOpenNavDropdown(null);
-                      scrollToId('activities');
-                    }}
-                    className="w-full text-left px-4 py-2.5 text-sm text-gray-800 hover:bg-gray-50 transition inline-flex items-center gap-2"
-                  >
-                    <span className="text-blue-700">{renderActivityIcon('pencil')}</span>
-                    <span className="font-semibold">{getActivityTitleByIcon('pencil')}</span>
-                  </button>
+                    TOPIK II
+                  </Link>
                 </div>
               )}
             </div>
 
             <button
               type="button"
-              onClick={() => scrollToId('features')}
-              className="text-white hover:text-blue-300 transition whitespace-nowrap font-medium"
+              onClick={() => scrollToId('about')}
+              className="text-white hover:text-blue-300 transition whitespace-nowrap font-medium px-3 py-2 rounded-lg hover:bg-white/10"
             >
               {t.nav[3]}
             </button>
+          </nav>
+          
+          <nav className="flex items-center gap-3">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="md:hidden p-2 rounded-lg hover:bg-white/10 transition"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
 
-            <button
-              onClick={() => router.push('/contact')}
-              className="text-white hover:text-blue-300 transition whitespace-nowrap font-medium"
-            >
-              Contact
-            </button>
-            <button
-              onClick={() => router.push('/donate')}
-              className="text-white hover:text-blue-300 transition whitespace-nowrap font-medium"
-            >
-              Donate
-            </button>
-            
             {user ? (
-              <Link
-                href="/dashboard"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition"
-              >
-                Dashboard
-              </Link>
-            ) : (
               <>
                 <Link
-                  href="/login"
-                  className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg font-medium transition border border-white/20"
+                  href="/dashboard"
+                  className="hidden md:block text-white hover:text-blue-300 transition font-medium px-3 py-2 rounded-lg hover:bg-white/10"
                 >
-                  Kirish
+                  {t.progressCheck}
                 </Link>
                 <Link
                   href="/login"
                   className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition"
                 >
-                  Ro'yxatdan o'tish
+                  Chiqish
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="hidden md:block text-white hover:text-blue-300 transition font-medium px-3 py-2 rounded-lg hover:bg-white/10"
+                >
+                  {t.login}
+                </Link>
+                <Link
+                  href="/login"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition"
+                >
+                  {t.signup}
                 </Link>
               </>
             )}
           </nav>
-          
-          <div className="flex items-center gap-3 sm:gap-4">
-            <button
-              type="button"
-              onClick={() => router.push('/dashboard')}
-              className="hidden md:block bg-transparent border-2 border-white text-white hover:bg-white/10 px-4 py-1.5 rounded-full font-medium transition text-sm sm:text-base"
-            >
-              {t.progressCheck}
-            </button>
-            
-            <div className="flex items-center gap-2">
-              <button 
-                onClick={() => router.push('/login?mode=signup')} 
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-full font-bold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 text-sm sm:text-base"
-              >
-                {t.signup}
-              </button>
-              <button 
-                onClick={() => router.push('/login')} 
-                className="bg-white/10 hover:bg-white/20 text-white px-4 py-1.5 rounded-full font-medium transition text-sm sm:text-base"
-              >
-                {t.login}
-              </button>
-            </div>
-          </div>
         </div>
       </header>
 
+      {/* Mobile Navigation */}
+      <MobileNav isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+
       {/* Hero Section */}
-      <section id="home" className="bg-gradient-to-br from-blue-700 to-blue-900 text-white py-32">
-        <div className="max-w-7xl mx-auto px-8 text-center">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-8 leading-tight">{t.heroTitle}</h2>
-          <p className="text-xl md:text-2xl mb-12 max-w-4xl mx-auto opacity-95 leading-relaxed">
+      <section id="home" className="bg-gradient-to-br from-blue-600 to-purple-700 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            {t.heroTitle}
+          </h1>
+          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
             {t.heroDesc}
           </p>
-          <button className="bg-white text-blue-800 hover:bg-blue-50 px-10 py-5 rounded-full text-xl font-bold shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
-            {t.cta} 🚀
+          <button
+            onClick={() => scrollToId('activities')}
+            className="bg-white text-blue-600 px-8 py-4 rounded-lg font-bold text-lg hover:bg-gray-100 transition transform hover:scale-105"
+          >
+            {t.cta}
           </button>
-
-          <div id="activities" className="mt-14">
-            <div className="text-sm font-semibold tracking-wide opacity-90 mb-6">
-              {t.activitiesTitle}
-            </div>
-            <div className="flex flex-wrap justify-center gap-4">
-              {t.activities.map((a: any) => (
-                <button
-                  key={a.title}
-                  type="button"
-                  onClick={() => {
-                    if (a.icon === 'book') {
-                      router.push('/exercises/vocabulary');
-                      return;
-                    }
-                  }}
-                  className="bg-white/95 text-blue-900 hover:bg-white px-5 py-3 rounded-xl shadow-md hover:shadow-lg transition inline-flex items-center gap-2 transform hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-white/70 focus:ring-offset-2 focus:ring-offset-blue-800"
-                >
-                  <span className="text-blue-700">{renderActivityIcon(a.icon)}</span>
-                  <span className="font-semibold text-sm sm:text-base">{a.title}</span>
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-24 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-8">
-          <h2 className="text-4xl font-bold text-center mb-16 text-gray-900">
-            {t.featuresTitle}
+      {/* Activities Section */}
+      <section id="activities" className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900">
+            {t.activitiesTitle}
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {t.features.map((f) => (
-              <div 
-                key={f.title}
-                className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all border border-gray-100"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {t.activities.map((activity, index) => (
+              <div
+                key={index}
+                className="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow cursor-pointer transform hover:scale-105 transition-transform"
+                onClick={() => {
+                  if (activity.icon === 'book') {
+                    router.push('/flashcards');
+                  } else if (activity.icon === 'headphones') {
+                    router.push('/listening');
+                  } else if (activity.icon === 'file') {
+                    router.push('/reading');
+                  }
+                }}
               >
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">{f.title}</h3>
-                <p className="text-gray-700 leading-relaxed">{f.desc}</p>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="text-blue-600">
+                    {renderIcon(activity.icon)}
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900">
+                    {activity.title}
+                  </h3>
+                </div>
+                <p className="text-gray-600">
+                  {activity.title} mashqlari bilan mahoratingizni oshiring
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
+
+      {/* Features Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900">
+            {t.featuresTitle}
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {t.features.map((feature, index) => (
+              <div key={index} className="text-center">
+                <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M9 12l2 2 4-4" />
+                    <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9c2.39 0 4.68.94 6.36 2.64" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold mb-2 text-gray-900">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600">
+                  {feature.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p>&copy; 2024 Koreancha.uz. Barcha huquqlar himoyalangan.</p>
+        </div>
+      </footer>
     </div>
   );
 }

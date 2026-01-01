@@ -1749,21 +1749,12 @@ function FlashcardsPageContent() {
                     <button
                       type="button"
                       onClick={() => {
-                        const next = !shuffleEnabled;
-                        setShuffleEnabled(next);
-
-                        const indices = mode === 'again' ? againClean : allIndices;
-                        const nextDeck = next ? shuffleArray(indices) : [...indices];
-                        const found = nextDeck.indexOf(currentIndex);
-                        setDeckOrder(nextDeck);
-                        setDeckPosition(found >= 0 ? found : 0);
+                        const shuffled = [...(mode === 'all' ? deck : againClean)].sort(() => Math.random() - 0.5);
+                        setDeck(shuffled);
+                        setCurrentIndex(0);
                         setIsFlipped(false);
                       }}
-                      className={`px-3 py-2 rounded-lg border text-sm font-semibold transition ${
-                        shuffleEnabled
-                          ? 'bg-white text-gray-900 border-white'
-                          : 'bg-white/5 text-white border-white/10 hover:bg-white/10'
-                      }`}
+                      className="px-3 py-2 rounded-lg border border-white/10 bg-white/5 text-white text-sm font-semibold hover:bg-white/10 transition"
                     >
                       {ui.shuffle}
                     </button>
@@ -1840,6 +1831,11 @@ function FlashcardsPageContent() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Add bottom padding to prevent content overlap */}
+        {cards.length > 0 && currentCard && !isDone && (
+          <div className="h-32"></div>
         )}
       </div>
     </main>
