@@ -10,10 +10,26 @@ import LanguageSwitcher from '../components/LanguageSwitcher';
 
 export default function Home() {
   const router = useRouter();
-  const { lang } = useLanguage();
-  const { user, logout } = useUser();
+  const { lang, user } = useLanguage();
+  const { logout } = useUser();
 
   const t = translations[lang];
+
+  // Redirect logged-in users to dashboard
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard');
+    }
+  }, [user, router]);
+
+  // Show loading while checking auth
+  if (user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
+        <div className="text-white">Redirecting to dashboard...</div>
+      </div>
+    );
+  }
 
   const handleLogout = async () => {
     await logout();

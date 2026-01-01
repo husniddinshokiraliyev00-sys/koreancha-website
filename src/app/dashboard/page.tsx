@@ -86,11 +86,14 @@ export default function DashboardPage() {
               <Link href="/" className="text-white/80 hover:text-white transition">
                 {t.home}
               </Link>
-              <Link href="/exercises" className="text-white hover:text-white transition">
+              <Link href="/exercises" className="text-white/80 hover:text-white transition">
                 {t.exercises}
               </Link>
               <Link href="/progress" className="text-white/80 hover:text-white transition">
                 {t.progress}
+              </Link>
+              <Link href="/dashboard" className="text-white hover:text-white transition font-medium">
+                {t.dashboard}
               </Link>
             </div>
 
@@ -98,9 +101,6 @@ export default function DashboardPage() {
             <div className="flex items-center space-x-4">
               <LanguageSwitcher />
               
-              <Link href="/dashboard" className="hidden md:block text-white hover:text-white transition font-medium">
-                {t.dashboard}
-              </Link>
               <button
                 onClick={handleLogout}
                 className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg text-sm font-medium transition"
