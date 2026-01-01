@@ -1,0 +1,24 @@
+'use client';
+
+const translations = {
+  uz: { title: "Kirish", desc: "Koreancha.uz ga xush kelibsiz!" },
+  ru: { title: "Вход", desc: "Добро пожаловать в Koreancha.uz!" },
+  en: { title: "Login", desc: "Welcome to Koreancha.uz!" }
+};
+
+export default function LoginPage() {
+  // Lang detect later
+  const t = translations.uz;
+
+  return (
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="bg-white p-12 rounded-3xl shadow-2xl max-w-md w-full text-center">
+        <h1 className="text-4xl font-bold mb-4">{t.title}</h1>
+        <p className="text-xl mb-8 opacity-80">{t.desc}</p>
+        <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-12 rounded-xl text-xl">
+          Kirish 🚀
+        </button>
+      </div>
+    </main>
+  );
+}
