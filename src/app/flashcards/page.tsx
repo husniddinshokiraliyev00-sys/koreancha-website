@@ -1170,6 +1170,12 @@ function FlashcardsPageContent() {
   const { lang } = useLanguage();
   const { user, logActivity, isPremium, loading: userLoading, saveFlashcardProgress, loadFlashcardProgress, syncLocalProgress } = useUser();
 
+  const unitKeys = useMemo(() => Object.keys(units), []);
+  const initialUnitFromQuery = searchParams.get('unit');
+  const [selectedUnit, setSelectedUnit] = useState<string>(
+    initialUnitFromQuery && units[initialUnitFromQuery] ? initialUnitFromQuery : unitKeys[0] || '1과'
+  );
+
   // Show loading while user authentication is being checked
   if (userLoading) {
     return (
@@ -1178,12 +1184,6 @@ function FlashcardsPageContent() {
       </main>
     );
   }
-
-  const unitKeys = useMemo(() => Object.keys(units), []);
-  const initialUnitFromQuery = searchParams.get('unit');
-  const [selectedUnit, setSelectedUnit] = useState<string>(
-    initialUnitFromQuery && units[initialUnitFromQuery] ? initialUnitFromQuery : unitKeys[0] || '1과'
-  );
 
   const cards = useMemo(() => {
     const base = units[selectedUnit] || [];
