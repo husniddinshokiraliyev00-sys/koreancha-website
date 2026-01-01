@@ -23,7 +23,7 @@ type DonateTranslations = {
   backHome: string;
 };
 
-const translations: Record<Lang, DonateTranslations> = {
+const donateTranslations: Record<Lang, DonateTranslations> = {
   uz: {
     title: 'Donat',
     subtitle: 'Agar loyihani qo‘llab-quvvatlamoqchi bo‘lsangiz, “Menga qahva sovg‘a qiling”.',
@@ -74,6 +74,23 @@ const translations: Record<Lang, DonateTranslations> = {
     editMessage: 'Edit',
     messageSaved: 'Message saved. You can edit it if needed.',
     backHome: 'Back to home'
+  },
+  ko: {
+    title: '기부',
+    subtitle: '프로젝트를 지원하고 싶으시면 "커피를 사주세요".',
+    paymentTitle: '결제 정보',
+    korea: '한국',
+    uzbekistan: '우즈베키스탄',
+    accountNumber: '계좌 번호',
+    cardNumber: '카드 번호',
+    accountHolder: '카드 소유자',
+    cardType: '카드 유형',
+    messageTitle: '메시지 남기기',
+    messagePlaceholder: '메시지를 남겨주세요...',
+    saveMessage: '저장',
+    editMessage: '편집',
+    messageSaved: '메시지가 저장되었습니다. 필요하면 편집할 수 있습니다.',
+    backHome: '홈으로 돌아가기'
   }
 };
 
@@ -81,7 +98,7 @@ const getLangName = (code: Lang) => (code === 'uz' ? "O'Z" : code === 'ru' ? 'Р
 
 export default function DonatePage() {
   const { lang, setLang } = useLanguage();
-  const t = translations[lang];
+  const t = donateTranslations[lang];
 
   const [showLangDropdown, setShowLangDropdown] = useState(false);
   const langDropdownRef = useRef<HTMLDivElement>(null);

@@ -30,7 +30,7 @@ type AuthTranslations = {
   backHome: string;
 };
 
-const translations: Record<Lang, AuthTranslations> = {
+const authTranslations: Record<Lang, AuthTranslations> = {
   uz: {
     headerSignup: "Bepul akkaunt yarating",
     headerLogin: 'Kirish',
@@ -112,7 +112,7 @@ export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const t = translations[lang];
+  const t = authTranslations[lang];
 
   const supabase = useMemo(() => {
     try {

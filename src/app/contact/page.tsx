@@ -31,7 +31,7 @@ type ContactTranslations = {
   backHome: string;
 };
 
-const translations: Record<Lang, ContactTranslations> = {
+const contactTranslations: Record<Lang, ContactTranslations> = {
   uz: {
     title: 'Bog‘lanish',
     subtitle: 'Savollaringiz bormi? Biz sizni eshitishdan xursandmiz!',
@@ -113,7 +113,7 @@ const getLangName = (code: Lang) => (code === 'uz' ? "O'Z" : code === 'ru' ? 'Р
 
 export default function ContactPage() {
   const { lang, setLang } = useLanguage();
-  const t = translations[lang];
+  const t = contactTranslations[lang];
 
   const [showLangDropdown, setShowLangDropdown] = useState(false);
   const langDropdownRef = useRef<HTMLDivElement>(null);

@@ -35,7 +35,7 @@ type ListeningTranslations = {
   context: string;
 };
 
-const translations: Record<Lang, ListeningTranslations> = {
+const listeningTranslations: Record<Lang, ListeningTranslations> = {
   uz: {
     title: "Tinglash mashqlari",
     selectUnit: "Bo'limni tanlang",
@@ -124,7 +124,7 @@ function ListeningPageContent() {
   const { lang } = useLanguage();
   const { user, logActivity } = useUser();
   
-  const t = translations[lang];
+  const t = listeningTranslations[lang];
   
   const units = useMemo(() => getAllUnits(), []);
   const initialUnitFromQuery = searchParams.get('unit');

@@ -37,7 +37,7 @@ type DashboardTranslations = {
   signIn: string;
 };
 
-const translations: Record<Lang, DashboardTranslations> = {
+const dashboardTranslations: Record<Lang, DashboardTranslations> = {
   uz: {
     welcome: 'Xush kelibsiz',
     title: 'Progress Dashboard',
@@ -150,7 +150,7 @@ export default function DashboardPage() {
   const { user, profile, stats, loading, isPremium } = useUser();
   const router = useRouter();
 
-  const t = translations[lang];
+  const t = dashboardTranslations[lang];
 
   const [flashcardsProgress, setFlashcardsProgress] = useState<FlashcardsProgressV1 | null>(null);
 

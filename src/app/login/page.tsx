@@ -31,7 +31,7 @@ type AuthTranslations = {
   backHome: string;
 };
 
-const translations: Record<Lang, AuthTranslations> = {
+const authTranslations: Record<Lang, AuthTranslations> = {
   uz: {
     headerSignup: "Bepul akkaunt yarating",
     headerLogin: 'Kirish',
@@ -113,7 +113,7 @@ function LoginPageContent() {
   const [isSignup, setIsSignup] = useState(initialMode === 'signup');
 
   const { lang, setLang } = useLanguage();
-  const t = translations[lang];
+  const t = authTranslations[lang];
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');

@@ -38,7 +38,7 @@ type ReadingTranslations = {
   false: string;
 };
 
-const translations: Record<Lang, ReadingTranslations> = {
+const readingTranslations: Record<Lang, ReadingTranslations> = {
   uz: {
     title: "O'qish mashqlari",
     selectUnit: "Bo'limni tanlang",
@@ -136,7 +136,7 @@ function ReadingPageContent() {
   const { lang } = useLanguage();
   const { user, logActivity } = useUser();
   
-  const t = translations[lang];
+  const t = readingTranslations[lang];
   
   const units = useMemo(() => getAllReadingUnits(), []);
   const initialUnitFromQuery = searchParams.get('unit');
