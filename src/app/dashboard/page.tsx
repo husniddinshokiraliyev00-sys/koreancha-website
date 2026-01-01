@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 import { useLanguage, type Lang, useUser } from '../providers';
 
@@ -353,20 +352,47 @@ export default function DashboardPage() {
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">{t.masteryByUnit}</h3>
             {flashcardsUnits.length > 0 ? (
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={flashcardsUnits.map(({ unit, masteredCount, total }) => ({
-                  unit,
-                  mastered: masteredCount,
-                  total: total - masteredCount
-                }))}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="unit" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="mastered" fill="#3B82F6" name="Mastered" />
-                  <Bar dataKey="total" fill="#E5E7EB" name="Remaining" />
-                </BarChart>
-              </ResponsiveContainer>
+              <div className="h-64">
+                <div className="relative h-full flex items-end justify-between gap-2 px-2">
+                  {flashcardsUnits.slice(0, 6).map(({ unit, masteredCount, total }, index) => {
+                    const masteredHeight = total > 0 ? (masteredCount / total) * 100 : 0;
+                    const remainingHeight = 100 - masteredHeight;
+                    
+                    return (
+                      <div key={unit} className="flex-1 flex flex-col items-center justify-end">
+                        <div className="text-xs text-gray-600 mb-1 text-center">
+                          {masteredCount}/{total}
+                        </div>
+                        <div className="w-full flex flex-col-reverse" style={{ height: '200px' }}>
+                          <div 
+                            className="w-full bg-blue-500 rounded-t"
+                            style={{ height: `${masteredHeight * 2}px` }}
+                            title={`Mastered: ${masteredCount}`}
+                          />
+                          <div 
+                            className="w-full bg-gray-200 rounded-b"
+                            style={{ height: `${remainingHeight * 2}px` }}
+                            title={`Remaining: ${total - masteredCount}`}
+                          />
+                        </div>
+                        <div className="text-xs text-gray-700 mt-1 text-center font-medium">
+                          {unit}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="flex justify-center gap-6 mt-4 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-blue-500 rounded"></div>
+                    <span className="text-gray-600">Mastered</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-gray-200 rounded"></div>
+                    <span className="text-gray-600">Remaining</span>
+                  </div>
+                </div>
+              </div>
             ) : (
               <div className="h-64 flex items-center justify-center text-gray-500">
                 {t.noActivity}

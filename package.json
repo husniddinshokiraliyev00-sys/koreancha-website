@@ -13,8 +13,7 @@
     "next": "16.1.1",
     "npx": "^10.2.2",
     "react": "19.2.3",
-    "react-dom": "19.2.3",
-    "recharts": "^2.12.7"
+    "react-dom": "19.2.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
