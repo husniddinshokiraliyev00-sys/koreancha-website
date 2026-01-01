@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 import { useLanguage, type Lang } from '../providers';
 
