@@ -147,7 +147,7 @@ const FLASHCARDS_PROGRESS_KEY = 'koreancha_flashcards_progress_v1';
 
 export default function DashboardPage() {
   const { lang } = useLanguage();
-  const { user, profile, stats, loading, isPremium } = useUser();
+  const { user, profile, stats, loading, isPremium, getDisplayName } = useUser();
   const router = useRouter();
 
   const t = dashboardTranslations[lang];
@@ -216,7 +216,7 @@ export default function DashboardPage() {
     );
   }
 
-  const displayName = profile?.full_name || user?.email || 'User';
+  const displayName = getDisplayName();
   const plan = isPremium ? 'premium' : 'free';
 
   return (

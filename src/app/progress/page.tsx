@@ -8,7 +8,7 @@ import { translations } from '../../lib/translations';
 
 function ProgressPageContent() {
   const { lang } = useLanguage();
-  const { user, profile, stats } = useUser();
+  const { user, profile, getDisplayName } = useUser();
   const t = translations[lang];
 
   if (!user) {
@@ -81,7 +81,7 @@ function ProgressPageContent() {
         <div className="bg-white/5 border border-white/10 rounded-xl p-6 mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold mb-2">{profile?.username || 'User'}</h2>
+              <h2 className="text-2xl font-bold mb-2">{getDisplayName()}</h2>
               <p className="text-white/70">Level {Math.floor((progressData.overall.totalXP || 0) / 100)} • {progressData.overall.totalXP} XP</p>
             </div>
             <div className="text-right">
