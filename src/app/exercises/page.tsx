@@ -20,25 +20,31 @@ export default function ExercisesPage() {
 
         <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <Link
-            href="/exercises/vocabulary"
+            href="/flashcards"
             className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition p-6"
           >
-            <div className="text-lg font-bold text-gray-900">Vocabulary</div>
-            <div className="mt-1 text-sm text-gray-600">Flashcards, review, unit learning</div>
+            <div className="text-lg font-bold text-gray-900">So'z yodlash</div>
+            <div className="mt-1 text-sm text-gray-600">Flashcards, SRS, unit learning</div>
             <div className="mt-4 text-sm font-semibold text-blue-700">Open</div>
           </Link>
 
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 opacity-75">
-            <div className="text-lg font-bold text-gray-900">Listening</div>
-            <div className="mt-1 text-sm text-gray-600">Practice listening skills</div>
-            <div className="mt-4 text-sm font-semibold text-gray-500">Coming soon</div>
-          </div>
+          <Link
+            href="/listening"
+            className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition p-6"
+          >
+            <div className="text-lg font-bold text-gray-900">Tinglash mashqlari</div>
+            <div className="mt-1 text-sm text-gray-600">Audio exercises, multiple choice</div>
+            <div className="mt-4 text-sm font-semibold text-blue-700">Open</div>
+          </Link>
 
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 opacity-75">
-            <div className="text-lg font-bold text-gray-900">Reading</div>
-            <div className="mt-1 text-sm text-gray-600">Practice reading skills</div>
-            <div className="mt-4 text-sm font-semibold text-gray-500">Coming soon</div>
-          </div>
+          <Link
+            href="/reading"
+            className="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition p-6"
+          >
+            <div className="text-lg font-bold text-gray-900">O'qish mashqlari</div>
+            <div className="mt-1 text-sm text-gray-600">Reading passages, comprehension</div>
+            <div className="mt-4 text-sm font-semibold text-blue-700">Open</div>
+          </Link>
 
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 opacity-75">
             <div className="text-lg font-bold text-gray-900">Writing</div>

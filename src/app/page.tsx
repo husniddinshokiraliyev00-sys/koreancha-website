@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { useLanguage, type Lang, useUser } from './providers';
+import { translations as i18nTranslations } from '../lib/translations';
 
 const translations = {
   uz: {
@@ -73,13 +74,13 @@ const translations = {
   },
   en: {
     logo: "Koreancha.uz",
-    nav: ["Home", "Exercises", "Mock Tests", "About Us"],
-    heroTitle: "Professional TOPIK Preparation Platform",
-    heroDesc: "Learn Korean with Hangul, vocabulary, listening, reading, and writing exercises.",
+    nav: ["Home", "Exercises", "Mock Tests", "About"],
+    heroTitle: "Professional platform for TOPIK preparation",
+    heroDesc: "Learn Korean with Hangul, vocabulary, listening, reading and writing exercises. Personal progress and fast results.",
     cta: "Get Started",
-    activitiesTitle: "Most popular activities",
+    activitiesTitle: "Most Popular Activities",
     activities: [
-      { title: "Learn Vocabulary", icon: 'book' },
+      { title: "Vocabulary", icon: 'book' },
       { title: "Listening Practice", icon: 'headphones' },
       { title: "Reading Practice", icon: 'file' },
       { title: "Writing Practice", icon: 'pencil' },
@@ -89,19 +90,51 @@ const translations = {
     ],
     login: "Login",
     signup: "Sign Up",
-    progressCheck: "My Progress",
+    progressCheck: "Check Progress",
     featuresTitle: "Key Features",
     features: [
       { title: "Flashcards & SRS", desc: "Long-term vocabulary retention" },
-      { title: "Listening Practice", desc: "Authentic audio and dialogues" },
+      { title: "Listening Exercises", desc: "Real audio and dialogues" },
       { title: "Reading & Writing", desc: "TOPIK format exercises" },
-      { title: "Mock Tests", desc: "Timed tests with scoring" }
+      { title: "Full Mock Tests", desc: "Time limits and grading" }
     ],
     modalTitle: "Login / Sign Up",
     email: "Email",
     password: "Password",
     modalLogin: "Login",
     modalSignup: "Sign Up"
+  },
+  ko: {
+    logo: "Koreancha.uz",
+    nav: ["홈", "연습", "모의 테스트", "소개"],
+    heroTitle: "TOPIK 준비를 위한 전문 플랫폼",
+    heroDesc: "한글, 어휘, 듣기, 읽기, 쓰기 연습으로 한국어를 배우세요. 개인 진행과 빠른 결과.",
+    cta: "시작하기",
+    activitiesTitle: "가장 인기 있는 활동",
+    activities: [
+      { title: "어휘", icon: 'book' },
+      { title: "듣기 연습", icon: 'headphones' },
+      { title: "읽기 연습", icon: 'file' },
+      { title: "쓰기 연습", icon: 'pencil' },
+      { title: "TOPIK 샘플", icon: 'star' },
+      { title: "전체 모의", icon: 'timer' },
+      { title: "말하기 연습", icon: 'mic' }
+    ],
+    login: "로그인",
+    signup: "가입",
+    progressCheck: "진행 확인",
+    featuresTitle: "주요 기능",
+    features: [
+      { title: "플래시카드 & SRS", desc: "장기 어휘 기억" },
+      { title: "듣기 연습", desc: "실제 오디오 및 대화" },
+      { title: "읽기 & 쓰기", desc: "TOPIK 형식 연습" },
+      { title: "전체 모의 테스트", desc: "시간 제한 및 채점" }
+    ],
+    modalTitle: "로그인 / 가입",
+    email: "이메일",
+    password: "비밀번호",
+    modalLogin: "로그인",
+    modalSignup: "가입"
   }
 };
 
@@ -126,7 +159,7 @@ export default function Home() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleLangChange = (newLang: 'uz' | 'ru' | 'en') => {
+  const handleLangChange = (newLang: 'uz' | 'en' | 'ko') => {
     setLang(newLang);
     setShowLangDropdown(false);
   };
@@ -247,31 +280,35 @@ export default function Home() {
             <h1 className="text-2xl md:text-3xl font-bold">
               {t.logo}
             </h1>
+            {/* Language Switcher */}
             <div className="relative" ref={langDropdownRef}>
               <button 
                 onClick={() => setShowLangDropdown(!showLangDropdown)}
                 className="flex items-center gap-1 text-white hover:text-blue-300 transition"
               >
-                {getLangName(lang)}
+                <span className="text-lg font-bold">
+                  {lang === 'uz' ? 'UZ' : lang === 'en' ? 'EN' : 'KO'}
+                </span>
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
               {showLangDropdown && (
                 <div className="absolute left-0 mt-2 w-32 bg-white rounded-lg shadow-lg p-2 z-50">
-                  {Object.entries({
-                    'uz': "O'zbekcha",
-                    'ru': "Русский",
-                    'en': "English"
-                  }).map(([code, name]) => (
+                  {[
+                    { code: 'uz', name: 'O\'zbekcha', flag: '🇺🇿' },
+                    { code: 'en', name: 'English', flag: '🇬🇧' },
+                    { code: 'ko', name: '한국어', flag: '🇰🇷' }
+                  ].map(({ code, name, flag }) => (
                     <button
                       key={code}
-                      onClick={() => handleLangChange(code as 'uz' | 'ru' | 'en')}
-                      className={`block w-full text-left px-4 py-2 rounded text-gray-800 hover:bg-blue-50 hover:text-blue-700 transition ${
+                      onClick={() => handleLangChange(code as 'uz' | 'en' | 'ko')}
+                      className={`w-full text-left px-4 py-2 rounded text-gray-800 hover:bg-blue-50 hover:text-blue-700 transition flex items-center gap-2 ${
                         lang === code ? 'bg-blue-50 text-blue-700 font-medium' : ''
                       }`}
                     >
-                      {name}
+                      <span>{flag}</span>
+                      <span>{name}</span>
                     </button>
                   ))}
                 </div>
@@ -319,7 +356,15 @@ export default function Home() {
                         onClick={() => {
                           setOpenNavDropdown(null);
                           if (a.icon === 'book') {
-                            router.push('/exercises/vocabulary');
+                            router.push('/flashcards');
+                            return;
+                          }
+                          if (a.icon === 'headphones') {
+                            router.push('/listening');
+                            return;
+                          }
+                          if (a.icon === 'file') {
+                            router.push('/reading');
                             return;
                           }
 

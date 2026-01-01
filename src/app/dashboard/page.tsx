@@ -1,35 +1,26 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { createClient, type Session, type User } from '@supabase/supabase-js';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-import { useLanguage, type Lang, useUser, useSupabase } from '../providers';
-
-type Plan = 'free' | 'premium';
-
-type Activity = {
-  title: string;
-  icon: 'book' | 'headphones' | 'file' | 'pencil' | 'star' | 'timer' | 'mic';
-  limitKey?: 'limitedPerDay' | 'limitedAccess';
-};
-
-const activities: Activity[] = [
-  { title: 'Learn Vocabulary', icon: 'book', limitKey: 'limitedPerDay' },
-  { title: 'Listening Practice', icon: 'headphones', limitKey: 'limitedPerDay' },
-  { title: 'Reading Practice', icon: 'file', limitKey: 'limitedPerDay' },
-  { title: 'Writing Practice', icon: 'pencil', limitKey: 'limitedPerDay' },
-  { title: 'TOPIK Samples', icon: 'star', limitKey: 'limitedAccess' },
-  { title: 'Full Mock', icon: 'timer', limitKey: 'limitedAccess' },
-  { title: 'Speaking Practice', icon: 'mic', limitKey: 'limitedPerDay' }
-];
+import { useLanguage, type Lang, useUser } from '../providers';
 
 type DashboardTranslations = {
   welcome: string;
-  dashboardTitle: string;
-  dashboardDescPremium: string;
-  dashboardDescFree: string;
+  title: string;
+  overallStats: string;
+  totalCardsStudied: string;
+  masteryRate: string;
+  currentStreak: string;
+  topikLevel: string;
+  masteryByUnit: string;
+  recentActivity: string;
+  noActivity: string;
+  daysAgo: string;
+  today: string;
+  yesterday: string;
   premium: string;
   free: string;
   logout: string;
@@ -38,66 +29,105 @@ type DashboardTranslations = {
   unlimited: string;
   limitedPerDay: string;
   limitedAccess: string;
-  flashcardsProgressTitle: string;
-  flashcardsProgressDesc: string;
+  flashcardProgress: string;
+  flashcardDesc: string;
   continue: string;
-  noFlashcardsProgress: string;
+  noFlashcardProgress: string;
+  guestMode: string;
+  loginRequired: string;
+  signIn: string;
 };
 
 const translations: Record<Lang, DashboardTranslations> = {
   uz: {
     welcome: 'Xush kelibsiz',
-    dashboardTitle: 'Dashboard',
-    dashboardDescPremium: 'Barcha faoliyatlar va materiallarga cheksiz kirish imkoningiz bor.',
-    dashboardDescFree: 'Barcha faoliyatlardan cheklov bilan foydalanasiz. Keyinroq Premiumga o‘ting.',
+    title: 'Progress Dashboard',
+    overallStats: 'Umumiy statistika',
+    totalCardsStudied: 'Jami o\'rganilgan kartalar',
+    masteryRate: 'Ustalik darajasi',
+    currentStreak: 'Joriy seriya',
+    topikLevel: 'TOPIK darajasi',
+    masteryByUnit: 'Bo\'limlar bo\'yicha ustalik',
+    recentActivity: 'So\'nggi faoliyat',
+    noActivity: 'Faoliyat yo\'q',
+    daysAgo: 'kun oldin',
+    today: 'Bugun',
+    yesterday: 'Kecha',
     premium: 'Premium',
-    free: 'Free',
+    free: 'Bepul',
     logout: 'Chiqish',
-    upgrade: 'Premiumga o‘tish',
+    upgrade: 'Yangilash',
     activities: 'Faoliyatlar',
-    unlimited: 'Cheksiz kirish',
+    unlimited: 'Cheksiz',
     limitedPerDay: 'Kuniga cheklangan',
     limitedAccess: 'Cheklangan kirish',
-    flashcardsProgressTitle: 'Flashcards natijalari',
-    flashcardsProgressDesc: 'So‘z yodlashdagi progress.',
-    continue: 'Davom etish',
-    noFlashcardsProgress: 'Hali flashcards progress yo‘q.'
+    flashcardProgress: 'Flashcard progress',
+    flashcardDesc: 'Continue learning where you left off',
+    continue: 'Davom eting',
+    noFlashcardProgress: 'No flashcard progress yet',
+    guestMode: 'Mehmon rejimi',
+    loginRequired: 'To\'liq statistika uchun tizimga kiring',
+    signIn: 'Kirish'
   },
   ru: {
     welcome: 'Добро пожаловать',
-    dashboardTitle: 'Панель',
-    dashboardDescPremium: 'У вас безлимитный доступ ко всем активностям и материалам.',
-    dashboardDescFree: 'Доступ ко всем активностям с ограничениями. Позже можно перейти на Premium.',
-    premium: 'Premium',
-    free: 'Free',
+    title: 'Панель прогресса',
+    overallStats: 'Общая статистика',
+    totalCardsStudied: 'Всего изучено карточек',
+    masteryRate: 'Уровень владения',
+    currentStreak: 'Текущая серия',
+    topikLevel: 'Уровень TOPIK',
+    masteryByUnit: 'Владение по юнитам',
+    recentActivity: 'Последняя активность',
+    noActivity: 'Нет активности',
+    daysAgo: 'дней назад',
+    today: 'Сегодня',
+    yesterday: 'Вчера',
+    premium: 'Премиум',
+    free: 'Бесплатный',
     logout: 'Выйти',
-    upgrade: 'Перейти на Premium',
+    upgrade: 'Обновить',
     activities: 'Активности',
-    unlimited: 'Безлимитный доступ',
+    unlimited: 'Безлимитный',
     limitedPerDay: 'Ограничено в день',
     limitedAccess: 'Ограниченный доступ',
-    flashcardsProgressTitle: 'Прогресс Flashcards',
-    flashcardsProgressDesc: 'Прогресс по изучению слов.',
+    flashcardProgress: 'Прогресс карточек',
+    flashcardDesc: 'Продолжайте обучение с того места, где остановились',
     continue: 'Продолжить',
-    noFlashcardsProgress: 'Пока нет прогресса по flashcards.'
+    noFlashcardProgress: 'Прогресса по карточкам пока нет',
+    guestMode: 'Гостевой режим',
+    loginRequired: 'Войдите для полной статистики',
+    signIn: 'Войти'
   },
   en: {
     welcome: 'Welcome',
-    dashboardTitle: 'Dashboard',
-    dashboardDescPremium: 'You have unlimited access to all activities and materials.',
-    dashboardDescFree: 'You can access all activities with limitations. Upgrade later for unlimited access.',
+    title: 'Progress Dashboard',
+    overallStats: 'Overall Statistics',
+    totalCardsStudied: 'Total Cards Studied',
+    masteryRate: 'Mastery Rate',
+    currentStreak: 'Current Streak',
+    topikLevel: 'TOPIK Level',
+    masteryByUnit: 'Mastery by Unit',
+    recentActivity: 'Recent Activity',
+    noActivity: 'No activity',
+    daysAgo: 'days ago',
+    today: 'Today',
+    yesterday: 'Yesterday',
     premium: 'Premium',
     free: 'Free',
     logout: 'Logout',
-    upgrade: 'Upgrade to Premium',
+    upgrade: 'Upgrade',
     activities: 'Activities',
-    unlimited: 'Unlimited access',
+    unlimited: 'Unlimited',
     limitedPerDay: 'Limited per day',
     limitedAccess: 'Limited access',
-    flashcardsProgressTitle: 'Flashcards progress',
-    flashcardsProgressDesc: 'Your vocabulary learning progress.',
+    flashcardProgress: 'Flashcard progress',
+    flashcardDesc: 'Continue learning where you left off',
     continue: 'Continue',
-    noFlashcardsProgress: 'No flashcards progress yet.'
+    noFlashcardProgress: 'No flashcard progress yet',
+    guestMode: 'Guest Mode',
+    loginRequired: 'Sign in for full statistics',
+    signIn: 'Sign In'
   }
 };
 
@@ -116,89 +146,14 @@ type FlashcardsProgressV1 = {
 
 const FLASHCARDS_PROGRESS_KEY = 'koreancha_flashcards_progress_v1';
 
-const getLangName = (code: Lang) => (code === 'uz' ? "O'Z" : code === 'ru' ? 'РУ' : 'EN');
-
-const renderIcon = (name: Activity['icon']) => {
-  const className = 'w-5 h-5';
-
-  switch (name) {
-    case 'book':
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M4 19a2 2 0 0 0 2 2h12" />
-          <path d="M6 3h12a2 2 0 0 1 2 2v16" />
-          <path d="M6 3a2 2 0 0 0-2 2v14a2 2 0 0 1 2-2h12" />
-        </svg>
-      );
-    case 'headphones':
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M4 13a8 8 0 0 1 16 0" />
-          <path d="M4 13v6a2 2 0 0 0 2 2h1v-8H6a2 2 0 0 0-2 2" />
-          <path d="M20 13v6a2 2 0 0 1-2 2h-1v-8h1a2 2 0 0 1 2 2" />
-        </svg>
-      );
-    case 'file':
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <path d="M14 2v6h6" />
-        </svg>
-      );
-    case 'pencil':
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 20h9" />
-          <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" />
-        </svg>
-      );
-    case 'star':
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 17.27 18.18 21 16.54 13.97 22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-        </svg>
-      );
-    case 'timer':
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M10 2h4" />
-          <path d="M12 14v-4" />
-          <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-        </svg>
-      );
-    case 'mic':
-      return (
-        <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z" />
-          <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-          <path d="M12 19v4" />
-          <path d="M8 23h8" />
-        </svg>
-      );
-  }
-};
-
-const getPlanFromUser = (user: User | null): Plan => {
-  const anyUser: any = user;
-  const plan = anyUser?.user_metadata?.plan;
-  const isPremium = anyUser?.user_metadata?.is_premium;
-
-  if (plan === 'premium' || isPremium === true) return 'premium';
-  return 'free';
-};
-
 export default function DashboardPage() {
-  const { lang, setLang } = useLanguage();
-  const { user, profile, stats, loading, isPremium, canAccessFeature, logActivity } = useUser();
-  const supabase = useSupabase();
+  const { lang } = useLanguage();
+  const { user, profile, stats, loading, isPremium } = useUser();
   const router = useRouter();
 
-  const ui = useMemo(() => translations[lang], [lang]);
-  const t = ui;
+  const t = translations[lang];
 
   const [flashcardsProgress, setFlashcardsProgress] = useState<FlashcardsProgressV1 | null>(null);
-  const [showLangDropdown, setShowLangDropdown] = useState(false);
-  const langDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     try {
@@ -226,8 +181,7 @@ export default function DashboardPage() {
         const total = typeof u.totalCards === 'number' ? u.totalCards : 0;
         const masteredCount = Array.isArray(u.masteredIndices) ? u.masteredIndices.length : 0;
         const updatedAt = typeof u.updatedAt === 'string' ? u.updatedAt : '';
-        const lastIndex = typeof u.lastIndex === 'number' ? u.lastIndex : 0;
-        return { unit, total, masteredCount, updatedAt, lastIndex };
+        return { unit, total, masteredCount, updatedAt };
       })
       .filter((u) => u.total > 0)
       .sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
@@ -235,31 +189,29 @@ export default function DashboardPage() {
 
   const mostRecentFlashcardsUnit = flashcardsUnits[0] || null;
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
-        setShowLangDropdown(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  const handleLangChange = (newLang: Lang) => {
-    setLang(newLang);
-  };
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.replace('/login');
-  };
-
-  if (loading || !user) {
+  // Guest mode handling
+  if (!user) {
     return (
-      <main className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+      <main className="min-h-screen bg-gray-50">
+        <div className="max-w-4xl mx-auto px-6 py-12">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">{t.guestMode}</h1>
+            <p className="text-gray-600 mb-8">{t.loginRequired}</p>
+            <Link
+              href="/login"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition"
+            >
+              {t.signIn}
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-gray-700 font-semibold">Loading...</div>
       </main>
     );
@@ -270,6 +222,7 @@ export default function DashboardPage() {
 
   return (
     <main className="min-h-screen bg-gray-50">
+      {/* Header */}
       <header className="bg-gray-900 text-white">
         <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between gap-4">
           <div>
@@ -278,44 +231,6 @@ export default function DashboardPage() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="relative" ref={langDropdownRef}>
-              <button
-                type="button"
-                onClick={() => setShowLangDropdown((v) => !v)}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 transition"
-              >
-                <span className="text-sm font-semibold text-white">{getLangName(lang)}</span>
-                <svg
-                  className={`w-4 h-4 text-white/80 transition-transform ${showLangDropdown ? 'rotate-180' : ''}`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              {showLangDropdown && (
-                <div className="absolute right-0 mt-2 w-28 bg-white rounded-lg shadow-xl py-1 z-50 border border-gray-100">
-                  {(['uz', 'ru', 'en'] as Lang[]).map((code) => (
-                    <button
-                      key={code}
-                      type="button"
-                      onClick={() => {
-                        handleLangChange(code);
-                        setShowLangDropdown(false);
-                      }}
-                      className={`w-full text-left px-3 py-2 text-sm transition hover:bg-gray-50 ${
-                        lang === code ? 'bg-blue-50 text-blue-700 font-semibold' : 'text-gray-700'
-                      }`}
-                    >
-                      {getLangName(code)}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
             <div
               className={`px-3 py-1 rounded-full text-sm font-semibold border ${
                 plan === 'premium'
@@ -326,22 +241,28 @@ export default function DashboardPage() {
               {plan === 'premium' ? t.premium : t.free}
             </div>
 
-            <button
-              type="button"
-              onClick={handleSignOut}
+            <Link
+              href="/login"
+              onClick={() => {
+                // Handle logout logic here
+                router.replace('/login');
+              }}
               className="bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg font-semibold transition"
             >
               {t.logout}
-            </button>
+            </Link>
           </div>
         </div>
+      </header>
 
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        {/* Stats Widgets */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           {/* Streak Widget */}
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
             <div className="flex items-center justify-between gap-2">
               <div className="flex-1">
-                <div className="text-xs font-semibold text-gray-800">🔥 Streak</div>
+                <div className="text-xs font-semibold text-gray-800">🔥 {t.currentStreak}</div>
                 <div className="text-xs text-gray-600 mt-1">Daily learning</div>
               </div>
               <div className="text-xl font-bold text-orange-600">{profile?.streak_current || 0}</div>
@@ -369,7 +290,7 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
             <div className="flex items-center justify-between gap-2">
               <div className="flex-1">
-                <div className="text-xs font-semibold text-gray-800">📊 Stats</div>
+                <div className="text-xs font-semibold text-gray-800">📊 {t.totalCardsStudied}</div>
                 <div className="text-xs text-gray-600 mt-1">Progress</div>
               </div>
               <div className="text-xl font-bold text-blue-600">{stats?.flashcards_reviewed || 0}</div>
@@ -380,11 +301,12 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="mt-6 bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        {/* Flashcards Progress */}
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
             <div>
-              <div className="text-sm font-semibold text-gray-800">{t.flashcardsProgressTitle}</div>
-              <div className="mt-1 text-sm text-gray-600">{t.flashcardsProgressDesc}</div>
+              <div className="text-sm font-semibold text-gray-800">{t.flashcardProgress}</div>
+              <div className="mt-1 text-sm text-gray-600">{t.flashcardDesc}</div>
             </div>
 
             {mostRecentFlashcardsUnit && (
@@ -398,95 +320,126 @@ export default function DashboardPage() {
           </div>
 
           {flashcardsUnits.length === 0 ? (
-            <div className="mt-4 text-sm text-gray-700">{t.noFlashcardsProgress}</div>
+            <div className="text-sm text-gray-700">{t.noFlashcardProgress}</div>
           ) : (
-            <div className="mt-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {flashcardsUnits.slice(0, 6).map((u) => {
-                const percent = u.total ? Math.round((u.masteredCount / u.total) * 100) : 0;
-
+            <div className="space-y-3">
+              {flashcardsUnits.slice(0, 3).map(({ unit, total, masteredCount, updatedAt }) => {
+                const percentage = total > 0 ? Math.round((masteredCount / total) * 100) : 0;
                 return (
-                  <div key={u.unit} className="rounded-2xl border border-gray-100 bg-gray-50 p-4">
-                    <div className="flex items-center justify-between gap-3">
-                      <div className="font-bold text-gray-900">{u.unit}</div>
-                      <div className="text-xs font-semibold text-gray-600">{percent}%</div>
+                  <div key={unit} className="flex items-center justify-between gap-4 p-3 bg-gray-50 rounded-lg">
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-medium text-gray-900">{unit}</span>
+                        <span className="text-xs text-gray-500">{masteredCount}/{total}</span>
+                      </div>
+                      <div className="mt-1 w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${percentage}%` }}
+                        />
+                      </div>
                     </div>
-                    <div className="mt-2 h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-green-600" style={{ width: `${percent}%` }} />
-                    </div>
-                    <div className="mt-2 text-xs text-gray-600">
-                      {u.masteredCount} / {u.total} mastered
-                    </div>
-
-                    <div className="mt-3">
-                      <Link
-                        href={`/flashcards?unit=${encodeURIComponent(u.unit)}`}
-                        className="text-sm font-semibold text-blue-700 hover:text-blue-800 transition"
-                      >
-                        {t.continue}
-                      </Link>
-                    </div>
+                    <div className="text-xs text-gray-500">{percentage}%</div>
                   </div>
                 );
               })}
             </div>
           )}
-
-          <div className="mt-5">
-            <Link href="/exercises/vocabulary" className="text-sm font-semibold text-blue-700 hover:text-blue-800 transition">
-              Open vocabulary exercises
-            </Link>
-          </div>
         </div>
-      </header>
 
-      <section className="max-w-6xl mx-auto px-6 py-10">
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900">{t.dashboardTitle}</h1>
-              <p className="mt-1 text-gray-600">
-                {plan === 'premium' ? t.dashboardDescPremium : t.dashboardDescFree}
-              </p>
-            </div>
-
-            {plan === 'free' && (
-              <button
-                type="button"
-                className="bg-blue-700 hover:bg-blue-800 text-white px-5 py-3 rounded-xl font-bold transition transform hover:-translate-y-1 active:translate-y-0 active:scale-[0.98]"
-              >
-                {t.upgrade}
-              </button>
+        {/* Enhanced Statistics */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Mastery Chart */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">{t.masteryByUnit}</h3>
+            {flashcardsUnits.length > 0 ? (
+              <ResponsiveContainer width="100%" height={250}>
+                <BarChart data={flashcardsUnits.map(({ unit, masteredCount, total }) => ({
+                  unit,
+                  mastered: masteredCount,
+                  total: total - masteredCount
+                }))}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="unit" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar dataKey="mastered" fill="#3B82F6" name="Mastered" />
+                  <Bar dataKey="total" fill="#E5E7EB" name="Remaining" />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-64 flex items-center justify-center text-gray-500">
+                {t.noActivity}
+              </div>
             )}
           </div>
-        </div>
 
-        <div className="mt-10">
-          <div className="text-sm font-semibold text-gray-800 mb-4">{t.activities}</div>
-          <div className="flex flex-wrap gap-4">
-            {activities.map((a) => (
-              <button
-                key={a.title}
-                type="button"
-                onClick={() => {
-                  if (a.icon === 'book') {
-                    router.push('/exercises/vocabulary');
-                    return;
-                  }
-                }}
-                className="bg-white text-gray-900 hover:bg-gray-50 px-5 py-4 rounded-2xl shadow-sm hover:shadow-md transition border border-gray-100 inline-flex items-start gap-3 min-w-[240px] flex-1 transform hover:-translate-y-1 active:translate-y-0 active:scale-[0.98]"
-              >
-                <span className="mt-0.5 text-blue-700">{renderIcon(a.icon)}</span>
-                <span className="text-left">
-                  <span className="block font-bold">{a.title}</span>
-                  <span className="block text-sm text-gray-600 mt-1">
-                    {plan === 'premium' ? t.unlimited : a.limitKey ? t[a.limitKey] : ''}
-                  </span>
-                </span>
-              </button>
-            ))}
+          {/* Recent Activity */}
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">{t.recentActivity}</h3>
+            <div className="space-y-3">
+              {flashcardsUnits.slice(0, 5).map(({ unit, masteredCount, updatedAt }) => {
+                const date = new Date(updatedAt);
+                const now = new Date();
+                const daysDiff = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+                
+                let timeAgo = t.today;
+                if (daysDiff === 1) timeAgo = t.yesterday;
+                else if (daysDiff > 1) timeAgo = `${daysDiff} ${t.daysAgo}`;
+                
+                return (
+                  <div key={unit} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div>
+                      <div className="font-medium text-gray-900">{unit}</div>
+                      <div className="text-sm text-gray-600">{masteredCount} cards mastered</div>
+                    </div>
+                    <div className="text-xs text-gray-500">{timeAgo}</div>
+                  </div>
+                );
+              })}
+              {flashcardsUnits.length === 0 && (
+                <div className="text-center text-gray-500 py-8">
+                  {t.noActivity}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </section>
+
+        {/* TOPIK Level */}
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl border border-gray-100 shadow-sm p-6 text-white mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">{t.topikLevel}</h3>
+              <div className="text-3xl font-bold">
+                {profile?.level && profile.level >= 10 ? 'TOPIK II' : 'TOPIK I'}
+              </div>
+              <div className="text-sm opacity-80 mt-1">
+                Based on your XP and progress
+              </div>
+            </div>
+            <div className="text-6xl opacity-20">
+              🎯
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <div className="flex justify-between items-center">
+          <Link
+            href="/exercises"
+            className="text-blue-600 hover:text-blue-700 font-medium transition"
+          >
+            ← {t.activities}
+          </Link>
+          <Link
+            href="/"
+            className="text-blue-600 hover:text-blue-700 font-medium transition"
+          >
+            {t.home}
+          </Link>
+        </div>
+      </div>
     </main>
   );
 }

@@ -1285,6 +1285,7 @@ function FlashcardsPageContent() {
     if (!currentCard) return '';
     if (lang === 'ru') return currentCard.russian || currentCard.uzbek;
     if (lang === 'en') return currentCard.english || currentCard.uzbek;
+    if (lang === 'ko') return currentCard.korean; // Show Korean for Korean users
     return currentCard.uzbek;
   }, [currentCard, lang]);
 

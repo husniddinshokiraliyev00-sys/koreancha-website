@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from '
 import { createClient, type Session, type User } from '@supabase/supabase-js';
 import { supabase, type Database } from '../lib/supabase';
 
-export type Lang = 'uz' | 'ru' | 'en';
+export type Lang = 'uz' | 'en' | 'ko';
 
 type LanguageContextValue = {
   lang: Lang;
@@ -38,7 +38,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       const savedLang = localStorage.getItem('preferredLanguage') as Lang | null;
-      if (savedLang === 'uz' || savedLang === 'ru' || savedLang === 'en') {
+      if (savedLang === 'uz' || savedLang === 'en' || savedLang === 'ko') {
         setLangState(savedLang);
       }
     } catch {
@@ -50,7 +50,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     const onStorage = (e: StorageEvent) => {
       if (e.key !== 'preferredLanguage') return;
       const next = e.newValue as Lang | null;
-      if (next === 'uz' || next === 'ru' || next === 'en') {
+      if (next === 'uz' || next === 'en' || next === 'ko') {
         setLangState(next);
       }
     };
