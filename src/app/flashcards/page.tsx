@@ -1,4 +1,4 @@
-'use client';
+ 'use client';
 
 import { useEffect, useMemo, useRef, useState, Suspense } from 'react';
 import Link from 'next/link';
@@ -8,6 +8,7 @@ import { useLanguage, useUser } from '../providers';
 import { translations } from '../../lib/translations';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
 import MobileNav from '../../components/MobileNav';
+import flashcardsData from '../../data/flashcardsData.json';
 
 type Card = {
   korean: string;
@@ -17,6 +18,17 @@ type Card = {
 };
 
 type Units = Record<string, Card[]>;
+
+type FlashcardsDataEntry = {
+  book: '1A' | '1B';
+  unit: string;
+  cards: Array<{
+    korean: string;
+    uzbek: string;
+    russian?: string;
+    english?: string;
+  }>;
+};
 
 type FlashcardsProgressV1 = {
   version: 1;
@@ -37,6 +49,9 @@ type FlashcardsProgressV1 = {
 };
 
 const FLASHCARDS_PROGRESS_KEY = 'koreancha_flashcards_progress_v1';
+
+const BOOKS = ['1A', '1B'] as const;
+type Book = (typeof BOOKS)[number];
 
 const units: Units = {
   '1과': [
@@ -588,6 +603,20 @@ const units: Units = {
     { korean: '선을 보다', uzbek: 'sovchilar orqali uchrashmoq' }
   ]
 };
+
+// Merge JSON-based flashcards data (e.g. 1B) into the existing units map.
+(() => {
+  const entries = flashcardsData as unknown as FlashcardsDataEntry[];
+  for (const entry of entries) {
+    if (!entry || !entry.unit || !Array.isArray(entry.cards)) continue;
+    units[entry.unit] = entry.cards.map((c) => ({
+      korean: c.korean,
+      uzbek: c.uzbek,
+      russian: c.russian,
+      english: c.english
+    }));
+  }
+})();
 
 const unitTranslationsList: Record<
   string,
@@ -1174,11 +1203,33 @@ function FlashcardsPageContent() {
   const { lang } = useLanguage();
   const { user, logActivity, isPremium, loading: userLoading, saveFlashcardProgress, loadFlashcardProgress, syncLocalProgress, logout } = useUser();
 
-  const unitKeys = useMemo(() => Object.keys(units), []);
+  const initialBookFromQuery = (searchParams.get('book') as Book | null) ?? null;
+  const [selectedBook, setSelectedBook] = useState<Book>(BOOKS.includes(initialBookFromQuery as Book) ? (initialBookFromQuery as Book) : '1A');
+
+  const allUnitKeys = useMemo(() => Object.keys(units), []);
+  const unitKeysForBook = useMemo(() => {
+    return allUnitKeys
+      .filter((u) => {
+        const n = Number(u.replace(/\D/g, ''));
+        if (!Number.isFinite(n)) return false;
+        return selectedBook === '1A' ? n >= 1 && n <= 8 : n >= 9 && n <= 15;
+      })
+      .sort((a, b) => Number(a.replace(/\D/g, '')) - Number(b.replace(/\D/g, '')));
+  }, [allUnitKeys, selectedBook]);
+
   const initialUnitFromQuery = searchParams.get('unit');
-  const [selectedUnit, setSelectedUnit] = useState<string>(
-    initialUnitFromQuery && units[initialUnitFromQuery] ? initialUnitFromQuery : unitKeys[0] || '1과'
-  );
+  const [selectedUnit, setSelectedUnit] = useState<string>(() => {
+    if (initialUnitFromQuery && units[initialUnitFromQuery]) return initialUnitFromQuery;
+    return selectedBook === '1A' ? '1과' : '9과';
+  });
+
+  const unitProgressKey = useMemo(() => `${selectedBook}:${selectedUnit}`, [selectedBook, selectedUnit]);
+
+  useEffect(() => {
+    if (!unitKeysForBook.includes(selectedUnit)) {
+      setSelectedUnit(unitKeysForBook[0] || (selectedBook === '1A' ? '1과' : '9과'));
+    }
+  }, [selectedBook, selectedUnit, unitKeysForBook]);
 
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
@@ -1202,6 +1253,7 @@ function FlashcardsPageContent() {
     }
 
     return base.map((card) => {
+      if (card.russian || card.english) return card;
       const list = queues[card.korean];
       const t = list && list.length > 0 ? list.shift() : undefined;
       if (!t) return card;
@@ -1297,7 +1349,16 @@ function FlashcardsPageContent() {
     
     const loadProgress = async () => {
       if (user) {
-        const backendProgress = await loadFlashcardProgress(selectedUnit);
+        let backendProgress = await loadFlashcardProgress(unitProgressKey);
+
+        // Backward compatibility: migrate legacy 1A progress stored under plain unit name.
+        if (selectedBook === '1A' && backendProgress.mastered.length === 0 && backendProgress.again.length === 0) {
+          const legacy = await loadFlashcardProgress(selectedUnit);
+          if (legacy.mastered.length > 0 || legacy.again.length > 0) {
+            backendProgress = legacy;
+            await syncLocalProgress(unitProgressKey, legacy.mastered, legacy.again);
+          }
+        }
         
         const raw = localStorage.getItem(FLASHCARDS_PROGRESS_KEY);
         let localProgress: FlashcardsProgressV1 | null = null;
@@ -1312,9 +1373,13 @@ function FlashcardsPageContent() {
           }
         }
         
-        if (localProgress && localProgress.units[selectedUnit]) {
-          const unitProgress = localProgress.units[selectedUnit];
-          await syncLocalProgress(selectedUnit, unitProgress.masteredIndices, unitProgress.againIndices || []);
+        const localUnitKey = localProgress?.units[unitProgressKey]
+          ? unitProgressKey
+          : (selectedBook === '1A' && localProgress?.units[selectedUnit] ? selectedUnit : null);
+
+        if (localProgress && localUnitKey) {
+          const unitProgress = localProgress.units[localUnitKey];
+          await syncLocalProgress(unitProgressKey, unitProgress.masteredIndices, unitProgress.againIndices || []);
         }
         
         setMastered(backendProgress.mastered);
@@ -1347,7 +1412,11 @@ function FlashcardsPageContent() {
           setIsFlipped(false);
           return;
         }
-        const unitData = parsed.units[selectedUnit] || {
+        const unitData = parsed.units[unitProgressKey]
+          ? parsed.units[unitProgressKey]
+          : (selectedBook === '1A' && parsed.units[selectedUnit] ? parsed.units[selectedUnit] : undefined);
+
+        const resolvedUnitData = unitData || {
           masteredIndices: [],
           lastIndex: 0,
           totalCards: cards.length,
@@ -1358,19 +1427,26 @@ function FlashcardsPageContent() {
           deckPosition: 0,
           updatedAt: new Date().toISOString()
         };
-        setMastered(unitData.masteredIndices);
-        setAgain(unitData.againIndices || []);
-        setMode(unitData.mode || 'all');
-        setShuffleEnabled(unitData.shuffleEnabled || false);
-        setDeckOrder(unitData.deckOrder || allIndices);
-        setDeckPosition(unitData.deckPosition || 0);
+
+        // If we used legacy 1A key, write it under the new book-scoped key.
+        if (selectedBook === '1A' && !parsed.units[unitProgressKey] && parsed.units[selectedUnit]) {
+          parsed.units[unitProgressKey] = parsed.units[selectedUnit];
+          localStorage.setItem(FLASHCARDS_PROGRESS_KEY, JSON.stringify(parsed));
+        }
+
+        setMastered(resolvedUnitData.masteredIndices);
+        setAgain(resolvedUnitData.againIndices || []);
+        setMode(resolvedUnitData.mode || 'all');
+        setShuffleEnabled(resolvedUnitData.shuffleEnabled || false);
+        setDeckOrder(resolvedUnitData.deckOrder || allIndices);
+        setDeckPosition(resolvedUnitData.deckPosition || 0);
         setIsFlipped(false);
       }
     };
 
     loadProgress();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedUnit, user, cards.length]);
+  }, [cards.length, selectedBook, selectedUnit, unitProgressKey, user]);
 
   useEffect(() => {
     if (deckOrder.length > 0) return;
@@ -1420,7 +1496,7 @@ function FlashcardsPageContent() {
       }
     })();
 
-    data.units[selectedUnit] = {
+    data.units[unitProgressKey] = {
       masteredIndices: mastered,
       againIndices: again,
       mode,
@@ -1433,7 +1509,7 @@ function FlashcardsPageContent() {
     };
 
     localStorage.setItem(FLASHCARDS_PROGRESS_KEY, JSON.stringify(data));
-  }, [again, cards.length, currentIndex, deckOrder, deckPosition, mastered, mode, selectedUnit, shuffleEnabled]);
+  }, [again, cards.length, currentIndex, deckOrder, deckPosition, mastered, mode, shuffleEnabled, unitProgressKey]);
 
   useEffect(() => {
     keyboardScopeRef.current?.focus();
@@ -1462,8 +1538,8 @@ function FlashcardsPageContent() {
       setAgain((a) => (a.includes(currentIndex) ? a : [...a, currentIndex]));
       // Save to backend if authenticated
       if (user) {
-        saveFlashcardProgress(selectedUnit, currentIndex, false, true);
-        logActivity('flashcard_review', { unit: selectedUnit, cardIndex: currentIndex, action: 'again' }, 1);
+        saveFlashcardProgress(unitProgressKey, currentIndex, false, true);
+        logActivity('flashcard_review', { unit: unitProgressKey, cardIndex: currentIndex, action: 'again' }, 1);
       }
     }
     setMasteryAnimation('again');
@@ -1478,8 +1554,8 @@ function FlashcardsPageContent() {
       setAgain((a) => a.filter((i) => i !== currentIndex));
       // Save to backend if authenticated
       if (user) {
-        saveFlashcardProgress(selectedUnit, currentIndex, true, false);
-        logActivity('flashcard_review', { unit: selectedUnit, cardIndex: currentIndex, action: 'mastered' }, 2);
+        saveFlashcardProgress(unitProgressKey, currentIndex, true, false);
+        logActivity('flashcard_review', { unit: unitProgressKey, cardIndex: currentIndex, action: 'mastered' }, 2);
       }
     }
     setMasteryAnimation('success');
@@ -1614,6 +1690,16 @@ function FlashcardsPageContent() {
 
         <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3">
+            <div className="text-sm font-semibold text-white/70">{translations[lang].selectBook}</div>
+            <select
+              value={selectedBook}
+              onChange={(e) => setSelectedBook(e.target.value as Book)}
+              className="px-4 py-2 rounded-lg border border-white/10 text-sm bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/60"
+            >
+              <option value="1A" className="bg-[#0b0f1a]">{translations[lang].book1A}</option>
+              <option value="1B" className="bg-[#0b0f1a]">{translations[lang].book1B}</option>
+            </select>
+
             <div className="text-sm font-semibold text-white/70">{translations[lang].selectUnit}</div>
             <select
               value={selectedUnit}
@@ -1622,7 +1708,7 @@ function FlashcardsPageContent() {
               }}
               className="px-4 py-2 rounded-lg border border-white/10 text-sm bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/60"
             >
-              {unitKeys.map((unit) => (
+              {unitKeysForBook.map((unit) => (
                 <option key={unit} value={unit} className="bg-[#0b0f1a]">
                   {unit}
                 </option>
