@@ -34,7 +34,7 @@ export type Database = {
         Row: {
           id: string;
           user_id: string;
-          activity_type: 'flashcard_review' | 'quiz_complete' | 'daily_login' | 'streak_save';
+          activity_type: 'flashcard_review' | 'quiz_complete' | 'daily_login' | 'streak_save' | 'listening_exercise' | 'listening_correct' | 'reading_exercise' | 'reading_correct';
           metadata: Record<string, any>;
           xp_earned: number;
           created_at: string;

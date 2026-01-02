@@ -23,46 +23,46 @@ export default function DashboardPage() {
   const quickStats = [
     {
       icon: '📚',
-      label: 'Flashcards Studied',
+      label: t.flashcardsStudied,
       value: stats?.flashcards_reviewed || 0,
       color: 'from-blue-500 to-blue-600'
     },
     {
       icon: '🎯',
-      label: 'Quizzes Completed',
+      label: t.quizzesCompleted,
       value: stats?.quizzes_completed || 0,
       color: 'from-purple-500 to-purple-600'
     },
     {
       icon: '⭐',
-      label: 'Total XP',
+      label: t.totalXp,
       value: profile?.xp || 0,
       color: 'from-yellow-500 to-yellow-600'
     },
     {
       icon: '🔥',
-      label: 'Current Streak',
+      label: t.currentStreak,
       value: profile?.streak_current || 0,
       color: 'from-orange-500 to-orange-600'
     }
   ];
 
   const recentActivity = [
-    { type: 'Flashcard Review', unit: '1과', time: '2 hours ago', xp: 10 },
-    { type: 'Quiz Complete', unit: '2과', time: '5 hours ago', xp: 25 },
-    { type: 'Flashcard Review', unit: '1과', time: '1 day ago', xp: 8 },
+    { type: 'flashcard_review' as const, unit: '1과', hoursAgo: 2, xp: 10 },
+    { type: 'quiz_complete' as const, unit: '2과', hoursAgo: 5, xp: 25 },
+    { type: 'flashcard_review' as const, unit: '1과', daysAgo: 1, xp: 8 },
   ];
 
   const upcomingUnits = [
-    { unit: '3과', title: 'Family & People', progress: 65 },
-    { unit: '4과', title: 'Food & Drinks', progress: 30 },
-    { unit: '5과', title: 'Daily Life', progress: 0 },
+    { unit: '3과', title: t.unitFamilyPeople, progress: 65 },
+    { unit: '4과', title: t.unitFoodDrinks, progress: 30 },
+    { unit: '5과', title: t.unitDailyLife, progress: 0 },
   ];
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
-        <div className="text-white">Loading dashboard...</div>
+        <div className="text-white">{t.loading}</div>
       </div>
     );
   }
@@ -76,7 +76,7 @@ export default function DashboardPage() {
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">KO</span>
+                <span className="text-white font-bold text-sm">KC</span>
               </div>
               <span className="text-white font-semibold text-lg">Koreancha.uz</span>
             </Link>
@@ -124,10 +124,10 @@ export default function DashboardPage() {
         {/* Welcome Section */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-            Welcome back, {getDisplayName()}!
+            {t.welcomeBack.replace('{name}', getDisplayName())}
           </h1>
           <p className="text-white/70 text-lg">
-            {isPremium ? 'Premium Member' : 'Free Member'} • Level {profile?.level || 1}
+            {(isPremium ? t.premiumMember : t.freeMember)} • {t.level} {profile?.level || 1}
           </p>
         </div>
 
@@ -149,7 +149,7 @@ export default function DashboardPage() {
           {/* Recent Activity */}
           <div className="lg:col-span-2">
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
-              <h2 className="text-xl font-semibold text-white mb-6">Recent Activity</h2>
+              <h2 className="text-xl font-semibold text-white mb-6">{t.recentActivity}</h2>
               <div className="space-y-4">
                 {recentActivity.map((activity, index) => (
                   <div key={index} className="flex items-center justify-between p-4 bg-white/5 rounded-lg">
@@ -158,12 +158,18 @@ export default function DashboardPage() {
                         <span className="text-blue-400">📝</span>
                       </div>
                       <div>
-                        <div className="text-white font-medium">{activity.type}</div>
-                        <div className="text-white/60 text-sm">{activity.unit} • {activity.time}</div>
+                        <div className="text-white font-medium">
+                          {activity.type === 'flashcard_review' ? t.flashcardReview : t.quizComplete}
+                        </div>
+                        <div className="text-white/60 text-sm">
+                          {activity.unit} • {typeof activity.hoursAgo === 'number'
+                            ? t.timeHoursAgo.replace('{n}', String(activity.hoursAgo))
+                            : t.timeDaysAgo.replace('{n}', String(activity.daysAgo ?? 0))}
+                        </div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-green-400 font-medium">+{activity.xp} XP</div>
+                      <div className="text-green-400 font-medium">+{activity.xp} {t.xp}</div>
                     </div>
                   </div>
                 ))}
@@ -171,7 +177,7 @@ export default function DashboardPage() {
               
               <div className="mt-6 text-center">
                 <Link href="/progress" className="inline-flex items-center text-blue-400 hover:text-blue-300 transition">
-                  <span className="text-sm font-medium">View All Activity</span>
+                  <span className="text-sm font-medium">{t.viewAllActivity}</span>
                   <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -184,23 +190,23 @@ export default function DashboardPage() {
           <div className="space-y-6">
             {/* Continue Learning */}
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">Continue Learning</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">{t.continueLearning}</h3>
               <div className="space-y-3">
                 <Link href="/flashcards" className="block w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-medium transition">
-                  📚 Flashcards
+                  📚 {t.flashcards}
                 </Link>
                 <Link href="/listening" className="block w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg font-medium transition">
-                  🎧 Listening
+                  🎧 {t.listening}
                 </Link>
                 <Link href="/reading" className="block w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg font-medium transition">
-                  📖 Reading
+                  📖 {t.reading}
                 </Link>
               </div>
             </div>
 
             {/* Upcoming Units */}
             <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
-              <h3 className="text-lg font-semibold text-white mb-4">Upcoming Units</h3>
+              <h3 className="text-lg font-semibold text-white mb-4">{t.upcomingUnits}</h3>
               <div className="space-y-3">
                 {upcomingUnits.map((unit, index) => (
                   <div key={index} className="space-y-2">
@@ -223,12 +229,10 @@ export default function DashboardPage() {
             {/* Premium Banner (if not premium) */}
             {!isPremium && (
               <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-white mb-2">Upgrade to Premium</h3>
-                <p className="text-white/80 text-sm mb-4">
-                  Get unlimited access to all features and remove daily limits.
-                </p>
+                <h3 className="text-lg font-semibold text-white mb-2">{t.upgradeToPremium}</h3>
+                <p className="text-white/80 text-sm mb-4">{t.upgradeSubtitle}</p>
                 <Link href="/donate" className="block w-full bg-white text-purple-600 hover:bg-gray-100 px-4 py-2 rounded-lg font-medium transition text-center">
-                  Upgrade Now
+                  {t.upgradeNow}
                 </Link>
               </div>
             )}

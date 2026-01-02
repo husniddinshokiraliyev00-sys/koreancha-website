@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
 import { useLanguage, type Lang, useUser } from '../providers';
+import { translations } from '../../lib/translations';
 import { getReadingExercisesByUnit, getAllReadingUnits, type ReadingExercise } from '../../data/readingExercises';
 
 type ReadingTranslations = {
@@ -99,35 +100,35 @@ const readingTranslations: Record<Lang, ReadingTranslations> = {
     true: "True",
     false: "False"
   },
-  ko: {
-    title: "읽기 연습",
-    selectUnit: "단원 선택",
-    startExercise: "연습 시작",
-    passage: "본문",
-    questions: "질문",
-    submit: "답변 제출",
-    next: "다음",
-    previous: "이전",
-    correct: "정답!",
-    incorrect: "오답!",
-    score: "점수",
-    completed: "완료",
-    progress: "진행률",
-    noExercises: "이 단원에 대한 읽기 연습이 아직 준비되지 않았습니다.",
-    backToExercises: "연습으로 돌아가기",
-    reading: "읽기",
-    comprehension: "이해",
-    shortPassage: "짧은 본문",
-    trueFalse: "참/거짓",
-    matching: "일치",
-    easy: "쉬움",
-    medium: "보통",
-    hard: "어려움",
-    grammarPoint: "문법 포인트",
-    vocabulary: "어휘",
-    explanation: "설명",
-    true: "참",
-    false: "거짓"
+  ru: {
+    title: "Упражнения на чтение",
+    selectUnit: "Выберите раздел",
+    startExercise: "Начать упражнение",
+    passage: "Текст",
+    questions: "Вопросы",
+    submit: "Отправить ответ",
+    next: "Далее",
+    previous: "Назад",
+    correct: "Правильно!",
+    incorrect: "Неправильно!",
+    score: "Счет",
+    completed: "Завершено",
+    progress: "Прогресс",
+    noExercises: "Пока нет упражнений на чтение для этого раздела.",
+    backToExercises: "Назад к упражнениям",
+    reading: "Чтение",
+    comprehension: "Понимание",
+    shortPassage: "Короткий текст",
+    trueFalse: "Верно/Неверно",
+    matching: "Сопоставление",
+    easy: "Легко",
+    medium: "Средне",
+    hard: "Сложно",
+    grammarPoint: "Грамматика",
+    vocabulary: "Словарь",
+    explanation: "Пояснение",
+    true: "Верно",
+    false: "Неверно"
   }
 };
 
@@ -137,6 +138,7 @@ function ReadingPageContent() {
   const { user, logActivity } = useUser();
   
   const t = readingTranslations[lang];
+  const common = translations[lang];
   
   const units = useMemo(() => getAllReadingUnits(), []);
   const initialUnitFromQuery = searchParams.get('unit');
@@ -271,7 +273,7 @@ function ReadingPageContent() {
                 onClick={resetExercise}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition"
               >
-                Qayta boshlash
+                {translations[lang].reset}
               </button>
               <Link
                 href="/exercises"
@@ -297,10 +299,10 @@ function ReadingPageContent() {
           </div>
           <div className="flex items-center gap-3">
             <Link href="/exercises" className="text-sm font-semibold text-white/70 hover:text-white transition">
-              Exercises
+              {common.exercises}
             </Link>
             <Link href="/" className="text-sm font-semibold text-white/70 hover:text-white transition">
-              Home
+              {common.home}
             </Link>
           </div>
         </div>
@@ -361,7 +363,9 @@ function ReadingPageContent() {
 
           {/* Translation */}
           <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-6">
-            <h3 className="text-sm font-medium mb-2 text-white/70">Translation ({lang === 'uz' ? 'Uzbek' : lang === 'en' ? 'English' : 'Korean'})</h3>
+            <h3 className="text-sm font-medium mb-2 text-white/70">
+              {common.translation} ({lang === 'uz' ? common.languageUzbek : common.languageEnglish})
+            </h3>
             <div className="text-base leading-relaxed text-white/90">
               {lang === 'uz' ? currentExercise.uzbek : currentExercise.english}
             </div>
@@ -392,7 +396,7 @@ function ReadingPageContent() {
               {currentExercise.questions.map((question, qIndex) => (
                 <div key={question.id} className="bg-white/5 border border-white/10 rounded-lg p-4">
                   <div className="mb-3">
-                    <span className="text-sm text-white/70">Question {qIndex + 1}:</span>
+                    <span className="text-sm text-white/70">{common.question} {qIndex + 1}:</span>
                     <p className="text-white mt-1">{question.question}</p>
                   </div>
 
@@ -543,10 +547,12 @@ function ReadingPageContent() {
 }
 
 export default function ReadingPage() {
+  const { lang } = useLanguage();
+
   return (
     <Suspense fallback={
       <main className="min-h-screen bg-[#0b0f1a] text-white flex items-center justify-center">
-        <div className="text-white">Loading...</div>
+        <div className="text-white">{translations[lang].loading}</div>
       </main>
     }>
       <ReadingPageContent />

@@ -1,16 +1,14 @@
 'use client';
 
 import { useLanguage } from '../app/providers';
-import { translations } from '../lib/translations';
 
 export default function LanguageSwitcher() {
   const { lang, setLang } = useLanguage();
   
   const languages = [
     { code: 'uz', name: 'UZ', flag: '🇺🇿' },
-    { code: 'en', name: 'EN', flag: '🇬🇧' },
-    { code: 'ko', name: 'KO', flag: '🇰🇷' },
-    { code: 'ru', name: 'RU', flag: '🇷🇺' }
+    { code: 'ru', name: 'RU', flag: '🇷🇺' },
+    { code: 'en', name: 'EN', flag: '🇬🇧' }
   ] as const;
 
   return (

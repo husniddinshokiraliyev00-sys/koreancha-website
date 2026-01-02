@@ -10,6 +10,9 @@ type ContactTranslations = {
   subtitle: string;
   sendMessageTitle: string;
   sendMessageDesc: string;
+  emailSubject: string;
+  emailNameLabel: string;
+  emailEmailLabel: string;
   name: string;
   yourName: string;
   email: string;
@@ -37,6 +40,9 @@ const contactTranslations: Record<Lang, ContactTranslations> = {
     subtitle: 'Savollaringiz bormi? Biz sizni eshitishdan xursandmiz!',
     sendMessageTitle: 'Xabar yuborish',
     sendMessageDesc: 'Quyidagi formani to‘ldiring va biz tez orada javob beramiz.',
+    emailSubject: 'Koreancha.uz Aloqa',
+    emailNameLabel: 'Ism',
+    emailEmailLabel: 'Email',
     name: 'Ism',
     yourName: 'Ismingiz',
     email: 'Email',
@@ -62,6 +68,9 @@ const contactTranslations: Record<Lang, ContactTranslations> = {
     subtitle: 'Есть вопросы? Мы будем рады помочь!',
     sendMessageTitle: 'Отправить сообщение',
     sendMessageDesc: 'Заполните форму ниже и мы ответим как можно скорее.',
+    emailSubject: 'Koreancha.uz: Контакт',
+    emailNameLabel: 'Имя',
+    emailEmailLabel: 'Email',
     name: 'Имя',
     yourName: 'Ваше имя',
     email: 'Email',
@@ -87,6 +96,9 @@ const contactTranslations: Record<Lang, ContactTranslations> = {
     subtitle: "Have questions? We'd love to hear from you!",
     sendMessageTitle: 'Send us a message',
     sendMessageDesc: "Fill out the form below and we'll respond as soon as possible.",
+    emailSubject: 'Koreancha.uz Contact',
+    emailNameLabel: 'Name',
+    emailEmailLabel: 'Email',
     name: 'Name',
     yourName: 'Your name',
     email: 'Email',
@@ -106,35 +118,10 @@ const contactTranslations: Record<Lang, ContactTranslations> = {
     emailContact: 'Email',
     emailContactDesc: 'Contact via email.',
     backHome: 'Back to home'
-  },
-  ko: {
-    title: '연락하기',
-    subtitle: '질문이 있으신가요? 기꺼이 도와드리겠습니다!',
-    sendMessageTitle: '메시지 보내기',
-    sendMessageDesc: '아래 양식을 작성하시면 최대한 빨리 답변해드리겠습니다.',
-    name: '이름',
-    yourName: '당신의 이름',
-    email: '이메일',
-    yourEmail: 'your@email.com',
-    message: '메시지',
-    messagePlaceholder: '도움이 필요한 내용을 작성해주세요...',
-    send: '메시지 보내기',
-    preferChat: '직접 채팅하고 싶으신가요?',
-    messageOnTelegram: '텔레그램으로 메시지',
-    contactVia: '연락 방법',
-    telegramChannel: '텔레그램 채널',
-    telegramChannelDesc: '웹사이트 소식과 업데이트가 이 채널에 게시됩니다.',
-    instagram: '인스타그램',
-    instagramDesc: '개인 프로필 (콘텐츠 및 업데이트).',
-    supportTelegram: '불만 / 구독 텔레그램',
-    supportTelegramDesc: '결제 확인 및 구독 문의용.',
-    emailContact: '이메일',
-    emailContactDesc: '이메일로 연락.',
-    backHome: '홈으로'
   }
 };
 
-const getLangName = (code: Lang) => (code === 'uz' ? "O'Z" : code === 'ru' ? 'РУ' : code === 'ko' ? 'KO' : 'EN');
+const getLangName = (code: Lang) => (code === 'uz' ? "O'Z" : code === 'ru' ? 'РУ' : 'EN');
 
 export default function ContactPage() {
   const { lang, setLang } = useLanguage();
@@ -185,8 +172,8 @@ export default function ContactPage() {
   const maxMessageLength = 1000;
 
   const sendEmail = () => {
-    const subject = encodeURIComponent('Koreancha.uz Contact');
-    const body = encodeURIComponent(`Name: ${name || '-'}\nEmail: ${email || '-'}\n\n${message || '-'}`);
+    const subject = encodeURIComponent(t.emailSubject);
+    const body = encodeURIComponent(`${t.emailNameLabel}: ${name || '-'}\n${t.emailEmailLabel}: ${email || '-'}\n\n${message || '-'}`);
     window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
   };
 
@@ -261,7 +248,7 @@ export default function ContactPage() {
               rel="noreferrer"
               className="bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl p-5 transition flex items-center gap-4"
             >
-              <img src={TELEGRAM_LOGO_URL} alt="Telegram" className="h-10 w-10" />
+              <img src={TELEGRAM_LOGO_URL} alt={t.telegramChannel} className="h-10 w-10" />
               <div>
                 <div className="font-bold text-gray-900">{t.telegramChannel}</div>
                 <div className="text-sm text-gray-600">{t.telegramChannelDesc}</div>
@@ -274,7 +261,7 @@ export default function ContactPage() {
               rel="noreferrer"
               className="bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl p-5 transition flex items-center gap-4"
             >
-              <img src={TELEGRAM_LOGO_URL} alt="Telegram" className="h-10 w-10" />
+              <img src={TELEGRAM_LOGO_URL} alt={t.supportTelegram} className="h-10 w-10" />
               <div>
                 <div className="font-bold text-gray-900">{t.supportTelegram}</div>
                 <div className="text-sm text-gray-600">{t.supportTelegramDesc}</div>
@@ -287,7 +274,7 @@ export default function ContactPage() {
               rel="noreferrer"
               className="bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl p-5 transition flex items-center gap-4"
             >
-              <img src={INSTAGRAM_LOGO_URL} alt="Instagram" className="h-10 w-10" />
+              <img src={INSTAGRAM_LOGO_URL} alt={t.instagram} className="h-10 w-10" />
               <div>
                 <div className="font-bold text-gray-900">{t.instagram}</div>
                 <div className="text-sm text-gray-600">{t.instagramDesc}</div>
@@ -299,7 +286,7 @@ export default function ContactPage() {
               onClick={() => setShowEmailModal(true)}
               className="text-left bg-white hover:bg-gray-50 border border-gray-200 rounded-2xl p-5 transition flex items-center gap-4"
             >
-              <img src={EMAIL_LOGO_URL} alt="Email" className="h-10 w-10" />
+              <img src={EMAIL_LOGO_URL} alt={t.emailContact} className="h-10 w-10" />
               <div>
                 <div className="font-bold text-gray-900">{t.emailContact}</div>
                 <div className="text-sm text-gray-600">{t.emailContactDesc}</div>
@@ -329,7 +316,7 @@ export default function ContactPage() {
                 type="button"
                 onClick={() => setShowEmailModal(false)}
                 className="h-9 w-9 rounded-lg border border-gray-200 hover:bg-gray-50 text-gray-700 transition inline-flex items-center justify-center"
-                aria-label="Close"
+                aria-label={t.backHome}
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                   <path d="M18 6 6 18" />
@@ -392,7 +379,7 @@ export default function ContactPage() {
                 rel="noreferrer"
                 className="mt-3 w-full inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 text-gray-900 px-4 py-3 rounded-xl font-bold transition border border-gray-200"
               >
-                <img src={TELEGRAM_LOGO_URL} alt="Telegram" className="h-5 w-5" />
+                <img src={TELEGRAM_LOGO_URL} alt={t.messageOnTelegram} className="h-5 w-5" />
                 {t.messageOnTelegram}
               </a>
             </div>

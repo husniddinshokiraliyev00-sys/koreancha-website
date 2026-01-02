@@ -24,29 +24,29 @@ export default function ExercisesPage() {
     {
       icon: '📚',
       title: t.flashcards,
-      description: 'Interactive flashcards with smart SRS algorithm',
+      description: t.featureFlashcardsDesc,
       href: '/flashcards',
       color: 'from-blue-500 to-blue-600',
-      difficulty: 'All Levels',
-      duration: '10-15 min'
+      difficulty: t.difficultyAllLevels,
+      duration: t.duration10to15
     },
     {
       icon: '🎧',
       title: t.listening,
-      description: 'Improve listening comprehension with audio exercises',
+      description: t.featureListeningDesc,
       href: '/listening',
       color: 'from-purple-500 to-purple-600',
-      difficulty: 'Beginner to Advanced',
-      duration: '15-20 min'
+      difficulty: t.difficultyBeginnerToAdvanced,
+      duration: t.duration15to20
     },
     {
       icon: '📖',
       title: t.reading,
-      description: 'Practice reading with real Korean texts',
+      description: t.featureReadingDesc,
       href: '/reading',
       color: 'from-green-500 to-green-600',
-      difficulty: 'Beginner to Advanced',
-      duration: '20-30 min'
+      difficulty: t.difficultyBeginnerToAdvanced,
+      duration: t.duration20to30
     }
   ];
 
@@ -59,7 +59,7 @@ export default function ExercisesPage() {
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">KO</span>
+                <span className="text-white font-bold text-sm">KC</span>
               </div>
               <span className="text-white font-semibold text-lg">Koreancha.uz</span>
             </Link>
@@ -123,7 +123,7 @@ export default function ExercisesPage() {
               {t.exercises}
             </h1>
             <p className="text-xl text-white/80 max-w-3xl mx-auto">
-              Choose your learning activity and start practicing Korean with our interactive exercises
+              {t.exercisesDescription}
             </p>
           </div>
 
@@ -153,7 +153,7 @@ export default function ExercisesPage() {
                   <p className="text-white/60 mb-6">{exercise.description}</p>
                   
                   <div className="flex items-center text-blue-400 group-hover:text-blue-300 transition">
-                    <span className="text-sm font-medium">Start Learning</span>
+                    <span className="text-sm font-medium">{t.getStartedShort}</span>
                     <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
@@ -165,23 +165,23 @@ export default function ExercisesPage() {
 
           {/* Quick Stats */}
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-6 text-center">Learning Progress</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <h2 className="text-2xl font-bold text-white mb-6 text-center">{t.learningProgress}</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center">
                 <div className="text-3xl font-bold text-blue-400 mb-2">8</div>
-                <div className="text-white/60 text-sm">Units Available</div>
+                <div className="text-white/60 text-sm">{t.statsUnits}</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-purple-400 mb-2">500+</div>
-                <div className="text-white/60 text-sm">Flashcards</div>
+                <div className="text-white/60 text-sm">{t.statsFlashcards}</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-green-400 mb-2">80+</div>
-                <div className="text-white/60 text-sm">Exercises</div>
+                <div className="text-white/60 text-sm">{t.statsExercises}</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-orange-400 mb-2">4</div>
-                <div className="text-white/60 text-sm">Languages</div>
+                <div className="text-white/60 text-sm">{t.statsLanguages}</div>
               </div>
             </div>
           </div>
@@ -195,26 +195,26 @@ export default function ExercisesPage() {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">KO</span>
+                  <span className="text-white font-bold text-sm">KC</span>
                 </div>
                 <span className="text-white font-semibold text-lg">Koreancha.uz</span>
               </div>
               <p className="text-white/60 text-sm">
-                Learn Korean with interactive exercises and smart flashcards.
+                {t.description}
               </p>
             </div>
             
             <div>
-              <h3 className="text-white font-semibold mb-4">Learning</h3>
+              <h3 className="text-white font-semibold mb-4">{t.footerLearning}</h3>
               <ul className="space-y-2">
-                <li><Link href="/flashcards" className="text-white/60 hover:text-white text-sm transition">Flashcards</Link></li>
-                <li><Link href="/listening" className="text-white/60 hover:text-white text-sm transition">Listening</Link></li>
-                <li><Link href="/reading" className="text-white/60 hover:text-white text-sm transition">Reading</Link></li>
+                <li><Link href="/flashcards" className="text-white/60 hover:text-white text-sm transition">{t.flashcards}</Link></li>
+                <li><Link href="/listening" className="text-white/60 hover:text-white text-sm transition">{t.listening}</Link></li>
+                <li><Link href="/reading" className="text-white/60 hover:text-white text-sm transition">{t.reading}</Link></li>
               </ul>
             </div>
             
             <div>
-              <h3 className="text-white font-semibold mb-4">Account</h3>
+              <h3 className="text-white font-semibold mb-4">{t.footerAccount}</h3>
               <ul className="space-y-2">
                 <li><Link href="/login" className="text-white/60 hover:text-white text-sm transition">{t.login}</Link></li>
                 <li><Link href="/signup" className="text-white/60 hover:text-white text-sm transition">{t.signup}</Link></li>
@@ -223,17 +223,17 @@ export default function ExercisesPage() {
             </div>
             
             <div>
-              <h3 className="text-white font-semibold mb-4">About</h3>
+              <h3 className="text-white font-semibold mb-4">{t.footerAbout}</h3>
               <ul className="space-y-2">
-                <li><Link href="/contact" className="text-white/60 hover:text-white text-sm transition">Contact</Link></li>
-                <li><Link href="/donate" className="text-white/60 hover:text-white text-sm transition">Support</Link></li>
+                <li><Link href="/contact" className="text-white/60 hover:text-white text-sm transition">{t.contact}</Link></li>
+                <li><Link href="/donate" className="text-white/60 hover:text-white text-sm transition">{t.footerSupport}</Link></li>
               </ul>
             </div>
           </div>
           
           <div className="border-t border-white/10 mt-8 pt-8 text-center">
             <p className="text-white/40 text-sm">
-              © 2024 Koreancha.uz. All rights reserved.
+              © 2024 Koreancha.uz. {t.footerRights}
             </p>
           </div>
         </div>

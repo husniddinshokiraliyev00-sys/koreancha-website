@@ -2,23 +2,23 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-export type Lang = 'uz' | 'en' | 'ko' | 'ru';
+export type Lang = 'uz' | 'ru' | 'en';
 
 interface LanguageContextType {
-  currentLang: Lang;
+  lang: Lang;
   setLang: (lang: Lang) => void;
 }
 
 const LanguageContext = createContext<LanguageContextType | null>(null);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [currentLang, setCurrentLang] = useState<Lang>('uz');
+  const [lang, setLangState] = useState<Lang>('uz');
 
   useEffect(() => {
     try {
       const savedLang = localStorage.getItem('preferredLanguage') as Lang | null;
-      if (savedLang && ['uz', 'en', 'ko', 'ru'].includes(savedLang)) {
-        setCurrentLang(savedLang);
+      if (savedLang && ['uz', 'ru', 'en'].includes(savedLang)) {
+        setLangState(savedLang);
       }
     } catch {
       // Ignore localStorage errors
@@ -26,7 +26,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setLang = (lang: Lang) => {
-    setCurrentLang(lang);
+    setLangState(lang);
     try {
       localStorage.setItem('preferredLanguage', lang);
     } catch {
@@ -35,7 +35,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <LanguageContext.Provider value={{ currentLang, setLang }}>
+    <LanguageContext.Provider value={{ lang, setLang }}>
       {children}
     </LanguageContext.Provider>
   );

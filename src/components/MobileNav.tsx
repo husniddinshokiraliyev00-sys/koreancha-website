@@ -3,59 +3,22 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useLanguage, type Lang } from '../app/providers';
+import { useLanguage, useUser } from '../app/providers';
+import { translations } from '../lib/translations';
 
 type MobileNavProps = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-const translations = {
-  uz: {
-    home: "Bosh sahifa",
-    exercises: "Mashqlar",
-    mockTests: "Mock Testlar",
-    about: "Biz haqimizda",
-    login: "Kirish",
-    signup: "Ro'yxatdan o'tish",
-    dashboard: "Dashboard",
-    flashcards: "So'z yodlash",
-    listening: "Tinglash",
-    reading: "O'qish"
-  },
-  en: {
-    home: "Home",
-    exercises: "Exercises",
-    mockTests: "Mock Tests",
-    about: "About",
-    login: "Login",
-    signup: "Sign Up",
-    dashboard: "Dashboard",
-    flashcards: "Flashcards",
-    listening: "Listening",
-    reading: "Reading"
-  },
-  ko: {
-    home: "홈",
-    exercises: "연습",
-    mockTests: "모의 테스트",
-    about: "소개",
-    login: "로그인",
-    signup: "가입",
-    dashboard: "대시보드",
-    flashcards: "플래시카드",
-    listening: "듣기",
-    reading: "읽기"
-  }
-};
-
 export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
   const router = useRouter();
-  const { lang, user, logout } = useLanguage();
+  const { lang } = useLanguage();
+  const { user, logout } = useUser();
   const [exercisesOpen, setExercisesOpen] = useState(false);
   const [mockOpen, setMockOpen] = useState(false);
 
-  const t = translations[lang as keyof typeof translations];
+  const t = translations[lang];
 
   const handleLinkClick = (href: string) => {
     router.push(href);
@@ -146,7 +109,7 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
               onClick={() => setMockOpen(!mockOpen)}
               className="w-full text-left px-4 py-3 rounded-lg hover:bg-white/10 transition font-medium flex items-center justify-between"
             >
-              {t.mockTests}
+              {t.mocks}
               <svg 
                 className={`w-4 h-4 transition-transform ${mockOpen ? 'rotate-180' : ''}`}
                 fill="none" 
@@ -194,7 +157,7 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
                 onClick={handleLogout}
                 className="w-full text-left px-4 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 transition font-medium"
               >
-                Chiqish
+                {t.logout}
               </button>
             </>
           ) : (

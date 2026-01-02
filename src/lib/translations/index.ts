@@ -71,43 +71,43 @@ export const translations = {
       donate: "Donate"
     }
   },
-  ko: {
+  ru: {
     common: {
-      loading: "로딩 중...",
-      error: "오류",
-      retry: "재시도",
-      close: "닫기",
-      save: "저장",
-      cancel: "취소",
-      confirm: "확인",
-      yes: "예",
-      no: "아니오",
-      next: "다음",
-      previous: "이전",
-      submit: "제출",
-      back: "뒤로",
-      home: "홈",
-      login: "로그인",
-      logout: "로그아웃트",
-      signup: "가입",
-      dashboard: "대시보드",
-      exercises: "연습",
-      flashcards: "플래시카드",
-      listening: "듣기",
-      reading: "읽기",
-      writing: "쓰기",
-      speaking: "말하기"
+      loading: "Загрузка...",
+      error: "Ошибка",
+      retry: "Повторить",
+      close: "Закрыть",
+      save: "Сохранить",
+      cancel: "Отмена",
+      confirm: "Подтвердить",
+      yes: "Да",
+      no: "Нет",
+      next: "Далее",
+      previous: "Назад",
+      submit: "Отправить",
+      back: "Назад",
+      home: "Главная",
+      login: "Войти",
+      logout: "Выйти",
+      signup: "Регистрация",
+      dashboard: "Панель",
+      exercises: "Упражнения",
+      flashcards: "Флеш-карты",
+      listening: "Аудирование",
+      reading: "Чтение",
+      writing: "Письмо",
+      speaking: "Говорение"
     },
     nav: {
-      home: "홈",
-      exercises: "연습",
-      mockTests: "모의 테스트",
-      about: "소개",
-      contact: "연락처",
-      donate: "기부"
+      home: "Главная",
+      exercises: "Упражнения",
+      mockTests: "Пробные тесты",
+      about: "О нас",
+      contact: "Контакты",
+      donate: "Донат"
     }
   }
 };
 
-export type Language = 'uz' | 'en' | 'ko';
+export type Language = 'uz' | 'ru' | 'en';
 export type TranslationKey = keyof typeof translations.uz;

@@ -397,10 +397,12 @@ function LoginPageContent() {
 }
 
 export default function LoginPage() {
+  const { lang } = useLanguage();
+
   return (
     <Suspense fallback={
       <main className="min-h-screen bg-gradient-to-br from-[#0b0f1a] to-[#1a1f2e] text-white flex items-center justify-center">
-        <div className="text-white">Loading...</div>
+        <div className="text-white">{translations[lang].loading}</div>
       </main>
     }>
       <LoginPageContent />

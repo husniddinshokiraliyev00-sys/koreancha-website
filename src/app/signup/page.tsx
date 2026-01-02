@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 import { useLanguage, type Lang } from '../providers';
+import { translations } from '../../lib/translations';
 
 type AuthTranslations = {
   headerSignup: string;
@@ -78,28 +79,28 @@ const authTranslations: Record<Lang, AuthTranslations> = {
     missingEnv: 'Supabase configuration not found. Please contact an administrator.',
     backHome: 'Back to Home'
   },
-  ko: {
-    headerSignup: "무료 계정 만들기",
-    headerLogin: '로그인',
-    subheaderSignup: '무료 과정에 액세스하려면 가입하세요',
-    subheaderLogin: '계정에 로그인하세요',
-    fullName: '전체 이름',
-    continueWithEmail: '이메일로 계속',
-    titleLogin: '로그인',
-    titleSignup: '가입',
-    email: '이메일',
-    password: '비밀번호',
-    primarySignup: '무료 계정 만들기',
-    primaryLogin: '로그인',
-    login: '로그인',
-    signup: '가입',
-    google: 'Google로 로그인',
-    or: '또는',
-    switchToSignup: '가입',
-    switchToLogin: '로그인',
-    errorFallback: '오류가 발생했습니다. 다시 시도해주세요.',
-    missingEnv: 'Supabase 구성을 찾을 수 없습니다. 관리자에게 문의하세요.',
-    backHome: '홈으로 돌아가기'
+  ru: {
+    headerSignup: 'Создайте бесплатный аккаунт',
+    headerLogin: 'Вход',
+    subheaderSignup: 'Зарегистрируйтесь, чтобы получить доступ к бесплатному курсу',
+    subheaderLogin: 'Войдите в свой аккаунт',
+    fullName: 'Полное имя',
+    continueWithEmail: 'ПРОДОЛЖИТЬ С EMAIL',
+    titleLogin: 'Вход',
+    titleSignup: 'Регистрация',
+    email: 'Email',
+    password: 'Пароль',
+    primarySignup: 'Создать бесплатный аккаунт',
+    primaryLogin: 'Войти',
+    login: 'Войти',
+    signup: 'Регистрация',
+    google: 'Войти через Google',
+    or: 'или',
+    switchToSignup: 'Регистрация',
+    switchToLogin: 'Войти',
+    errorFallback: 'Произошла ошибка. Пожалуйста, попробуйте снова.',
+    missingEnv: 'Конфигурация Supabase не найдена. Пожалуйста, обратитесь к администратору.',
+    backHome: 'На главную'
   }
 };
 
@@ -269,7 +270,7 @@ export default function AuthPage() {
             disabled={loading}
             className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg transition"
           >
-            {loading ? 'Loading...' : (isLogin ? t.primaryLogin : t.primarySignup)}
+            {loading ? translations[lang].loading : (isLogin ? t.primaryLogin : t.primarySignup)}
           </button>
         </form>
 

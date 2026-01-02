@@ -1183,7 +1183,7 @@ function FlashcardsPageContent() {
   if (userLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
-        <div className="text-white">Loading flashcards...</div>
+        <div className="text-white">{translations[lang].loadingFlashcards}</div>
       </div>
     );
   }
@@ -1258,7 +1258,6 @@ function FlashcardsPageContent() {
     if (!currentCard) return '';
     if (lang === 'ru') return currentCard.russian || currentCard.uzbek;
     if (lang === 'en') return currentCard.english || currentCard.uzbek;
-    if (lang === 'ko') return currentCard.korean; // Show Korean for Korean users
     return currentCard.uzbek;
   }, [currentCard, lang]);
 
@@ -1509,7 +1508,7 @@ function FlashcardsPageContent() {
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">KO</span>
+                <span className="text-white font-bold text-sm">KC</span>
               </div>
               <span className="text-white font-semibold text-lg">Koreancha.uz</span>
             </Link>
@@ -1571,8 +1570,12 @@ function FlashcardsPageContent() {
           <div className="mb-6 rounded-lg border border-orange-500/30 bg-orange-500/10 p-4">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <div className="font-semibold text-orange-300">⚠️ Progress not saved</div>
-                <div className="text-sm text-orange-200/70">Using guest mode. <Link href="/login" className="underline hover:text-orange-200 font-semibold">Sign up</Link> to save your progress!</div>
+                <div className="font-semibold text-orange-300">{translations[lang].progressNotSaved}</div>
+                <div className="text-sm text-orange-200/70">
+                  {translations[lang].guestModeUsing}{' '}
+                  <Link href="/login" className="underline hover:text-orange-200 font-semibold">{translations[lang].signup}</Link>{' '}
+                  {translations[lang].saveYourProgressSuffix}
+                </div>
               </div>
               <Link href="/login" className="rounded-lg bg-orange-600 px-4 py-2 text-sm font-semibold text-white hover:bg-orange-500 transition">
                 {translations[lang].signup}
@@ -1583,22 +1586,22 @@ function FlashcardsPageContent() {
 
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <h1 className="text-xl sm:text-2xl font-bold tracking-tight">Flashcards</h1>
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight">{translations[lang].flashcards}</h1>
             <div className="hidden sm:block text-sm text-white/60">{selectedUnit}</div>
           </div>
           <div className="flex items-center gap-3">
             <Link href="/exercises" className="text-sm font-semibold text-white/70 hover:text-white transition">
-              Exercises
+              {translations[lang].exercises}
             </Link>
             <Link href="/" className="text-sm font-semibold text-white/70 hover:text-white transition">
-              Home
+              {translations[lang].home}
             </Link>
           </div>
         </div>
 
         <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3">
-            <div className="text-sm font-semibold text-white/70">Bo'lim</div>
+            <div className="text-sm font-semibold text-white/70">{translations[lang].selectUnit}</div>
             <select
               value={selectedUnit}
               onChange={(e) => {
@@ -1616,29 +1619,29 @@ function FlashcardsPageContent() {
           <div className="text-xs sm:text-sm text-white/60">
             {cards.length > 0 ? (
               <>
-                {deckSize > 0 ? `${deckPosition + 1} / ${deckSize}` : `0 / 0`} • Mastered {mastered.length}/{cards.length} • Again{' '}
+                {deckSize > 0 ? `${deckPosition + 1} / ${deckSize}` : `0 / 0`} • {translations[lang].mastered} {mastered.length}/{cards.length} • {translations[lang].again}{' '}
                 {againClean.length}
               </>
             ) : (
-              <>Bo'lim tanlang</>
+              <>{translations[lang].pleaseSelectUnit}</>
             )}
           </div>
         </div>
 
         <div className="mt-3 text-xs text-white/50">
-          Flip: Tab/Enter/Space • Prev/Next: ArrowLeft/ArrowRight • Again: A • Mastered: M
+          {translations[lang].flashcardsShortcuts}
         </div>
 
         {cards.length === 0 || !currentCard ? (
-          <div className="mt-10 p-8 text-center text-white/70">Bo'lim tanlang</div>
+          <div className="mt-10 p-8 text-center text-white/70">{translations[lang].pleaseSelectUnit}</div>
         ) : isDone ? (
           <div className="mt-10 rounded-2xl border border-white/10 bg-white/5 shadow-sm p-8 text-center">
-            <div className="text-2xl font-bold text-white">Great!</div>
+            <div className="text-2xl font-bold text-white">{translations[lang].great}</div>
             <div className="mt-2 text-white/70">
               {mode === 'again' ? (
-                <>No “Again” cards left in {selectedUnit}.</>
+                <>{translations[lang].noAgainCardsLeftInUnit.replace('{unit}', selectedUnit)}</>
               ) : (
-                <>You mastered all cards in {selectedUnit}.</>
+                <>{translations[lang].youMasteredAllCardsInUnit.replace('{unit}', selectedUnit)}</>
               )}
             </div>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
@@ -1648,7 +1651,7 @@ function FlashcardsPageContent() {
                   onClick={() => rebuildDeck({ nextMode: 'all' })}
                   className="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-3 rounded-xl font-bold"
                 >
-                  Back to All
+                  {translations[lang].backToAll}
                 </button>
               )}
               <button
@@ -1656,13 +1659,13 @@ function FlashcardsPageContent() {
                 onClick={resetUnitProgress}
                 className="bg-white/10 hover:bg-white/15 text-white px-6 py-3 rounded-xl font-bold border border-white/10"
               >
-                Reset unit
+                {translations[lang].resetUnit}
               </button>
               <Link
                 href="/exercises"
                 className="bg-white hover:bg-gray-50 text-gray-900 px-6 py-3 rounded-xl font-bold"
               >
-                Back to Exercises
+                {translations[lang].backToExercises}
               </Link>
             </div>
           </div>
@@ -1725,8 +1728,8 @@ function FlashcardsPageContent() {
                     </div>
                   ) : (
                     <div className="text-center text-white/50">
-                      <div className="text-2xl mb-2">No card available</div>
-                      <div className="text-sm">Please select a unit</div>
+                      <div className="text-2xl mb-2">{translations[lang].noCardAvailable}</div>
+                      <div className="text-sm">{translations[lang].pleaseSelectUnit}</div>
                     </div>
                   )}
                 </div>
@@ -1744,12 +1747,12 @@ function FlashcardsPageContent() {
                       <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-relaxed drop-shadow-md">
                         {translationText}
                       </div>
-                      <div className="mt-6 text-sm text-white/70 font-medium">Click to flip back</div>
+                      <div className="mt-6 text-sm text-white/70 font-medium">{translations[lang].clickToFlipBack}</div>
                     </div>
                   ) : (
                     <div className="text-center text-white/50">
-                      <div className="text-2xl mb-2">No card available</div>
-                      <div className="text-sm">Please select a unit</div>
+                      <div className="text-2xl mb-2">{translations[lang].noCardAvailable}</div>
+                      <div className="text-sm">{translations[lang].pleaseSelectUnit}</div>
                     </div>
                   )}
                 </div>
@@ -1805,7 +1808,7 @@ function FlashcardsPageContent() {
                   </div>
 
                   <div className="text-xs sm:text-sm text-white/60">
-                    {deckSize > 0 ? `${deckPosition + 1} / ${deckSize}` : `0 / 0`} • Mastered {mastered.length}/{cards.length}
+                    {deckSize > 0 ? `${deckPosition + 1} / ${deckSize}` : `0 / 0`} • {translations[lang].mastered} {mastered.length}/{cards.length}
                   </div>
                 </div>
 
@@ -1880,10 +1883,12 @@ function FlashcardsPageContent() {
 }
 
 export default function FlashcardsPage() {
+  const { lang } = useLanguage();
+
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
-        <div className="text-white">Loading flashcards...</div>
+        <div className="text-white">{translations[lang].loadingFlashcards}</div>
       </div>
     }>
       <FlashcardsPageContent />

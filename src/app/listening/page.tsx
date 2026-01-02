@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
 import { useLanguage, type Lang, useUser } from '../providers';
+import { translations } from '../../lib/translations';
 import { getListeningExercisesByUnit, getAllUnits, type ListeningExercise } from '../../data/listeningExercises';
 
 type ListeningTranslations = {
@@ -90,32 +91,32 @@ const listeningTranslations: Record<Lang, ListeningTranslations> = {
     grammarPoint: "Grammar Point",
     context: "Context"
   },
-  ko: {
-    title: "듣기 연습",
-    selectUnit: "단원 선택",
-    startExercise: "연습 시작",
-    playAudio: "오디오 듣기",
-    selectAnswer: "답변 선택",
-    submit: "답변 제출",
-    next: "다음",
-    previous: "이전",
-    correct: "정답!",
-    incorrect: "오답!",
-    score: "점수",
-    completed: "완료",
-    progress: "진행률",
-    noExercises: "이 단원에 대한 듣기 연습이 아직 준비되지 않았습니다.",
-    backToExercises: "연습으로 돌아가기",
-    listening: "듣기",
-    comprehension: "이해",
-    wordRecognition: "단어 인식",
-    dialogue: "대화",
-    fillBlank: "빈칸 채우기",
-    easy: "쉬움",
-    medium: "보통",
-    hard: "어려움",
-    grammarPoint: "문법 포인트",
-    context: "문맥"
+  ru: {
+    title: "Упражнения на аудирование",
+    selectUnit: "Выберите раздел",
+    startExercise: "Начать упражнение",
+    playAudio: "Прослушайте аудио",
+    selectAnswer: "Выберите ответ",
+    submit: "Отправить ответ",
+    next: "Далее",
+    previous: "Назад",
+    correct: "Правильно!",
+    incorrect: "Неправильно!",
+    score: "Счет",
+    completed: "Завершено",
+    progress: "Прогресс",
+    noExercises: "Пока нет упражнений на аудирование для этого раздела.",
+    backToExercises: "Назад к упражнениям",
+    listening: "Аудирование",
+    comprehension: "Понимание",
+    wordRecognition: "Распознавание слов",
+    dialogue: "Диалог",
+    fillBlank: "Заполните пропуск",
+    easy: "Легко",
+    medium: "Средне",
+    hard: "Сложно",
+    grammarPoint: "Грамматика",
+    context: "Контекст"
   }
 };
 
@@ -468,10 +469,12 @@ function ListeningPageContent() {
 }
 
 export default function ListeningPage() {
+  const { lang } = useLanguage();
+
   return (
     <Suspense fallback={
       <main className="min-h-screen bg-[#0b0f1a] text-white flex items-center justify-center">
-        <div className="text-white">Loading...</div>
+        <div className="text-white">{translations[lang].loading}</div>
       </main>
     }>
       <ListeningPageContent />

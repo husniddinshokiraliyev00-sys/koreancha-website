@@ -3,6 +3,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 
+import { useLanguage } from '../providers';
+import { translations } from '../../lib/translations';
+
 type Plan = 'free' | 'premium';
 
 type AdminSettings = {
@@ -23,6 +26,9 @@ type AdminSettings = {
 };
 
 export default function AdminPage() {
+  const { lang } = useLanguage();
+  const t = translations[lang];
+
   const [adminToken, setAdminToken] = useState('');
   const [email, setEmail] = useState('');
   const [userId, setUserId] = useState('');
@@ -68,12 +74,16 @@ export default function AdminPage() {
 
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(data?.error || 'Request failed');
+        throw new Error(data?.error || t.adminRequestFailed);
       }
 
-      setResult(`OK: updated user ${data.userId} to ${data.plan}`);
+      setResult(
+        t.adminOkUpdatedUser
+          .replace('{userId}', String(data.userId))
+          .replace('{plan}', String(data.plan))
+      );
     } catch (e: any) {
-      setResult(`Error: ${e?.message || 'Unknown error'}`);
+      setResult(`${t.adminErrorPrefix} ${e?.message || t.adminUnknownError}`);
     } finally {
       setLoading(false);
     }
@@ -83,9 +93,9 @@ export default function AdminPage() {
     setSettingsSavedText(null);
     try {
       localStorage.setItem('koreancha_admin_settings_v1', JSON.stringify(settings));
-      setSettingsSavedText('Saved.');
+      setSettingsSavedText(t.adminSaved);
     } catch {
-      setSettingsSavedText('Failed to save.');
+      setSettingsSavedText(t.adminFailedToSave);
     }
   };
 
@@ -94,9 +104,9 @@ export default function AdminPage() {
     try {
       localStorage.removeItem('koreancha_admin_settings_v1');
       setSettings({});
-      setSettingsSavedText('Reset.');
+      setSettingsSavedText(t.adminResetDone);
     } catch {
-      setSettingsSavedText('Failed to reset.');
+      setSettingsSavedText(t.adminFailedToReset);
     }
   };
 
@@ -104,65 +114,65 @@ export default function AdminPage() {
     <main className="min-h-screen bg-gray-50">
       <header className="bg-gray-900 text-white">
         <div className="max-w-4xl mx-auto px-6 py-5 flex items-center justify-between gap-4">
-          <div className="font-bold">Admin</div>
+          <div className="font-bold">{t.adminTitle}</div>
           <Link href="/" className="text-sm font-semibold text-white/90 hover:text-white transition">
-            Home
+            {t.adminHome}
           </Link>
         </div>
       </header>
 
       <section className="max-w-4xl mx-auto px-6 py-10">
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
-          <h1 className="text-2xl font-bold text-gray-900">Upgrade user plan</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t.adminUpgradeUserPlan}</h1>
           <p className="mt-2 text-gray-600">
-            This uses a server API route with Supabase Service Role key. Keep it private.
+            {t.adminUpgradeDesc}
           </p>
 
           <div className="mt-6 grid gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Admin token</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminToken}</label>
               <input
                 value={adminToken}
                 onChange={(e) => setAdminToken(e.target.value)}
                 type="password"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                placeholder="Set ADMIN_API_TOKEN in .env.local"
+                placeholder={t.adminTokenPlaceholder}
               />
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">User email (recommended)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminUserEmailRecommended}</label>
                 <input
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                  placeholder="user@email.com"
+                  placeholder={t.adminUserEmailPlaceholder}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">User ID (optional)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminUserIdOptional}</label>
                 <input
                   value={userId}
                   onChange={(e) => setUserId(e.target.value)}
                   type="text"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                  placeholder="uuid"
+                  placeholder={t.adminUserIdPlaceholder}
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Plan</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminPlan}</label>
               <select
                 value={plan}
                 onChange={(e) => setPlan(e.target.value as Plan)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white"
               >
-                <option value="free">free</option>
-                <option value="premium">premium</option>
+                <option value="free">{t.adminPlanFree}</option>
+                <option value="premium">{t.adminPlanPremium}</option>
               </select>
             </div>
 
@@ -176,21 +186,21 @@ export default function AdminPage() {
               disabled={!canSubmit || loading}
               className="bg-blue-700 hover:bg-blue-800 text-white px-5 py-3 rounded-xl font-bold transition disabled:opacity-50"
             >
-              {loading ? 'Updating...' : 'Update user'}
+              {loading ? t.adminUpdating : t.adminUpdateUser}
             </button>
           </div>
         </div>
 
         <div className="mt-6 bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
-          <h2 className="text-2xl font-bold text-gray-900">Site info settings</h2>
+          <h2 className="text-2xl font-bold text-gray-900">{t.adminSiteInfoSettings}</h2>
           <p className="mt-2 text-gray-600">
-            These values are saved in your browser localStorage and used by /contact and /donate.
+            {t.adminSiteInfoSettingsDesc}
           </p>
 
           <div className="mt-6 grid gap-4">
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Telegram channel URL</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminTelegramChannelUrl}</label>
                 <input
                   value={settings.telegramChannelUrl || ''}
                   onChange={(e) => setSettings((s) => ({ ...s, telegramChannelUrl: e.target.value }))}
@@ -201,7 +211,7 @@ export default function AdminPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Instagram URL</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminInstagramUrl}</label>
                 <input
                   value={settings.instagramUrl || ''}
                   onChange={(e) => setSettings((s) => ({ ...s, instagramUrl: e.target.value }))}
@@ -213,7 +223,7 @@ export default function AdminPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Support Telegram URL</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminSupportTelegramUrl}</label>
               <input
                 value={settings.supportTelegramUrl || ''}
                 onChange={(e) => setSettings((s) => ({ ...s, supportTelegramUrl: e.target.value }))}
@@ -225,7 +235,7 @@ export default function AdminPage() {
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Contact email</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminContactEmail}</label>
                 <input
                   value={settings.contactEmail || ''}
                   onChange={(e) => setSettings((s) => ({ ...s, contactEmail: e.target.value }))}
@@ -235,7 +245,7 @@ export default function AdminPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Telegram logo URL</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminTelegramLogoUrl}</label>
                 <input
                   value={settings.telegramLogoUrl || ''}
                   onChange={(e) => setSettings((s) => ({ ...s, telegramLogoUrl: e.target.value }))}
@@ -248,7 +258,7 @@ export default function AdminPage() {
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Instagram logo URL</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminInstagramLogoUrl}</label>
                 <input
                   value={settings.instagramLogoUrl || ''}
                   onChange={(e) => setSettings((s) => ({ ...s, instagramLogoUrl: e.target.value }))}
@@ -258,7 +268,7 @@ export default function AdminPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email logo URL</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminEmailLogoUrl}</label>
                 <input
                   value={settings.emailLogoUrl || ''}
                   onChange={(e) => setSettings((s) => ({ ...s, emailLogoUrl: e.target.value }))}
@@ -271,17 +281,17 @@ export default function AdminPage() {
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Korea bank name</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminKoreaBankName}</label>
                 <input
                   value={settings.krBankName || ''}
                   onChange={(e) => setSettings((s) => ({ ...s, krBankName: e.target.value }))}
                   type="text"
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
-                  placeholder="TOSS BANK/토스뱅크"
+                  placeholder="TOSS BANK"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Korea account number</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminKoreaAccountNumber}</label>
                 <input
                   value={settings.krAccountNumber || ''}
                   onChange={(e) => setSettings((s) => ({ ...s, krAccountNumber: e.target.value }))}
@@ -294,7 +304,7 @@ export default function AdminPage() {
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">TOSS logo URL</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminTossLogoUrl}</label>
                 <input
                   value={settings.tossLogoUrl || ''}
                   onChange={(e) => setSettings((s) => ({ ...s, tossLogoUrl: e.target.value }))}
@@ -304,7 +314,7 @@ export default function AdminPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">HUMO logo URL</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminHumoLogoUrl}</label>
                 <input
                   value={settings.humoLogoUrl || ''}
                   onChange={(e) => setSettings((s) => ({ ...s, humoLogoUrl: e.target.value }))}
@@ -317,7 +327,7 @@ export default function AdminPage() {
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Uzbekistan card number</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminUzCardNumber}</label>
                 <input
                   value={settings.uzCardNumber || ''}
                   onChange={(e) => setSettings((s) => ({ ...s, uzCardNumber: e.target.value }))}
@@ -327,7 +337,7 @@ export default function AdminPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Uzbekistan card type</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminUzCardType}</label>
                 <input
                   value={settings.uzCardType || ''}
                   onChange={(e) => setSettings((s) => ({ ...s, uzCardType: e.target.value }))}
@@ -339,7 +349,7 @@ export default function AdminPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Uzbekistan account holder</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t.adminUzAccountHolder}</label>
               <input
                 value={settings.uzCardHolder || ''}
                 onChange={(e) => setSettings((s) => ({ ...s, uzCardHolder: e.target.value }))}
@@ -361,14 +371,14 @@ export default function AdminPage() {
                 onClick={saveSettings}
                 className="bg-blue-700 hover:bg-blue-800 text-white px-5 py-3 rounded-xl font-bold transition"
               >
-                Save settings
+                {t.adminSaveSettings}
               </button>
               <button
                 type="button"
                 onClick={resetSettings}
                 className="bg-white hover:bg-gray-50 text-gray-900 px-5 py-3 rounded-xl font-bold transition border border-gray-200"
               >
-                Reset
+                {t.adminReset}
               </button>
             </div>
           </div>

@@ -74,23 +74,6 @@ const donateTranslations: Record<Lang, DonateTranslations> = {
     editMessage: 'Edit',
     messageSaved: 'Message saved. You can edit it if needed.',
     backHome: 'Back to home'
-  },
-  ko: {
-    title: '기부',
-    subtitle: '프로젝트를 지원하고 싶으시면 "커피를 사주세요".',
-    paymentTitle: '결제 정보',
-    korea: '한국',
-    uzbekistan: '우즈베키스탄',
-    accountNumber: '계좌 번호',
-    cardNumber: '카드 번호',
-    accountHolder: '카드 소유자',
-    cardType: '카드 유형',
-    messageTitle: '메시지 남기기',
-    messagePlaceholder: '메시지를 남겨주세요...',
-    saveMessage: '저장',
-    editMessage: '편집',
-    messageSaved: '메시지가 저장되었습니다. 필요하면 편집할 수 있습니다.',
-    backHome: '홈으로 돌아가기'
   }
 };
 
@@ -147,7 +130,7 @@ export default function DonatePage() {
   const uzCardNumber = settings?.uzCardNumber || '9860 0866 0140 8502';
   const uzCardHolder = settings?.uzCardHolder || 'SHOKIRALIYEV X';
   const uzCardType = settings?.uzCardType || 'HUMO';
-  const krBankName = settings?.krBankName || 'TOSS BANK/토스뱅크';
+  const krBankName = settings?.krBankName || 'TOSS BANK';
   const krAccountNumber = settings?.krAccountNumber || '1001 9131 6312';
 
   const tossLogoUrl =
@@ -234,7 +217,7 @@ export default function DonatePage() {
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-sm font-semibold text-gray-900">{t.korea}</div>
                     <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-100">
-                      <img src={tossLogoUrl} alt="TOSS" className="h-3.5 w-auto" />
+                      <img src={tossLogoUrl} alt={t.korea} className="h-3.5 w-auto" />
                     </div>
                   </div>
                   <div className="mt-2 text-sm text-gray-600">{krBankName}</div>
@@ -248,7 +231,7 @@ export default function DonatePage() {
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-sm font-semibold text-gray-900">{t.uzbekistan}</div>
                     <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
-                      <img src={humoLogoUrl} alt="HUMO" className="h-3.5 w-auto" />
+                      <img src={humoLogoUrl} alt={t.uzbekistan} className="h-3.5 w-auto" />
                     </div>
                   </div>
 
