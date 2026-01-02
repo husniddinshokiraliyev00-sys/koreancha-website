@@ -107,7 +107,7 @@ const authTranslations: Record<Lang, AuthTranslations> = {
 export default function AuthPage() {
   const router = useRouter();
   const { lang } = useLanguage();
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');

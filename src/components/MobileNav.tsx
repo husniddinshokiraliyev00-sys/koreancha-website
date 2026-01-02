@@ -16,7 +16,6 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
   const { lang } = useLanguage();
   const { user, logout } = useUser();
   const [exercisesOpen, setExercisesOpen] = useState(false);
-  const [mockOpen, setMockOpen] = useState(false);
 
   const t = translations[lang];
 
@@ -44,7 +43,7 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
       {/* Mobile Navigation */}
       <div className="fixed top-0 left-0 right-0 bg-gray-900 text-white z-50 md:hidden">
         <div className="flex items-center justify-between p-4 border-b border-white/10">
-          <h2 className="text-xl font-bold">Menu</h2>
+          <h2 className="text-xl font-bold">{t.menu}</h2>
           <button
             onClick={onClose}
             className="p-2 rounded-lg hover:bg-white/10 transition"
@@ -61,6 +60,13 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
             className="w-full text-left px-4 py-3 rounded-lg hover:bg-white/10 transition font-medium"
           >
             {t.home}
+          </button>
+
+          <button
+            onClick={() => handleLinkClick('/flashcards')}
+            className="w-full text-left px-4 py-3 rounded-lg hover:bg-white/10 transition font-medium"
+          >
+            {t.flashcards}
           </button>
 
           {/* Exercises Dropdown */}
@@ -82,12 +88,6 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
             {exercisesOpen && (
               <div className="ml-4 mt-2 space-y-2">
                 <button
-                  onClick={() => handleLinkClick('/flashcards')}
-                  className="w-full text-left px-4 py-2 rounded-lg hover:bg-white/10 transition text-white/80"
-                >
-                  {t.flashcards}
-                </button>
-                <button
                   onClick={() => handleLinkClick('/listening')}
                   className="w-full text-left px-4 py-2 rounded-lg hover:bg-white/10 transition text-white/80"
                 >
@@ -103,45 +103,25 @@ export default function MobileNav({ isOpen, onClose }: MobileNavProps) {
             )}
           </div>
 
-          {/* Mock Tests Dropdown */}
-          <div>
-            <button
-              onClick={() => setMockOpen(!mockOpen)}
-              className="w-full text-left px-4 py-3 rounded-lg hover:bg-white/10 transition font-medium flex items-center justify-between"
-            >
-              {t.mocks}
-              <svg 
-                className={`w-4 h-4 transition-transform ${mockOpen ? 'rotate-180' : ''}`}
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            {mockOpen && (
-              <div className="ml-4 mt-2 space-y-2">
-                <button
-                  onClick={() => handleLinkClick('/mock/topik1')}
-                  className="w-full text-left px-4 py-2 rounded-lg hover:bg-white/10 transition text-white/80"
-                >
-                  TOPIK I
-                </button>
-                <button
-                  onClick={() => handleLinkClick('/mock/topik2')}
-                  className="w-full text-left px-4 py-2 rounded-lg hover:bg-white/10 transition text-white/80"
-                >
-                  TOPIK II
-                </button>
-              </div>
-            )}
-          </div>
-
           <button
-            onClick={() => handleLinkClick('/#about')}
+            onClick={() => handleLinkClick('/progress')}
             className="w-full text-left px-4 py-3 rounded-lg hover:bg-white/10 transition font-medium"
           >
-            {t.about}
+            {t.progress}
+          </button>
+
+          <button
+            onClick={() => handleLinkClick('/contacts')}
+            className="w-full text-left px-4 py-3 rounded-lg hover:bg-white/10 transition font-medium"
+          >
+            {t.contact}
+          </button>
+
+          <button
+            onClick={() => handleLinkClick('/donate')}
+            className="w-full text-left px-4 py-3 rounded-lg hover:bg-white/10 transition font-medium"
+          >
+            {t.donate}
           </button>
 
           {/* Auth Links */}

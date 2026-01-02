@@ -7,11 +7,14 @@ import { useRouter } from 'next/navigation';
 import { useLanguage, useUser } from './providers';
 import { translations } from '../lib/translations';
 import LanguageSwitcher from '../components/LanguageSwitcher';
+import MobileNav from '../components/MobileNav';
 
 export default function Home() {
   const router = useRouter();
   const { lang } = useLanguage();
   const { user, logout } = useUser();
+
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const t = translations[lang];
 
@@ -130,10 +133,23 @@ export default function Home() {
                   </Link>
                 </div>
               )}
+
+              <button
+                type="button"
+                onClick={() => setMobileNavOpen(true)}
+                className="md:hidden p-2 rounded-lg hover:bg-white/10 transition"
+                aria-label="Open menu"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
             </div>
           </div>
         </div>
       </nav>
+
+      <MobileNav isOpen={mobileNavOpen} onClose={() => setMobileNavOpen(false)} />
 
       {/* Hero Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
