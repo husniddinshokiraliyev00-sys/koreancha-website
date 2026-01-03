@@ -1,20 +1,28 @@
-// 서울대 한국어 1A (Seoul National University Korean 1A) Reading Exercises
+﻿﻿// 서울대 한국어 1A (Seoul National University Korean 1A) Reading Exercises
 // Beginner level - 8 units + Hangul introduction
 
 export interface ReadingExercise {
   id: string;
+  book?: '1A' | '1B';
   unit: string;
   type: 'short-passage' | 'comprehension' | 'true-false' | 'matching';
   difficulty: 'easy' | 'medium' | 'hard';
   korean: string;
   uzbek: string;
   english: string;
+  russian?: string;
   questions?: {
     id: string;
     question: string;
+    questionEn?: string;
+    questionRu?: string;
     options?: string[];
+    optionsEn?: string[];
+    optionsRu?: string[];
     correctAnswer: number | boolean;
     explanation?: string;
+    explanationEn?: string;
+    explanationRu?: string;
   }[];
   grammarPoint?: string;
   vocabulary?: string[];
@@ -527,13 +535,464 @@ export const readingExercises: Record<string, ReadingExercise[]> = {
       grammarPoint: 'Movement and activities: ~에 가요, 같이 ~해요',
       vocabulary: ['학교', '도서관', '같이', '공부해요', '조용해요']
     }
+  ],
+  '9과': [
+    {
+      id: '1b9-r1',
+      book: '1B',
+      unit: '9과',
+      type: 'short-passage',
+      difficulty: 'easy',
+      korean: '우리 가족은 다섯 명이에요. 할머니, 아버지, 어머니, 동생하고 저예요.',
+      uzbek: 'Bizning oilamiz besh kishi. Buvi, ota, ona, ukam va men.',
+      russian: 'В нашей семье пять человек: бабушка, папа, мама, младший брат и я.',
+      english: 'My family has five people: grandmother, father, mother, younger brother, and me.',
+      questions: [
+        {
+          id: '1b9-r1-q1',
+          question: 'Oilada nechta kishi bor?',
+          questionEn: 'How many people are in the family?',
+          questionRu: 'Сколько человек в семье?',
+          options: ['Uch kishi', 'To‘rt kishi', 'Besh kishi', 'Olti kishi'],
+          optionsEn: ['Three', 'Four', 'Five', 'Six'],
+          optionsRu: ['Три', 'Четыре', 'Пять', 'Шесть'],
+          correctAnswer: 2,
+          explanation: 'Matnda “다섯 명” (besh kishi) deyilgan.',
+          explanationEn: 'The passage says “five people”.',
+          explanationRu: 'В тексте сказано “пять человек”.'
+        },
+        {
+          id: '1b9-r1-q2',
+          question: 'Kimlar oilada bor?',
+          questionEn: 'Who is in the family?',
+          questionRu: 'Кто есть в семье?',
+          options: ['Buvi, ota, ona, ukam, men', 'Buva, ota, ona, men', 'Opa, aka, men', 'Faqat ota-ona'],
+          optionsEn: ['Grandmother, father, mother, younger brother, me', 'Grandfather, father, mother, me', 'Older sister, older brother, me', 'Only parents'],
+          optionsRu: ['Бабушка, папа, мама, младший брат, я', 'Дедушка, папа, мама, я', 'Старшая сестра, старший брат, я', 'Только родители'],
+          correctAnswer: 0,
+          explanation: 'Matnda oiladagi a’zolar sanab o‘tilgan.',
+          explanationEn: 'The family members are listed in the passage.',
+          explanationRu: 'Члены семьи перечислены в тексте.'
+        }
+      ],
+      grammarPoint: 'Counters: ~명 / Family vocabulary',
+      vocabulary: ['가족', '다섯 명', '할머니', '아버지', '어머니', '동생']
+    },
+    {
+      id: '1b9-r2',
+      book: '1B',
+      unit: '9과',
+      type: 'true-false',
+      difficulty: 'medium',
+      korean: '저는 아들이 있어요. 그리고 딸도 있어요.',
+      uzbek: 'Mening o‘g‘lim bor. Va qizim ham bor.',
+      russian: 'У меня есть сын. И ещё есть дочь.',
+      english: 'I have a son. And I also have a daughter.',
+      questions: [
+        {
+          id: '1b9-r2-q1',
+          question: 'Uning qiz farzandi bor.',
+          questionEn: 'He/She has a daughter.',
+          questionRu: 'У него/неё есть дочь.',
+          correctAnswer: true,
+          explanation: 'Matnda “딸도 있어요” (qiz ham bor) deyilgan.',
+          explanationEn: 'The passage says “I also have a daughter”.',
+          explanationRu: 'В тексте сказано “есть и дочь”.'
+        },
+        {
+          id: '1b9-r2-q2',
+          question: 'Uning buvisi bor.',
+          questionEn: 'He/She has a grandmother.',
+          questionRu: 'У него/неё есть бабушка.',
+          correctAnswer: false,
+          explanation: 'Matnda buvi haqida aytilmagan.',
+          explanationEn: 'A grandmother is not mentioned.',
+          explanationRu: 'Про бабушку не сказано.'
+        }
+      ],
+      grammarPoint: '~이/가 있어요',
+      vocabulary: ['아들', '딸']
+    }
+  ],
+  '10과': [
+    {
+      id: '1b10-r1',
+      book: '1B',
+      unit: '10과',
+      type: 'short-passage',
+      difficulty: 'easy',
+      korean: '저는 아침 일곱 시에 일어나요. 그리고 버스를 기다려요. 회사에 가요.',
+      uzbek: 'Men ertalab soat yettida uyg‘onaman. Keyin avtobus kutaman. Ishxonaga boraman.',
+      russian: 'Я встаю в семь утра. Потом жду автобус и иду на работу.',
+      english: 'I wake up at 7 a.m. Then I wait for the bus and go to the office.',
+      questions: [
+        {
+          id: '1b10-r1-q1',
+          question: 'U qachon uyg‘onadi?',
+          questionEn: 'When does he/she wake up?',
+          questionRu: 'Когда он/она просыпается?',
+          options: ['Soat oltida', 'Soat yettida', 'Soat sakkizda', 'Soat to‘qqizda'],
+          optionsEn: ['At 6', 'At 7', 'At 8', 'At 9'],
+          optionsRu: ['В 6', 'В 7', 'В 8', 'В 9'],
+          correctAnswer: 1,
+          explanation: 'Matnda “일곱 시에 일어나요” deyilgan.',
+          explanationEn: 'The passage says “wake up at seven”.',
+          explanationRu: 'В тексте: “встаю в семь”.'
+        },
+        {
+          id: '1b10-r1-q2',
+          question: 'U qanday transportdan foydalanadi?',
+          questionEn: 'What transportation does he/she use?',
+          questionRu: 'Какой транспорт он/она использует?',
+          options: ['Taksi', 'Avtobus', 'Poyezd', 'Metro'],
+          optionsEn: ['Taxi', 'Bus', 'Train', 'Subway'],
+          optionsRu: ['Такси', 'Автобус', 'Поезд', 'Метро'],
+          correctAnswer: 1,
+          explanation: 'Matnda “버스를 기다려요” (avtobus kutaman) deyilgan.',
+          explanationEn: 'It says “wait for the bus”.',
+          explanationRu: 'Сказано “жду автобус”.'
+        }
+      ],
+      grammarPoint: 'Time + action: ~에 / Daily routine',
+      vocabulary: ['아침', '일어나요', '기다려요', '회사']
+    },
+    {
+      id: '1b10-r2',
+      book: '1B',
+      unit: '10과',
+      type: 'comprehension',
+      difficulty: 'medium',
+      korean: '저녁에는 집을 청소해요. 그리고 컴퓨터를 해요. 가끔 전화를 해요.',
+      uzbek: 'Kechqurun uy tozalayman. Keyin kompyuterda ishlayman. Ba’zan telefon qilaman.',
+      russian: 'Вечером я убираю дома, потом работаю за компьютером. Иногда звоню.',
+      english: 'In the evening, I clean the house, then use the computer. Sometimes I call.',
+      questions: [
+        {
+          id: '1b10-r2-q1',
+          question: 'U kechqurun nima qiladi?',
+          questionEn: 'What does he/she do in the evening?',
+          questionRu: 'Что он/она делает вечером?',
+          options: ['Uy tozalaydi', 'Sayohat qiladi', 'Sport qiladi', 'Maktabga boradi'],
+          optionsEn: ['Cleans the house', 'Travels', 'Exercises', 'Goes to school'],
+          optionsRu: ['Убирает дома', 'Путешествует', 'Занимается спортом', 'Идёт в школу'],
+          correctAnswer: 0,
+          explanation: 'Matnda “집을 청소해요” (uy tozalayman) bor.',
+          explanationEn: 'It says “I clean the house”.',
+          explanationRu: 'Сказано “убираю дома”.'
+        }
+      ],
+      grammarPoint: 'Routine verbs',
+      vocabulary: ['저녁', '청소해요', '컴퓨터', '전화해요']
+    }
+  ],
+  '11과': [
+    {
+      id: '1b11-r1',
+      book: '1B',
+      unit: '11과',
+      type: 'short-passage',
+      difficulty: 'easy',
+      korean: '저는 머리가 아파요. 그리고 기침도 해요. 오늘 병원에 가요.',
+      uzbek: 'Boshim og‘riyapti. Yo‘tal ham bor. Bugun shifoxonaga boraman.',
+      russian: 'У меня болит голова. Я кашляю. Сегодня иду в больницу.',
+      english: 'I have a headache. I also cough. Today I go to the hospital.',
+      questions: [
+        {
+          id: '1b11-r1-q1',
+          question: 'U qayerga boradi?',
+          questionEn: 'Where does he/she go?',
+          questionRu: 'Куда он/она идёт?',
+          options: ['Shifoxonaga', 'Kutubxonaga', 'Maktabga', 'Do‘konga'],
+          optionsEn: ['To the hospital', 'To the library', 'To school', 'To a store'],
+          optionsRu: ['В больницу', 'В библиотеку', 'В школу', 'В магазин'],
+          correctAnswer: 0,
+          explanation: 'Matnda “병원에 가요” (shifoxonaga boraman) deyilgan.',
+          explanationEn: 'The passage says “go to the hospital”.',
+          explanationRu: 'В тексте: “иду в больницу”.'
+        }
+      ],
+      grammarPoint: '~이/가 아파요 / Health',
+      vocabulary: ['머리', '아파요', '기침', '병원']
+    },
+    {
+      id: '1b11-r2',
+      book: '1B',
+      unit: '11과',
+      type: 'true-false',
+      difficulty: 'medium',
+      korean: '목이 아파서 약을 먹었어요.',
+      uzbek: 'Tomog‘im og‘rigani uchun dori ichdim.',
+      russian: 'Потому что болело горло, я выпил(а) лекарство.',
+      english: 'Because my throat hurt, I took medicine.',
+      questions: [
+        {
+          id: '1b11-r2-q1',
+          question: 'U dori ichgan.',
+          questionEn: 'He/She took medicine.',
+          questionRu: 'Он/она принял(а) лекарство.',
+          correctAnswer: true,
+          explanation: 'Matnda “약을 먹었어요” (dori ichdim) bor.',
+          explanationEn: 'It says “took medicine”.',
+          explanationRu: 'Сказано “принял(а) лекарство”.'
+        },
+        {
+          id: '1b11-r2-q2',
+          question: 'Uning oyog‘i og‘riyapti.',
+          questionEn: 'His/Her leg hurts.',
+          questionRu: 'У него/неё болит нога.',
+          correctAnswer: false,
+          explanation: 'Matnda tomoq haqida aytilgan, oyoq emas.',
+          explanationEn: 'It mentions throat, not leg.',
+          explanationRu: 'Речь о горле, не о ноге.'
+        }
+      ],
+      grammarPoint: 'Reason: ~아서/어서',
+      vocabulary: ['목', '약']
+    }
+  ],
+  '12과': [
+    {
+      id: '1b12-r1',
+      book: '1B',
+      unit: '12과',
+      type: 'short-passage',
+      difficulty: 'easy',
+      korean: '친구에게 문자를 보냈어요. 친구가 문자를 받았어요.',
+      uzbek: 'Do‘stimga SMS jo‘natdim. Do‘stim SMS oldi.',
+      russian: 'Я отправил(а) другу сообщение. Друг получил сообщение.',
+      english: 'I sent a text to my friend. My friend received it.',
+      questions: [
+        {
+          id: '1b12-r1-q1',
+          question: 'U nima qildi?',
+          questionEn: 'What did he/she do?',
+          questionRu: 'Что он/она сделал(а)?',
+          options: ['SMS jo‘natdi', 'Telefon raqamni yo‘qotdi', 'Kirdi', 'Uxladi'],
+          optionsEn: ['Sent a text', 'Lost the phone number', 'Entered', 'Slept'],
+          optionsRu: ['Отправил(а) сообщение', 'Потерял(а) номер', 'Вошёл(шла)', 'Спал(а)'],
+          correctAnswer: 0,
+          explanation: 'Matnda “문자를 보냈어요” (SMS jo‘natdim) bor.',
+          explanationEn: 'It says “sent a text”.',
+          explanationRu: 'Сказано “отправил(а) сообщение”.'
+        }
+      ],
+      grammarPoint: 'Past tense: ~았/었어요',
+      vocabulary: ['문자', '보냈어요', '받았어요']
+    },
+    {
+      id: '1b12-r2',
+      book: '1B',
+      unit: '12과',
+      type: 'comprehension',
+      difficulty: 'medium',
+      korean: '오랜만이에요. 요즘 회사 일이 많아요. 그래서 좀 피곤해요.',
+      uzbek: 'Ko‘rishmaganimizga ancha bo‘ldi. Hozir ish ko‘p. Shuning uchun biroz charchaganman.',
+      russian: 'Давно не виделись. В последнее время много работы, поэтому я немного уставший(ая).',
+      english: 'Long time no see. These days I have a lot of work, so I’m a bit tired.',
+      questions: [
+        {
+          id: '1b12-r2-q1',
+          question: 'Nega u charchagan?',
+          questionEn: 'Why is he/she tired?',
+          questionRu: 'Почему он/она устал(а)?',
+          options: ['Ish ko‘p bo‘lgani uchun', 'Uxlashgani uchun', 'Sayohat qilgani uchun', 'Sport qilgani uchun'],
+          optionsEn: ['Because there is a lot of work', 'Because he/she slept', 'Because he/she traveled', 'Because he/she exercised'],
+          optionsRu: ['Потому что много работы', 'Потому что спал(а)', 'Потому что путешествовал(а)', 'Потому что занимался(ась) спортом'],
+          correctAnswer: 0,
+          explanation: 'Matnda “회사 일이 많아요” deyilgan.',
+          explanationEn: 'It says “I have a lot of work”.',
+          explanationRu: 'Сказано “много работы”.'
+        }
+      ],
+      grammarPoint: 'Reason: 그래서',
+      vocabulary: ['오랜만이에요', '회사 일', '피곤해요']
+    }
+  ],
+  '13과': [
+    {
+      id: '1b13-r1',
+      book: '1B',
+      unit: '13과',
+      type: 'short-passage',
+      difficulty: 'easy',
+      korean: '저는 지하철을 타요. 그리고 여기에서 갈아타요. 다음 역에서 내려요.',
+      uzbek: 'Men metroga minaman. Keyin shu yerda almashaman. Keyingi bekatda tushaman.',
+      russian: 'Я еду на метро. Потом здесь делаю пересадку. Выхожу на следующей станции.',
+      english: 'I take the subway. Then I transfer here. I get off at the next station.',
+      questions: [
+        {
+          id: '1b13-r1-q1',
+          question: 'U qayerda almashadi?',
+          questionEn: 'Where does he/she transfer?',
+          questionRu: 'Где он/она пересаживается?',
+          options: ['Shu yerda', 'Uyda', 'Do‘konda', 'Maktabda'],
+          optionsEn: ['Here', 'At home', 'At a store', 'At school'],
+          optionsRu: ['Здесь', 'Дома', 'В магазине', 'В школе'],
+          correctAnswer: 0,
+          explanation: 'Matnda “여기에서 갈아타요” (shu yerda almashaman) bor.',
+          explanationEn: 'It says “transfer here”.',
+          explanationRu: 'Сказано “пересаживаюсь здесь”.'
+        }
+      ],
+      grammarPoint: 'Transportation + sequence',
+      vocabulary: ['지하철', '갈아타요', '내려요']
+    },
+    {
+      id: '1b13-r2',
+      book: '1B',
+      unit: '13과',
+      type: 'matching',
+      difficulty: 'medium',
+      korean: '버스 정류장, 지하철역, 기차역, 택시',
+      uzbek: 'Avtobus bekati, metro bekati, poyezd bekati, taksi',
+      russian: 'Автобусная остановка, станция метро, железнодорожная станция, такси',
+      english: 'Bus stop, subway station, train station, taxi',
+      questions: [
+        {
+          id: '1b13-r2-q1',
+          question: '“지하철역” nimani anglatadi?',
+          questionEn: 'What does “지하철역” mean?',
+          questionRu: 'Что означает “지하철역”?',
+          options: ['Metro bekati', 'Avtobus bekati', 'Taksi', 'Samolyot'],
+          optionsEn: ['Subway station', 'Bus stop', 'Taxi', 'Airplane'],
+          optionsRu: ['Станция метро', 'Автобусная остановка', 'Такси', 'Самолёт'],
+          correctAnswer: 0,
+          explanation: '“지하철역” — metro bekati.',
+          explanationEn: '“지하철역” means “subway station”.',
+          explanationRu: '“지하철역” — это “станция метро”.'
+        }
+      ],
+      grammarPoint: 'Transport vocabulary',
+      vocabulary: ['정류장', '역']
+    }
+  ],
+  '14과': [
+    {
+      id: '1b14-r1',
+      book: '1B',
+      unit: '14과',
+      type: 'short-passage',
+      difficulty: 'easy',
+      korean: '이 코트는 커요. 작은 사이즈를 입어 볼게요.',
+      uzbek: 'Bu palto katta. Kichik o‘lchamini kiyib ko‘raman.',
+      russian: 'Это пальто большое. Я примерю маленький размер.',
+      english: 'This coat is big. I will try on a smaller size.',
+      questions: [
+        {
+          id: '1b14-r1-q1',
+          question: 'Palto qanday?',
+          questionEn: 'How is the coat?',
+          questionRu: 'Какое пальто?',
+          options: ['Katta', 'Kichik', 'Arzon', 'Qimmat'],
+          optionsEn: ['Big', 'Small', 'Cheap', 'Expensive'],
+          optionsRu: ['Большое', 'Маленькое', 'Дешёвое', 'Дорогое'],
+          correctAnswer: 0,
+          explanation: 'Matnda “커요” (katta) deyilgan.',
+          explanationEn: 'It says “big”.',
+          explanationRu: 'Сказано “большое”.'
+        }
+      ],
+      grammarPoint: 'Size adjectives',
+      vocabulary: ['코트', '커요', '작은', '사이즈']
+    },
+    {
+      id: '1b14-r2',
+      book: '1B',
+      unit: '14과',
+      type: 'comprehension',
+      difficulty: 'medium',
+      korean: '저는 치마를 입었어요. 그리고 운동화를 신었어요.',
+      uzbek: 'Men yubka kiydim. Va krasovka kiydim.',
+      russian: 'Я надел(а) юбку и обул(а) кроссовки.',
+      english: 'I wore a skirt and sneakers.',
+      questions: [
+        {
+          id: '1b14-r2-q1',
+          question: 'U nima kiydi?',
+          questionEn: 'What did he/she wear?',
+          questionRu: 'Что он/она надел(а)?',
+          options: ['Yubka va krasovka', 'Shim va tufli', 'Ko‘ylak va bosh kiyim', 'Kostyum'],
+          optionsEn: ['Skirt and sneakers', 'Pants and shoes', 'Dress and hat', 'Suit'],
+          optionsRu: ['Юбку и кроссовки', 'Брюки и обувь', 'Платье и головной убор', 'Костюм'],
+          correctAnswer: 0,
+          explanation: 'Matnda “치마를 입었어요… 운동화를 신었어요” bor.',
+          explanationEn: 'It says “wore a skirt” and “wore sneakers”.',
+          explanationRu: 'Сказано “надел(а) юбку” и “обул(а) кроссовки”.'
+        }
+      ],
+      grammarPoint: '입어요/신어요',
+      vocabulary: ['치마', '운동화']
+    }
+  ],
+  '15과': [
+    {
+      id: '1b15-r1',
+      book: '1B',
+      unit: '15과',
+      type: 'short-passage',
+      difficulty: 'easy',
+      korean: '여행을 가기 전에 돈을 바꿨어요. 그리고 비행기 표를 예약했어요.',
+      uzbek: 'Sayohatga borishdan oldin pul almashtirdim. Va samolyot biletini zakaz qildim.',
+      russian: 'Перед поездкой я обменял(а) деньги и забронировал(а) авиабилет.',
+      english: 'Before traveling, I exchanged money and booked a flight ticket.',
+      questions: [
+        {
+          id: '1b15-r1-q1',
+          question: 'U sayohatdan oldin nima qildi?',
+          questionEn: 'What did he/she do before traveling?',
+          questionRu: 'Что он/она сделал(а) перед поездкой?',
+          options: ['Pul almashtirdi va bilet zakaz qildi', 'Uy tozaladi', 'Kasallandi', 'Kiyim sotib oldi'],
+          optionsEn: ['Exchanged money and booked a ticket', 'Cleaned the house', 'Got sick', 'Bought clothes'],
+          optionsRu: ['Обменял(а) деньги и забронировал(а) билет', 'Убрал(а) дома', 'Заболел(а)', 'Купил(а) одежду'],
+          correctAnswer: 0,
+          explanation: 'Matnda “돈을 바꿨어요… 표를 예약했어요” bor.',
+          explanationEn: 'It says “exchanged money” and “booked a ticket”.',
+          explanationRu: 'Сказано “обменял(а) деньги” и “забронировал(а) билет”.'
+        }
+      ],
+      grammarPoint: '~기 전에',
+      vocabulary: ['여행', '돈', '바꿨어요', '예약했어요']
+    },
+    {
+      id: '1b15-r2',
+      book: '1B',
+      unit: '15과',
+      type: 'comprehension',
+      difficulty: 'medium',
+      korean: '여권을 준비해야 해요. 그리고 호텔도 예약해야 해요.',
+      uzbek: 'Pasportni tayyorlash kerak. Va mehmonxonani ham bron qilish kerak.',
+      russian: 'Нужно подготовить паспорт и также забронировать отель.',
+      english: 'You need to prepare your passport and also book a hotel.',
+      questions: [
+        {
+          id: '1b15-r2-q1',
+          question: 'Nimani tayyorlash kerak?',
+          questionEn: 'What do you need to prepare?',
+          questionRu: 'Что нужно подготовить?',
+          options: ['Pasport', 'Krasovka', 'Kompyuter', 'Yubka'],
+          optionsEn: ['Passport', 'Sneakers', 'Computer', 'Skirt'],
+          optionsRu: ['Паспорт', 'Кроссовки', 'Компьютер', 'Юбка'],
+          correctAnswer: 0,
+          explanation: 'Matnda “여권을 준비해야 해요” (pasport tayyorlash kerak) deyilgan.',
+          explanationEn: 'It says “prepare a passport”.',
+          explanationRu: 'Сказано “подготовить паспорт”.'
+        }
+      ],
+      grammarPoint: '~아/어야 해요',
+      vocabulary: ['여권', '준비해야 해요', '예약해야 해요']
+    }
   ]
 };
 
-export const getReadingExercisesByUnit = (unit: string): ReadingExercise[] => {
-  return readingExercises[unit] || [];
+export const getReadingExercisesByUnit = (unit: string, book: '1A' | '1B' = '1A'): ReadingExercise[] => {
+  const list = readingExercises[unit] || [];
+  return list.filter((ex) => (ex.book ?? '1A') === book);
 };
 
-export const getAllReadingUnits = (): string[] => {
-  return Object.keys(readingExercises);
+export const getAllReadingUnits = (book?: '1A' | '1B'): string[] => {
+  if (!book) return Object.keys(readingExercises);
+  return Object.keys(readingExercises).filter((unit) => {
+    const list = readingExercises[unit] || [];
+    return list.some((ex) => (ex.book ?? '1A') === book);
+  });
 };

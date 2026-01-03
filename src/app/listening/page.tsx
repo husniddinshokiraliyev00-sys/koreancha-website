@@ -126,14 +126,28 @@ function ListeningPageContent() {
   const { user, logActivity } = useUser();
   
   const t = listeningTranslations[lang];
+  const common = translations[lang];
   
-  const units = useMemo(() => getAllUnits(), []);
+  const initialBookFromQuery = searchParams.get('book');
+  const initialBook: '1A' | '1B' = initialBookFromQuery === '1B' ? '1B' : '1A';
+  const [selectedBook, setSelectedBook] = useState<'1A' | '1B'>(initialBook);
+
+  const units = useMemo(() => getAllUnits(selectedBook), [selectedBook]);
   const initialUnitFromQuery = searchParams.get('unit');
   const [selectedUnit, setSelectedUnit] = useState<string>(
-    initialUnitFromQuery && units.includes(initialUnitFromQuery) ? initialUnitFromQuery : units[0] || '1과'
+    initialUnitFromQuery && getAllUnits(initialBook).includes(initialUnitFromQuery)
+      ? initialUnitFromQuery
+      : getAllUnits(initialBook)[0] || '1과'
   );
   
-  const exercises = useMemo(() => getListeningExercisesByUnit(selectedUnit), [selectedUnit]);
+  useEffect(() => {
+    if (units.length === 0) return;
+    if (!units.includes(selectedUnit)) {
+      setSelectedUnit(units[0]);
+    }
+  }, [units, selectedUnit]);
+
+  const exercises = useMemo(() => getListeningExercisesByUnit(selectedUnit, selectedBook), [selectedUnit, selectedBook]);
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
@@ -147,12 +161,78 @@ function ListeningPageContent() {
   useEffect(() => {
     if (user && currentExercise) {
       logActivity('listening_exercise', { 
-        unit: selectedUnit, 
+        unit: `${selectedBook}:${selectedUnit}`,
         exerciseId: currentExercise.id,
         exerciseType: currentExercise.type 
       }, 1);
     }
-  }, [user, currentExercise, selectedUnit, logActivity]);
+  }, [user, currentExercise, selectedBook, selectedUnit, logActivity]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (exercises.length === 0) return;
+
+    const key = `listeningProgress:${selectedBook}:${selectedUnit}`;
+    const raw = window.localStorage.getItem(key);
+    if (!raw) {
+      setCurrentExerciseIndex(0);
+      setSelectedAnswer(null);
+      setShowResult(false);
+      setScore(0);
+      setCompleted(false);
+      setAnswers(new Array(exercises.length).fill(null));
+      setIsPlaying(false);
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(raw) as {
+        currentExerciseIndex?: number;
+        answers?: (number | null)[];
+        score?: number;
+        completed?: boolean;
+      };
+
+      const savedIndex = typeof parsed.currentExerciseIndex === 'number' ? parsed.currentExerciseIndex : 0;
+      const nextIndex = Math.min(Math.max(savedIndex, 0), Math.max(exercises.length - 1, 0));
+      const savedAnswersRaw = Array.isArray(parsed.answers) ? parsed.answers : [];
+      const nextAnswers = new Array(exercises.length).fill(null).map((_, i) => {
+        const v = savedAnswersRaw[i];
+        return typeof v === 'number' ? v : null;
+      }) as (number | null)[];
+
+      setCurrentExerciseIndex(nextIndex);
+      setAnswers(nextAnswers);
+      setScore(typeof parsed.score === 'number' ? parsed.score : 0);
+      setCompleted(Boolean(parsed.completed));
+      setSelectedAnswer(nextAnswers[nextIndex]);
+      setShowResult(nextAnswers[nextIndex] !== null);
+      setIsPlaying(false);
+    } catch {
+      setCurrentExerciseIndex(0);
+      setSelectedAnswer(null);
+      setShowResult(false);
+      setScore(0);
+      setCompleted(false);
+      setAnswers(new Array(exercises.length).fill(null));
+      setIsPlaying(false);
+    }
+  }, [selectedBook, selectedUnit, exercises.length]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (exercises.length === 0) return;
+    const key = `listeningProgress:${selectedBook}:${selectedUnit}`;
+    window.localStorage.setItem(
+      key,
+      JSON.stringify({
+        currentExerciseIndex,
+        answers,
+        score,
+        completed
+      })
+    );
+  }, [selectedBook, selectedUnit, exercises.length, currentExerciseIndex, answers, score, completed]);
 
   const handleSubmit = () => {
     if (selectedAnswer === null) return;
@@ -166,7 +246,7 @@ function ListeningPageContent() {
       setScore(score + 1);
       if (user) {
         logActivity('listening_correct', { 
-          unit: selectedUnit, 
+          unit: `${selectedBook}:${selectedUnit}`,
           exerciseId: currentExercise.id 
         }, 2);
       }
@@ -262,7 +342,7 @@ function ListeningPageContent() {
                 onClick={resetExercise}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition"
               >
-                Qayta boshlash
+                {common.reset}
               </button>
               <Link
                 href="/exercises"
@@ -284,26 +364,40 @@ function ListeningPageContent() {
         <div className="flex items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-3">
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight">{t.title}</h1>
-            <div className="hidden sm:block text-sm text-white/60">{selectedUnit}</div>
+            <div className="hidden sm:block text-sm text-white/60">{selectedBook}:{selectedUnit}</div>
           </div>
           <div className="flex items-center gap-3">
             <Link href="/exercises" className="text-sm font-semibold text-white/70 hover:text-white transition">
-              Exercises
+              {common.exercises}
             </Link>
             <Link href="/" className="text-sm font-semibold text-white/70 hover:text-white transition">
-              Home
+              {common.home}
             </Link>
           </div>
         </div>
 
         {/* Unit Selection */}
         <div className="mb-6">
+          <label className="block text-sm font-medium text-white/70 mb-2">{common.selectBook}</label>
+          <select
+            value={selectedBook}
+            onChange={(e) => {
+              setSelectedBook(e.target.value === '1B' ? '1B' : '1A');
+            }}
+            className="px-4 py-2 rounded-lg border border-white/10 text-sm bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 mb-4"
+          >
+            <option value="1A" className="bg-[#0b0f1a]">
+              {common.book1A}
+            </option>
+            <option value="1B" className="bg-[#0b0f1a]">
+              {common.book1B}
+            </option>
+          </select>
           <label className="block text-sm font-medium text-white/70 mb-2">{t.selectUnit}</label>
           <select
             value={selectedUnit}
             onChange={(e) => {
               setSelectedUnit(e.target.value);
-              resetExercise();
             }}
             className="px-4 py-2 rounded-lg border border-white/10 text-sm bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60"
           >
@@ -371,6 +465,13 @@ function ListeningPageContent() {
             <div className="text-2xl sm:text-3xl font-bold text-white mb-2">
               {currentExercise.korean}
             </div>
+            <div className="text-sm text-white/70">
+              {lang === 'uz'
+                ? currentExercise.uzbek
+                : lang === 'ru'
+                ? currentExercise.russian ?? currentExercise.english
+                : currentExercise.english}
+            </div>
             {currentExercise.context && (
               <div className="text-sm text-white/60 italic">
                 {currentExercise.context}
@@ -389,7 +490,12 @@ function ListeningPageContent() {
 
           {/* Options */}
           <div className="space-y-3">
-            {currentExercise.options?.map((option, index) => (
+            {(lang === 'ru'
+              ? currentExercise.optionsRu ?? currentExercise.optionsEn ?? currentExercise.options
+              : lang === 'en'
+              ? currentExercise.optionsEn ?? currentExercise.options
+              : currentExercise.options
+            )?.map((option, index) => (
               <button
                 key={index}
                 onClick={() => !showResult && setSelectedAnswer(index)}

@@ -1,8 +1,9 @@
-// 서울대 한국어 1A (Seoul National University Korean 1A) Listening Exercises
+﻿﻿// 서울대 한국어 1A (Seoul National University Korean 1A) Listening Exercises
 // Beginner level - 8 units + Hangul introduction
 
 export interface ListeningExercise {
   id: string;
+  book?: '1A' | '1B';
   unit: string;
   type: 'word-recognition' | 'sentence-comprehension' | 'dialogue' | 'fill-blank';
   difficulty: 'easy' | 'medium' | 'hard';
@@ -10,7 +11,10 @@ export interface ListeningExercise {
   korean: string;
   uzbek: string;
   english: string;
+  russian?: string;
   options?: string[];
+  optionsEn?: string[];
+  optionsRu?: string[];
   correctAnswer: number;
   grammarPoint?: string;
   context?: string;
@@ -675,13 +679,643 @@ export const listeningExercises: Record<string, ListeningExercise[]> = {
       correctAnswer: 2,
       grammarPoint: 'Contrasting locations and movements'
     }
+  ],
+  '9과': [
+    {
+      id: '1b9-1',
+      book: '1B',
+      unit: '9과',
+      type: 'word-recognition',
+      difficulty: 'easy',
+      korean: '할머니',
+      uzbek: 'buvi',
+      russian: 'бабушка',
+      english: 'grandmother',
+      options: ['buvi', 'buva', 'ona', 'ota'],
+      optionsEn: ['grandmother', 'grandfather', 'mother', 'father'],
+      optionsRu: ['бабушка', 'дедушка', 'мама', 'папа'],
+      correctAnswer: 0,
+      grammarPoint: 'Family members'
+    },
+    {
+      id: '1b9-2',
+      book: '1B',
+      unit: '9과',
+      type: 'word-recognition',
+      difficulty: 'easy',
+      korean: '남편',
+      uzbek: 'er',
+      russian: 'муж',
+      english: 'husband',
+      options: ['er', 'xotin', 'uka', 'singil'],
+      optionsEn: ['husband', 'wife', 'younger brother', 'younger sister'],
+      optionsRu: ['муж', 'жена', 'младший брат', 'младшая сестра'],
+      correctAnswer: 0,
+      grammarPoint: 'Family members'
+    },
+    {
+      id: '1b9-3',
+      book: '1B',
+      unit: '9과',
+      type: 'sentence-comprehension',
+      difficulty: 'medium',
+      korean: '저는 딸이 있어요.',
+      uzbek: 'Mening qiz farzandim bor.',
+      russian: 'У меня есть дочь.',
+      english: 'I have a daughter.',
+      options: [
+        "Mening o'g'il farzandim bor.",
+        "Mening qiz farzandim bor.",
+        'Mening erim bor.',
+        'Mening buvim bor.'
+      ],
+      optionsEn: ['I have a son.', 'I have a daughter.', 'I have a husband.', 'I have a grandmother.'],
+      optionsRu: ['У меня есть сын.', 'У меня есть дочь.', 'У меня есть муж.', 'У меня есть бабушка.'],
+      correctAnswer: 1,
+      grammarPoint: '~이/가 있어요'
+    },
+    {
+      id: '1b9-4',
+      book: '1B',
+      unit: '9과',
+      type: 'dialogue',
+      difficulty: 'medium',
+      korean: 'A: 가족이 몇 명이에요? B: 다섯 명이에요. 할머니, 아버지, 어머니, 동생하고 저예요.',
+      uzbek: "A: Oilangizda necha kishi bor? B: Besh kishi. Buvi, ota, ona, ukam va men.",
+      russian: 'A: Сколько человек в вашей семье? B: Пять. Бабушка, папа, мама, младший брат и я.',
+      english: 'A: How many people are in your family? B: Five. Grandmother, father, mother, younger brother, and me.',
+      options: ['Oilada uch kishi bor.', 'Oilada besh kishi bor.', 'Oilada faqat ota-ona bor.', 'Oilada yetti kishi bor.'],
+      optionsEn: ['There are three people in the family.', 'There are five people in the family.', 'Only the parents are in the family.', 'There are seven people in the family.'],
+      optionsRu: ['В семье три человека.', 'В семье пять человек.', 'В семье только родители.', 'В семье семь человек.'],
+      correctAnswer: 1,
+      grammarPoint: 'Counters: ~명'
+    },
+    {
+      id: '1b9-5',
+      book: '1B',
+      unit: '9과',
+      type: 'fill-blank',
+      difficulty: 'hard',
+      korean: '저는 ______이 있어요.',
+      uzbek: 'Mening ______ bor.',
+      russian: 'У меня есть ______.',
+      english: 'I have ______.',
+      options: ['아들', '사과', '학교', '책'],
+      correctAnswer: 0,
+      grammarPoint: '아들/딸'
+    }
+  ],
+  '10과': [
+    {
+      id: '1b10-1',
+      book: '1B',
+      unit: '10과',
+      type: 'word-recognition',
+      difficulty: 'easy',
+      korean: '아침',
+      uzbek: 'ertalab',
+      russian: 'утро',
+      english: 'morning',
+      options: ['ertalab', 'kechqurun', 'tun', 'kunduzi'],
+      optionsEn: ['morning', 'evening', 'night', 'daytime'],
+      optionsRu: ['утро', 'вечер', 'ночь', 'днём'],
+      correctAnswer: 0,
+      grammarPoint: 'Time of day'
+    },
+    {
+      id: '1b10-2',
+      book: '1B',
+      unit: '10과',
+      type: 'sentence-comprehension',
+      difficulty: 'easy',
+      korean: '저는 아침에 일어나요.',
+      uzbek: "Men ertalab uyg'onaman.",
+      russian: 'Я просыпаюсь утром.',
+      english: 'I wake up in the morning.',
+      options: ["Men kechqurun uyg'onaman.", "Men ertalab uyg'onaman.", 'Men tun bo\'yi uxlayman.', 'Men tushlik qilaman.'],
+      optionsEn: ['I wake up in the evening.', 'I wake up in the morning.', 'I sleep all night.', 'I eat lunch.'],
+      optionsRu: ['Я просыпаюсь вечером.', 'Я просыпаюсь утром.', 'Я сплю всю ночь.', 'Я обедаю.'],
+      correctAnswer: 1,
+      grammarPoint: 'Time + action: ~에'
+    },
+    {
+      id: '1b10-3',
+      book: '1B',
+      unit: '10과',
+      type: 'dialogue',
+      difficulty: 'medium',
+      korean: 'A: 몇 시에 회사에 가요? B: 아침 일곱 시에 가요. 버스를 타요.',
+      uzbek: "A: Ishxonaga soat nechada borasiz? B: Ertalab soat yettida boraman. Avtobusga minaman.",
+      russian: 'A: Во сколько вы идёте на работу? B: В семь утра. Еду на автобусе.',
+      english: 'A: What time do you go to the office? B: At 7 a.m. I take the bus.',
+      options: ['U ishga kechqurun boradi.', 'U ishga ertalab soat yettida boradi.', 'U ishga piyoda boradi.', 'U ishga poyezdda boradi.'],
+      optionsEn: ['He goes to work in the evening.', 'He goes to work at 7 a.m.', 'He walks to work.', 'He goes to work by train.'],
+      optionsRu: ['Он ходит на работу вечером.', 'Он ходит на работу в семь утра.', 'Он ходит на работу пешком.', 'Он ездит на работу на поезде.'],
+      correctAnswer: 1,
+      grammarPoint: 'Schedule + transport'
+    },
+    {
+      id: '1b10-4',
+      book: '1B',
+      unit: '10과',
+      type: 'fill-blank',
+      difficulty: 'medium',
+      korean: '저는 저녁에 ______.',
+      uzbek: 'Men kechqurun ______.',
+      russian: 'Вечером я ______.',
+      english: 'In the evening, I ______.',
+      options: ['청소해요', '가요', '해요', '읽어요'],
+      correctAnswer: 0,
+      grammarPoint: 'Daily routine'
+    },
+    {
+      id: '1b10-5',
+      book: '1B',
+      unit: '10과',
+      type: 'word-recognition',
+      difficulty: 'hard',
+      korean: '전화해요',
+      uzbek: 'telefon qilaman',
+      russian: 'звоню',
+      english: 'call',
+      options: ['telefon qilaman', 'kir yuvaman', 'ovqat pishiraman', 'uy tozalayman'],
+      optionsEn: ['call', 'do laundry', 'cook', 'clean'],
+      optionsRu: ['звоню', 'стираю', 'готовлю', 'убираю'],
+      correctAnswer: 0,
+      grammarPoint: 'Action verbs'
+    }
+  ],
+  '11과': [
+    {
+      id: '1b11-1',
+      book: '1B',
+      unit: '11과',
+      type: 'word-recognition',
+      difficulty: 'easy',
+      korean: '머리',
+      uzbek: 'bosh',
+      russian: 'голова',
+      english: 'head',
+      options: ["bosh", "qo'l", "oyoq", "ko'z"],
+      optionsEn: ['head', 'hand', 'foot', 'eye'],
+      optionsRu: ['голова', 'рука', 'нога/ступня', 'глаз'],
+      correctAnswer: 0,
+      grammarPoint: 'Body parts'
+    },
+    {
+      id: '1b11-2',
+      book: '1B',
+      unit: '11과',
+      type: 'sentence-comprehension',
+      difficulty: 'easy',
+      korean: '머리가 아파요.',
+      uzbek: "Boshim og'riyapti.",
+      russian: 'У меня болит голова.',
+      english: 'I have a headache.',
+      options: ["Qornim og'riyapti.", "Boshim og'riyapti.", "Ko'zim og'riyapti.", "Belim og'riyapti."],
+      optionsEn: ['My stomach hurts.', 'I have a headache.', 'My eye hurts.', 'My waist hurts.'],
+      optionsRu: ['У меня болит живот.', 'У меня болит голова.', 'У меня болит глаз.', 'У меня болит поясница.'],
+      correctAnswer: 1,
+      grammarPoint: '~이/가 아파요'
+    },
+    {
+      id: '1b11-3',
+      book: '1B',
+      unit: '11과',
+      type: 'dialogue',
+      difficulty: 'medium',
+      korean: 'A: 어디가 아파요? B: 목이 아파요. 기침도 해요.',
+      uzbek: "A: Qayeringiz og'riyapti? B: Tomog'im og'riyapti. Yo'tal ham bor.",
+      russian: 'A: Что у вас болит? B: Горло болит. Ещё кашляю.',
+      english: 'A: What hurts? B: My throat hurts. I also cough.',
+      options: ["Uning oyog'i og'riyapti.", "Uning tomog'i og'riyapti va yo'talayapti.", "Uning qorni og'riyapti.", 'U sog\'lom.'],
+      optionsEn: ['His leg hurts.', 'His throat hurts and he coughs.', 'His stomach hurts.', 'He is healthy.'],
+      optionsRu: ['У него болит нога.', 'У него болит горло и он кашляет.', 'У него болит живот.', 'Он здоров.'],
+      correctAnswer: 1,
+      grammarPoint: 'Health expressions'
+    },
+    {
+      id: '1b11-4',
+      book: '1B',
+      unit: '11과',
+      type: 'fill-blank',
+      difficulty: 'medium',
+      korean: '기침이 ______.',
+      uzbek: 'Yo\'tal ______.',
+      russian: 'Кашель ______.',
+      english: 'I ______ (cough).',
+      options: ['나요', '가요', '봐요', '있어요'],
+      correctAnswer: 0,
+      grammarPoint: 'Symptoms: ~이/가 나요'
+    },
+    {
+      id: '1b11-5',
+      book: '1B',
+      unit: '11과',
+      type: 'sentence-comprehension',
+      difficulty: 'hard',
+      korean: '목이 아파서 병원에 가요.',
+      uzbek: "Tomog'im og'rigani uchun shifoxonaga boraman.",
+      russian: 'Потому что болит горло, я иду в больницу.',
+      english: 'Because my throat hurts, I go to the hospital.',
+      options: [
+        "Tomog'im og'rigani uchun shifoxonaga boraman.",
+        "Men sog'lomman, shifoxonaga bormayman.",
+        'Men ishxonaga boraman.',
+        'Men kutubxonaga boraman.'
+      ],
+      optionsEn: [
+        'Because my throat hurts, I go to the hospital.',
+        'I am healthy, so I don\'t go to the hospital.',
+        'I go to the office.',
+        'I go to the library.'
+      ],
+      optionsRu: [
+        'Потому что болит горло, я иду в больницу.',
+        'Я здоров, поэтому не иду в больницу.',
+        'Я иду в офис.',
+        'Я иду в библиотеку.'
+      ],
+      correctAnswer: 0,
+      grammarPoint: 'Reason: ~아서/어서'
+    }
+  ],
+  '12과': [
+    {
+      id: '1b12-1',
+      book: '1B',
+      unit: '12과',
+      type: 'word-recognition',
+      difficulty: 'easy',
+      korean: '전화번호',
+      uzbek: 'telefon raqam',
+      russian: 'номер телефона',
+      english: 'phone number',
+      options: ['telefon raqam', 'pasport', 'taksi', 'mehmonxona'],
+      optionsEn: ['phone number', 'passport', 'taxi', 'hotel'],
+      optionsRu: ['номер телефона', 'паспорт', 'такси', 'отель'],
+      correctAnswer: 0,
+      grammarPoint: 'Phone vocabulary'
+    },
+    {
+      id: '1b12-2',
+      book: '1B',
+      unit: '12과',
+      type: 'sentence-comprehension',
+      difficulty: 'easy',
+      korean: '문자를 보냈어요.',
+      uzbek: "SMS jo'natdim.",
+      russian: 'Я отправил(а) сообщение.',
+      english: 'I sent a text message.',
+      options: ["SMS oldim.", "SMS jo'natdim.", "Qo'ng'iroq keldi.", "Telefon raqamni yozdim."],
+      optionsEn: ['I received a text.', 'I sent a text.', 'I got a call.', 'I wrote down the phone number.'],
+      optionsRu: ['Я получил(а) сообщение.', 'Я отправил(а) сообщение.', 'Мне позвонили.', 'Я записал(а) номер телефона.'],
+      correctAnswer: 1,
+      grammarPoint: 'Past tense: ~았/었어요'
+    },
+    {
+      id: '1b12-3',
+      book: '1B',
+      unit: '12과',
+      type: 'dialogue',
+      difficulty: 'medium',
+      korean: 'A: 오랜만이에요! B: 네, 오랜만이에요. 잘 지냈어요? A: 네, 잘 지냈어요.',
+      uzbek: "A: Ko'rishmaganimizga ancha bo'ldi! B: Ha, ancha bo'ldi. Yaxshimisan? A: Ha, yaxshiman.",
+      russian: 'A: Давно не виделись! B: Да, давно. Как дела? A: Хорошо.',
+      english: 'A: Long time no see! B: Yes, long time. How have you been? A: I\'ve been well.',
+      options: ["Ular birinchi marta uchrashishmoqda.", "Ular uzoq vaqtdan keyin ko'rishishyapti.", 'Ular telefonda janjallashyapti.', 'Ular yo\'lda adashyapti.'],
+      optionsEn: ['They are meeting for the first time.', 'They are meeting after a long time.', 'They are arguing on the phone.', 'They are lost on the road.'],
+      optionsRu: ['Они встречаются впервые.', 'Они встречаются после долгого времени.', 'Они ругаются по телефону.', 'Они заблудились.'],
+      correctAnswer: 1,
+      grammarPoint: '오랜만이에요'
+    },
+    {
+      id: '1b12-4',
+      book: '1B',
+      unit: '12과',
+      type: 'fill-blank',
+      difficulty: 'medium',
+      korean: '좀 늦게 ______.',
+      uzbek: 'Biroz kech ______.',
+      russian: 'Я немного поздно ______.',
+      english: 'I ______ a little late.',
+      options: ['일어났어요', '갔어요', '먹었어요', '봤어요'],
+      correctAnswer: 0,
+      grammarPoint: '늦게 일어나다'
+    },
+    {
+      id: '1b12-5',
+      book: '1B',
+      unit: '12과',
+      type: 'sentence-comprehension',
+      difficulty: 'hard',
+      korean: '회의가 있어서 사무실에 늦게 갔어요.',
+      uzbek: "Majlis bo'lgani uchun ofisga kech bordim.",
+      russian: 'Потому что было совещание, я поздно пошёл(шла) в офис.',
+      english: 'Because there was a meeting, I went to the office late.',
+      options: [
+        "Majlis bo'lgani uchun ofisga kech bordim.",
+        "Uxlashim uchun ofisga kech bordim.",
+        "Bugun dam oldim, shuning uchun ishga bormadim.",
+        "Men do'konga bordim."
+      ],
+      optionsEn: [
+        'Because there was a meeting, I went to the office late.',
+        'Because I slept, I went to the office late.',
+        'I rested today, so I did not go to work.',
+        'I went to a store.'
+      ],
+      optionsRu: [
+        'Потому что было совещание, я поздно пошёл(шла) в офис.',
+        'Потому что я спал(а), я поздно пошёл(шла) в офис.',
+        'Я сегодня отдыхал(а), поэтому не пошёл(шла) на работу.',
+        'Я пошёл(шла) в магазин.'
+      ],
+      correctAnswer: 0,
+      grammarPoint: 'Reason: ~아서/어서'
+    }
+  ],
+  '13과': [
+    {
+      id: '1b13-1',
+      book: '1B',
+      unit: '13과',
+      type: 'word-recognition',
+      difficulty: 'easy',
+      korean: '지하철',
+      uzbek: 'metro',
+      russian: 'метро',
+      english: 'subway',
+      options: ['metro', 'avtobus', 'poyezd', 'taksi'],
+      optionsEn: ['subway', 'bus', 'train', 'taxi'],
+      optionsRu: ['метро', 'автобус', 'поезд', 'такси'],
+      correctAnswer: 0,
+      grammarPoint: 'Transportation'
+    },
+    {
+      id: '1b13-2',
+      book: '1B',
+      unit: '13과',
+      type: 'sentence-comprehension',
+      difficulty: 'easy',
+      korean: '버스를 타고 가요.',
+      uzbek: 'Avtobusga minib boraman.',
+      russian: 'Еду на автобусе.',
+      english: 'I go by bus.',
+      options: ['Piyoda boraman.', 'Avtobusga minib boraman.', 'Samolyotda boraman.', 'Velosiped minaman.'],
+      optionsEn: ['I walk.', 'I go by bus.', 'I go by plane.', 'I ride a bicycle.'],
+      optionsRu: ['Я иду пешком.', 'Я еду на автобусе.', 'Я лечу на самолёте.', 'Я еду на велосипеде.'],
+      correctAnswer: 1,
+      grammarPoint: '~을/를 타다'
+    },
+    {
+      id: '1b13-3',
+      book: '1B',
+      unit: '13과',
+      type: 'dialogue',
+      difficulty: 'medium',
+      korean: 'A: 여기에서 지하철을 갈아타요? B: 네, 2호선으로 갈아타세요.',
+      uzbek: "A: Shu yerda metro almashasizmi? B: Ha, 2-yo'nalishga o'ting.",
+      russian: 'A: Здесь пересадка на метро? B: Да, сделайте пересадку на линию 2.',
+      english: 'A: Do I transfer to the subway here? B: Yes, transfer to Line 2.',
+      options: ['Ular qayerda tushish haqida gapirishmoqda.', 'Ular metro almashish haqida gapirishmoqda.', 'Ular avtobus bekati haqida gapirishmoqda.', "Yo'l yopiq haqida gapirishmoqda."],
+      optionsEn: ['They are talking about where to get off.', 'They are talking about transferring to the subway.', 'They are talking about a bus stop.', 'They are talking about a road closure.'],
+      optionsRu: ['Они говорят о том, где выйти.', 'Они говорят о пересадке в метро.', 'Они говорят об автобусной остановке.', 'Они говорят о закрытой дороге.'],
+      correctAnswer: 1,
+      grammarPoint: '갈아타다'
+    },
+    {
+      id: '1b13-4',
+      book: '1B',
+      unit: '13과',
+      type: 'fill-blank',
+      difficulty: 'medium',
+      korean: '여기에서 ______.',
+      uzbek: 'Shu yerda ______.',
+      russian: 'Здесь ______.',
+      english: 'Here, ______.',
+      options: ['갈아타요', '자요', '먹어요', '읽어요'],
+      correctAnswer: 0,
+      grammarPoint: '갈아타요'
+    },
+    {
+      id: '1b13-5',
+      book: '1B',
+      unit: '13과',
+      type: 'sentence-comprehension',
+      difficulty: 'hard',
+      korean: '지하철역에서 내려서 버스 정류장에 가요.',
+      uzbek: "Metro bekatida tushib, avtobus bekatiga boraman.",
+      russian: 'Выхожу на станции метро и иду к автобусной остановке.',
+      english: 'I get off at the subway station and go to the bus stop.',
+      options: [
+        "Metro bekatida tushib, avtobus bekatiga boraman.",
+        "Metroda qolib, poyezdga o'taman.",
+        'Men uyda qolaman.',
+        'Men taksida boraman.'
+      ],
+      optionsEn: [
+        'I get off at the subway station and go to the bus stop.',
+        'I stay on the subway and transfer to a train.',
+        'I stay at home.',
+        'I go by taxi.'
+      ],
+      optionsRu: [
+        'Выхожу на станции метро и иду к автобусной остановке.',
+        'Остаюсь в метро и пересаживаюсь на поезд.',
+        'Я остаюсь дома.',
+        'Я еду на такси.'
+      ],
+      correctAnswer: 0,
+      grammarPoint: 'Sequence: ~어서/아서'
+    }
+  ],
+  '14과': [
+    {
+      id: '1b14-1',
+      book: '1B',
+      unit: '14과',
+      type: 'word-recognition',
+      difficulty: 'easy',
+      korean: '코트',
+      uzbek: 'palto',
+      russian: 'пальто',
+      english: 'coat',
+      options: ['palto', 'shim', 'bosh kiyim', 'yubka'],
+      optionsEn: ['coat', 'pants', 'hat', 'skirt'],
+      optionsRu: ['пальто', 'брюки', 'шапка', 'юбка'],
+      correctAnswer: 0,
+      grammarPoint: 'Clothes'
+    },
+    {
+      id: '1b14-2',
+      book: '1B',
+      unit: '14과',
+      type: 'sentence-comprehension',
+      difficulty: 'easy',
+      korean: '치마가 길어요.',
+      uzbek: 'Yubka uzun.',
+      russian: 'Юбка длинная.',
+      english: 'The skirt is long.',
+      options: ['Yubka kalta.', 'Yubka uzun.', 'Palto kichkina.', 'Shim katta.'],
+      optionsEn: ['The skirt is short.', 'The skirt is long.', 'The coat is small.', 'The pants are big.'],
+      optionsRu: ['Юбка короткая.', 'Юбка длинная.', 'Пальто маленькое.', 'Брюки большие.'],
+      correctAnswer: 1,
+      grammarPoint: '길어요/짧아요'
+    },
+    {
+      id: '1b14-3',
+      book: '1B',
+      unit: '14과',
+      type: 'dialogue',
+      difficulty: 'medium',
+      korean: 'A: 이 옷 어때요? B: 조금 커요. 작은 사이즈 있어요?',
+      uzbek: "A: Bu kiyim qanday? B: Biroz katta. Kichik o'lchami bormi?",
+      russian: 'A: Как эта одежда? B: Немного большая. Есть маленький размер?',
+      english: 'A: How is this outfit? B: It\'s a bit big. Do you have a smaller size?',
+      options: ['Kiyim juda kichkina.', 'Kiyim biroz katta.', 'Kiyim juda uzun.', 'Kiyim juda arzon.'],
+      optionsEn: ['The clothing is very small.', 'The clothing is a bit big.', 'The clothing is very long.', 'The clothing is very cheap.'],
+      optionsRu: ['Одежда очень маленькая.', 'Одежда немного большая.', 'Одежда очень длинная.', 'Одежда очень дешёвая.'],
+      correctAnswer: 1,
+      grammarPoint: 'Size: 커요/작아요'
+    },
+    {
+      id: '1b14-4',
+      book: '1B',
+      unit: '14과',
+      type: 'fill-blank',
+      difficulty: 'medium',
+      korean: '신발을 ______.',
+      uzbek: 'Poyabzal ______.',
+      russian: 'Я ______ обувь.',
+      english: 'I ______ shoes.',
+      options: ['신어요', '입어요', '봐요', '먹어요'],
+      correctAnswer: 0,
+      grammarPoint: 'Wear: 신어요'
+    },
+    {
+      id: '1b14-5',
+      book: '1B',
+      unit: '14과',
+      type: 'sentence-comprehension',
+      difficulty: 'hard',
+      korean: '저는 오늘 코트를 입고 운동화를 신었어요.',
+      uzbek: 'Men bugun palto kiyib, krasovka kiydim.',
+      russian: 'Сегодня я надел(а) пальто и обул(а) кроссовки.',
+      english: 'Today I wore a coat and sneakers.',
+      options: ['Men bugun palto kiyib, krasovka kiydim.', 'Men bugun yubka kiyib, tufli kiydim.', 'Men bugun hech nima kiymadim.', 'Men bugun kostyum kiydim.'],
+      optionsEn: ['Today I wore a coat and sneakers.', 'Today I wore a skirt and shoes.', 'I did not wear anything today.', 'I wore a suit today.'],
+      optionsRu: ['Сегодня я надел(а) пальто и обул(а) кроссовки.', 'Сегодня я надел(а) юбку и обувь.', 'Сегодня я ничего не надел(а).', 'Сегодня я надел(а) костюм.'],
+      correctAnswer: 0,
+      grammarPoint: 'Past tense'
+    }
+  ],
+  '15과': [
+    {
+      id: '1b15-1',
+      book: '1B',
+      unit: '15과',
+      type: 'word-recognition',
+      difficulty: 'easy',
+      korean: '여행',
+      uzbek: 'sayohat',
+      russian: 'путешествие',
+      english: 'travel',
+      options: ['sayohat', 'ish', 'ovqat', 'kiyim'],
+      optionsEn: ['travel', 'work', 'food', 'clothes'],
+      optionsRu: ['путешествие', 'работа', 'еда', 'одежда'],
+      correctAnswer: 0,
+      grammarPoint: 'Travel vocabulary'
+    },
+    {
+      id: '1b15-2',
+      book: '1B',
+      unit: '15과',
+      type: 'sentence-comprehension',
+      difficulty: 'easy',
+      korean: '비행기 표를 예약했어요.',
+      uzbek: 'Samolyot biletini zakaz qildim.',
+      russian: 'Я забронировал(а) авиабилет.',
+      english: 'I booked a flight ticket.',
+      options: ['Men mehmonxona bron qildim.', 'Men samolyot biletini zakaz qildim.', 'Men pul almashtirdim.', 'Men uyga qaytdim.'],
+      optionsEn: ['I booked a hotel.', 'I booked a flight ticket.', 'I exchanged money.', 'I returned home.'],
+      optionsRu: ['Я забронировал(а) отель.', 'Я забронировал(а) авиабилет.', 'Я обменял(а) деньги.', 'Я вернулся(лась) домой.'],
+      correctAnswer: 1,
+      grammarPoint: '예약하다'
+    },
+    {
+      id: '1b15-3',
+      book: '1B',
+      unit: '15과',
+      type: 'dialogue',
+      difficulty: 'medium',
+      korean: 'A: 여행사에 갔어요? B: 네, 비행기 표하고 호텔을 예약했어요.',
+      uzbek: "A: Sayohat agentligiga bordingizmi? B: Ha, samolyot bileti va mehmonxonani bron qildim.",
+      russian: 'A: Вы ходили в туристическое агентство? B: Да, забронировал(а) билет и отель.',
+      english: 'A: Did you go to a travel agency? B: Yes, I booked a flight ticket and a hotel.',
+      options: ["U sayohat agentligiga bormagan.", 'U bilet va mehmonxonani bron qilgan.', 'U pul almashtirmagan.', 'U mashina sotib olgan.'],
+      optionsEn: ['He did not go to a travel agency.', 'He booked a ticket and a hotel.', 'He did not exchange money.', 'He bought a car.'],
+      optionsRu: ['Он не ходил в туристическое агентство.', 'Он забронировал билет и отель.', 'Он не обменял деньги.', 'Он купил машину.'],
+      correctAnswer: 1,
+      grammarPoint: 'Travel planning'
+    },
+    {
+      id: '1b15-4',
+      book: '1B',
+      unit: '15과',
+      type: 'fill-blank',
+      difficulty: 'medium',
+      korean: '돈을 ______.',
+      uzbek: 'Pulni ______.',
+      russian: 'Я ______ деньги.',
+      english: 'I ______ money.',
+      options: ['바꿔요', '타요', '가요', '읽어요'],
+      correctAnswer: 0,
+      grammarPoint: '돈을 바꾸다'
+    },
+    {
+      id: '1b15-5',
+      book: '1B',
+      unit: '15과',
+      type: 'sentence-comprehension',
+      difficulty: 'hard',
+      korean: '여행을 가기 전에 여권을 준비해야 해요.',
+      uzbek: 'Sayohatga borishdan oldin pasportni tayyorlash kerak.',
+      russian: 'Перед путешествием нужно подготовить паспорт.',
+      english: 'Before traveling, you need to prepare your passport.',
+      options: [
+        'Sayohatga borishdan oldin pasportni tayyorlash kerak.',
+        'Sayohatdan keyin pasportni tayyorlash kerak.',
+        'Bugun pasport kerak emas.',
+        'Sayohatga avtobusda borish kerak.'
+      ],
+      optionsEn: [
+        'Before traveling, you need to prepare your passport.',
+        'After traveling, you need to prepare your passport.',
+        'You do not need a passport today.',
+        'You need to travel by bus.'
+      ],
+      optionsRu: [
+        'Перед путешествием нужно подготовить паспорт.',
+        'После путешествия нужно подготовить паспорт.',
+        'Сегодня паспорт не нужен.',
+        'Нужно путешествовать на автобусе.'
+      ],
+      correctAnswer: 0,
+      grammarPoint: '~기 전에'
+    }
   ]
 };
 
-export const getListeningExercisesByUnit = (unit: string): ListeningExercise[] => {
-  return listeningExercises[unit] || [];
+export const getListeningExercisesByUnit = (unit: string, book: '1A' | '1B' = '1A'): ListeningExercise[] => {
+  const list = listeningExercises[unit] || [];
+  return list.filter((ex) => (ex.book ?? '1A') === book);
 };
 
-export const getAllUnits = (): string[] => {
-  return Object.keys(listeningExercises);
+export const getAllUnits = (book?: '1A' | '1B'): string[] => {
+  if (!book) return Object.keys(listeningExercises);
+  return Object.keys(listeningExercises).filter((unit) => {
+    const list = listeningExercises[unit] || [];
+    return list.some((ex) => (ex.book ?? '1A') === book);
+  });
 };

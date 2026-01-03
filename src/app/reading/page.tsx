@@ -140,13 +140,26 @@ function ReadingPageContent() {
   const t = readingTranslations[lang];
   const common = translations[lang];
   
-  const units = useMemo(() => getAllReadingUnits(), []);
+  const initialBookFromQuery = searchParams.get('book');
+  const initialBook: '1A' | '1B' = initialBookFromQuery === '1B' ? '1B' : '1A';
+  const [selectedBook, setSelectedBook] = useState<'1A' | '1B'>(initialBook);
+
+  const units = useMemo(() => getAllReadingUnits(selectedBook), [selectedBook]);
   const initialUnitFromQuery = searchParams.get('unit');
   const [selectedUnit, setSelectedUnit] = useState<string>(
-    initialUnitFromQuery && units.includes(initialUnitFromQuery) ? initialUnitFromQuery : units[0] || '1과'
+    initialUnitFromQuery && getAllReadingUnits(initialBook).includes(initialUnitFromQuery)
+      ? initialUnitFromQuery
+      : getAllReadingUnits(initialBook)[0] || '1과'
   );
   
-  const exercises = useMemo(() => getReadingExercisesByUnit(selectedUnit), [selectedUnit]);
+  useEffect(() => {
+    if (units.length === 0) return;
+    if (!units.includes(selectedUnit)) {
+      setSelectedUnit(units[0]);
+    }
+  }, [units, selectedUnit]);
+
+  const exercises = useMemo(() => getReadingExercisesByUnit(selectedUnit, selectedBook), [selectedUnit, selectedBook]);
   const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number | boolean>>({});
   const [showResults, setShowResults] = useState(false);
@@ -158,12 +171,68 @@ function ReadingPageContent() {
   useEffect(() => {
     if (user && currentExercise) {
       logActivity('reading_exercise', { 
-        unit: selectedUnit, 
+        unit: `${selectedBook}:${selectedUnit}`,
         exerciseId: currentExercise.id,
         exerciseType: currentExercise.type 
       }, 1);
     }
-  }, [user, currentExercise, selectedUnit, logActivity]);
+  }, [user, currentExercise, selectedBook, selectedUnit, logActivity]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (exercises.length === 0) return;
+
+    const key = `readingProgress:${selectedBook}:${selectedUnit}`;
+    const raw = window.localStorage.getItem(key);
+    if (!raw) {
+      setCurrentExerciseIndex(0);
+      setSelectedAnswers({});
+      setShowResults(false);
+      setScore(0);
+      setCompleted(false);
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(raw) as {
+        currentExerciseIndex?: number;
+        selectedAnswers?: Record<string, number | boolean>;
+        showResults?: boolean;
+        score?: number;
+        completed?: boolean;
+      };
+
+      const savedIndex = typeof parsed.currentExerciseIndex === 'number' ? parsed.currentExerciseIndex : 0;
+      const nextIndex = Math.min(Math.max(savedIndex, 0), Math.max(exercises.length - 1, 0));
+      setCurrentExerciseIndex(nextIndex);
+      setSelectedAnswers(typeof parsed.selectedAnswers === 'object' && parsed.selectedAnswers ? parsed.selectedAnswers : {});
+      setShowResults(Boolean(parsed.showResults));
+      setScore(typeof parsed.score === 'number' ? parsed.score : 0);
+      setCompleted(Boolean(parsed.completed));
+    } catch {
+      setCurrentExerciseIndex(0);
+      setSelectedAnswers({});
+      setShowResults(false);
+      setScore(0);
+      setCompleted(false);
+    }
+  }, [selectedBook, selectedUnit, exercises.length]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (exercises.length === 0) return;
+    const key = `readingProgress:${selectedBook}:${selectedUnit}`;
+    window.localStorage.setItem(
+      key,
+      JSON.stringify({
+        currentExerciseIndex,
+        selectedAnswers,
+        showResults,
+        score,
+        completed
+      })
+    );
+  }, [selectedBook, selectedUnit, exercises.length, currentExerciseIndex, selectedAnswers, showResults, score, completed]);
 
   const handleAnswerSelect = (questionId: string, answer: number | boolean) => {
     if (showResults) return;
@@ -184,7 +253,7 @@ function ReadingPageContent() {
         correctCount++;
         if (user) {
           logActivity('reading_correct', { 
-            unit: selectedUnit, 
+            unit: `${selectedBook}:${selectedUnit}`,
             exerciseId: currentExercise.id,
             questionId: question.id 
           }, 2);
@@ -295,7 +364,7 @@ function ReadingPageContent() {
         <div className="flex items-center justify-between gap-4 mb-8">
           <div className="flex items-center gap-3">
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight">{t.title}</h1>
-            <div className="hidden sm:block text-sm text-white/60">{selectedUnit}</div>
+            <div className="hidden sm:block text-sm text-white/60">{selectedBook}:{selectedUnit}</div>
           </div>
           <div className="flex items-center gap-3">
             <Link href="/exercises" className="text-sm font-semibold text-white/70 hover:text-white transition">
@@ -309,12 +378,26 @@ function ReadingPageContent() {
 
         {/* Unit Selection */}
         <div className="mb-6">
+          <label className="block text-sm font-medium text-white/70 mb-2">{common.selectBook}</label>
+          <select
+            value={selectedBook}
+            onChange={(e) => {
+              setSelectedBook(e.target.value === '1B' ? '1B' : '1A');
+            }}
+            className="px-4 py-2 rounded-lg border border-white/10 text-sm bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 mb-4"
+          >
+            <option value="1A" className="bg-[#0b0f1a]">
+              {common.book1A}
+            </option>
+            <option value="1B" className="bg-[#0b0f1a]">
+              {common.book1B}
+            </option>
+          </select>
           <label className="block text-sm font-medium text-white/70 mb-2">{t.selectUnit}</label>
           <select
             value={selectedUnit}
             onChange={(e) => {
               setSelectedUnit(e.target.value);
-              resetExercise();
             }}
             className="px-4 py-2 rounded-lg border border-white/10 text-sm bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60"
           >
@@ -364,10 +447,14 @@ function ReadingPageContent() {
           {/* Translation */}
           <div className="bg-white/5 border border-white/10 rounded-lg p-4 mb-6">
             <h3 className="text-sm font-medium mb-2 text-white/70">
-              {common.translation} ({lang === 'uz' ? common.languageUzbek : common.languageEnglish})
+              {common.translation} ({lang === 'uz' ? common.languageUzbek : lang === 'ru' ? common.languageRussian : common.languageEnglish})
             </h3>
             <div className="text-base leading-relaxed text-white/90">
-              {lang === 'uz' ? currentExercise.uzbek : currentExercise.english}
+              {lang === 'uz'
+                ? currentExercise.uzbek
+                : lang === 'ru'
+                ? currentExercise.russian ?? currentExercise.english
+                : currentExercise.english}
             </div>
           </div>
 
@@ -397,13 +484,24 @@ function ReadingPageContent() {
                 <div key={question.id} className="bg-white/5 border border-white/10 rounded-lg p-4">
                   <div className="mb-3">
                     <span className="text-sm text-white/70">{common.question} {qIndex + 1}:</span>
-                    <p className="text-white mt-1">{question.question}</p>
+                    <p className="text-white mt-1">
+                      {lang === 'uz'
+                        ? question.question
+                        : lang === 'ru'
+                        ? question.questionRu ?? question.questionEn ?? question.question
+                        : question.questionEn ?? question.question}
+                    </p>
                   </div>
 
                   {question.options ? (
                     // Multiple choice
                     <div className="space-y-2">
-                      {question.options.map((option, oIndex) => (
+                      {(lang === 'ru'
+                        ? question.optionsRu ?? question.optionsEn ?? question.options
+                        : lang === 'en'
+                        ? question.optionsEn ?? question.options
+                        : question.options
+                      )?.map((option, oIndex) => (
                         <button
                           key={oIndex}
                           onClick={() => handleAnswerSelect(question.id, oIndex)}
@@ -504,7 +602,12 @@ function ReadingPageContent() {
                   {showResults && question.explanation && (
                     <div className="mt-3 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
                       <div className="text-sm text-blue-300">
-                        <strong>{t.explanation}:</strong> {question.explanation}
+                        <strong>{t.explanation}:</strong>{' '}
+                        {lang === 'uz'
+                          ? question.explanation
+                          : lang === 'ru'
+                          ? question.explanationRu ?? question.explanationEn ?? question.explanation
+                          : question.explanationEn ?? question.explanation}
                       </div>
                     </div>
                   )}
