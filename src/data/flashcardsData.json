@@ -1,200 +1,4010 @@
-[
-  {
-    "book": "1B",
-    "unit": "9과",
-    "cards": [
-      { "korean": "할머니", "uzbek": "buva", "russian": "бабушка", "english": "grandmother" },
-      { "korean": "할아버지", "uzbek": "buvi", "russian": "дедушка", "english": "grandfather" },
-      { "korean": "어머니", "uzbek": "ona", "russian": "мама", "english": "mother" },
-      { "korean": "아버지", "uzbek": "ota", "russian": "отец", "english": "father" },
-      { "korean": "누나", "uzbek": "opa(o’g’il bolalar uchun)", "russian": "сестра(для мальчиков)", "english": "sister (for boys)" },
-      { "korean": "형", "uzbek": "aka (o’g’il bolalarga)", "russian": "брат(для мальчиков)", "english": "brother (for boys)" },
-      { "korean": "언니", "uzbek": "opa (qizlarga)", "russian": "сестра(для девочек)", "english": "sister (for girls)" },
-      { "korean": "오빠", "uzbek": "aka(qizlarga)", "russian": "брат(для девочек)", "english": "brother (for girls)" },
-      { "korean": "여동생", "uzbek": "singil", "russian": "младшая сестра", "english": "younger sister" },
-      { "korean": "남동생", "uzbek": "uka", "russian": "младший брат", "english": "younger brother" },
-      { "korean": "아내", "uzbek": "xotin", "russian": "жена", "english": "wife" },
-      { "korean": "남편", "uzbek": "er", "russian": "муж", "english": "husband" },
-      { "korean": "딸", "uzbek": "qiz farzand", "russian": "дочь", "english": "daughter" },
-      { "korean": "아들", "uzbek": "o’g’il farzand", "russian": "сын", "english": "son" },
-      { "korean": "열", "uzbek": "10", "russian": "десять", "english": "ten" },
-      { "korean": "스물", "uzbek": "20", "russian": "двадцать", "english": "twenty" },
-      { "korean": "서른", "uzbek": "30", "russian": "тридцать", "english": "thirty" },
-      { "korean": "마흔", "uzbek": "40", "russian": "сорок", "english": "forty" },
-      { "korean": "쉰", "uzbek": "50", "russian": "пятьдесят", "english": "fifty" },
-      { "korean": "예순", "uzbek": "60", "russian": "шестьдесят", "english": "sixty" },
-      { "korean": "일흔", "uzbek": "70", "russian": "семьдесят", "english": "seventy" },
-      { "korean": "여든", "uzbek": "80", "russian": "восемьдесят", "english": "eighty" },
-      { "korean": "아흔", "uzbek": "90", "russian": "девяносто", "english": "ninety" },
-      { "korean": "백", "uzbek": "100", "russian": "сто", "english": "hundred" },
-      { "korean": "이름", "uzbek": "ism", "russian": "имя", "english": "name" },
-      { "korean": "집", "uzbek": "uy", "russian": "дом", "english": "house" },
-      { "korean": "사람", "uzbek": "odam", "russian": "человек", "english": "person" },
-      { "korean": "나이", "uzbek": "yosh", "russian": "возраст", "english": "age" },
-      { "korean": "있다", "uzbek": "bor bo’lmoq", "russian": "быть", "english": "exist" },
-      { "korean": "먹다", "uzbek": "yemoq", "russian": "есть", "english": "eat" },
-      { "korean": "자다", "uzbek": "uxlamoq", "russian": "спать", "english": "sleep" },
-      { "korean": "상자", "uzbek": "quti", "russian": "коробка", "english": "box" },
-      { "korean": "꺼내다", "uzbek": "sug’urmoq", "russian": "вынимать", "english": "take out" },
-      { "korean": "운전", "uzbek": "haydamoq", "russian": "водить", "english": "drive" },
-      { "korean": "수학", "uzbek": "matematika", "russian": "математика", "english": "mathematics" },
-      { "korean": "인사하다", "uzbek": "salomlashmoq", "russian": "приветствовать", "english": "greet" },
-      { "korean": "이쪽", "uzbek": "bu", "russian": "эта сторона", "english": "this side" },
-      { "korean": "한테서", "uzbek": "-dan", "russian": "от", "english": "from" },
-      { "korean": "동아리", "uzbek": "to’garak", "russian": "кружок", "english": "club" },
-      { "korean": "윗사람", "uzbek": "o’zidan katta odam", "russian": "старший", "english": "senior" },
-      { "korean": "역사", "uzbek": "tarix", "russian": "история", "english": "history" },
-      { "korean": "우리", "uzbek": "biz/bizning", "russian": "мы/наш", "english": "we/our" },
-      { "korean": "친절하다", "uzbek": "mehribon", "russian": "добрый", "english": "kind" },
-      { "korean": "부모님", "uzbek": "ota-ona", "russian": "родители", "english": "parents" },
-      { "korean": "아기", "uzbek": "chaqaloq", "russian": "младенец", "english": "baby" },
-      { "korean": "태어나다", "uzbek": "tug’ilmoq", "russian": "рождаться", "english": "be born" }
-    ]
-  },
-  {
-    "book": "1B",
-    "unit": "10과",
-    "cards": [
-      { "korean": "새벽", "uzbek": "sahar", "russian": "рассвет", "english": "dawn" },
-      { "korean": "아침", "uzbek": "ertalab", "russian": "утро", "english": "morning" },
-      { "korean": "낮", "uzbek": "kunduzi", "russian": "день", "english": "daytime" },
-      { "korean": "저녁", "uzbek": "kechki payt", "russian": "вечер", "english": "evening" },
-      { "korean": "밤", "uzbek": "tun", "russian": "ночь", "english": "night" },
-      { "korean": "오전", "uzbek": "obeddan oldin", "russian": "утро AM", "english": "AM" },
-      { "korean": "오후", "uzbek": "obeddan keyin", "russian": "после полудня", "english": "PM" },
-      { "korean": "일어나다", "uzbek": "uyg'onmoq", "russian": "просыпаться", "english": "wake up" },
-      { "korean": "버스를 기다리다", "uzbek": "avtobus kutmoq", "russian": "ждать автобус", "english": "wait for the bus" },
-      { "korean": "운전하다", "uzbek": "mashina minmoq", "russian": "вести машину", "english": "drive" },
-      { "korean": "버스를 타다", "uzbek": "avtobusga minmoq", "russian": "сесть на автобус", "english": "take the bus" },
-      { "korean": "세수하다", "uzbek": "yuvinmoq", "russian": "умываться", "english": "wash face" },
-      { "korean": "청소하다", "uzbek": "uy tozalamoq", "russian": "убирать", "english": "clean" },
-      { "korean": "회의하다", "uzbek": "majlis o’tkizmoq", "russian": "проводить совещание", "english": "have a meeting" },
-      { "korean": "빨래하다", "uzbek": "kir yuvmoq", "russian": "стирать", "english": "do laundry" },
-      { "korean": "전화하다", "uzbek": "telefon qilmoq", "russian": "звонить", "english": "call" },
-      { "korean": "컴퓨터를 하다", "uzbek": "kompyuterda ishlamoq", "russian": "работать на компьютере", "english": "use the computer" },
-      { "korean": "요리하다", "uzbek": "ovqat pishirmoq", "russian": "готовить", "english": "cook" },
-      { "korean": "샤워하다", "uzbek": "dush qabul qilmoq", "russian": "принимать душ", "english": "shower" },
-      { "korean": "시", "uzbek": "soat", "russian": "час", "english": "hour" },
-      { "korean": "분", "uzbek": "minut", "russian": "минута", "english": "minute" },
-      { "korean": "반", "uzbek": "yarim", "russian": "половина", "english": "half" },
-      { "korean": "쯤", "uzbek": "taxminan", "russian": "около", "english": "about" },
-      { "korean": "시험을 보다", "uzbek": "imtixon topshirmoq", "russian": "сдавать экзамен", "english": "take a test" },
-      { "korean": "그리다", "uzbek": "rasm chizmoq", "russian": "рисовать", "english": "draw" },
-      { "korean": "주말 잘 보내다", "uzbek": "dam olish kunini yaxshi o’tkazmoq", "russian": "хорошо провести выходные", "english": "have a good weekend" },
-      { "korean": "데이트하다", "uzbek": "uchrashuvga chiqmoq", "russian": "встречаться", "english": "date" },
-      { "korean": "박물관", "uzbek": "muzey", "russian": "музей", "english": "museum" },
-      { "korean": "연습", "uzbek": "mashq", "russian": "практика", "english": "practice" },
-      { "korean": "전통", "uzbek": "milliy", "russian": "традиционный", "english": "traditional" },
-      { "korean": "이메일", "uzbek": "e-mail", "russian": "электронная почта", "english": "email" },
-      { "korean": "그렇지만", "uzbek": "lekin", "russian": "но", "english": "but" }
-    ]
-  },
-  {
-    "book": "1B",
-    "unit": "11과",
-    "cards": [
-      { "korean": "머리", "uzbek": "bosh", "russian": "голова", "english": "head" },
-      { "korean": "목", "uzbek": "bo’yin", "russian": "шея", "english": "neck" },
-      { "korean": "어깨", "uzbek": "yelka", "russian": "плечо", "english": "shoulder" },
-      { "korean": "팔", "uzbek": "qo’l", "russian": "рука", "english": "arm" },
-      { "korean": "손", "uzbek": "qo’l", "russian": "рука", "english": "hand" },
-      { "korean": "가슴", "uzbek": "ko’krak", "russian": "грудь", "english": "chest" },
-      { "korean": "배", "uzbek": "qorin", "russian": "живот", "english": "stomach" },
-      { "korean": "허리", "uzbek": "bel", "russian": "талия", "english": "waist" },
-      { "korean": "다리", "uzbek": "oyoq", "russian": "нога", "english": "leg" },
-      { "korean": "무릎", "uzbek": "tizza", "russian": "колено", "english": "knee" },
-      { "korean": "발", "uzbek": "oyoq", "russian": "нога", "english": "foot" },
-      { "korean": "눈", "uzbek": "ko’z", "russian": "глаз", "english": "eye" },
-      { "korean": "코", "uzbek": "burun", "russian": "нос", "english": "nose" },
-      { "korean": "입", "uzbek": "og’iz", "russian": "рот", "english": "mouth" },
-      { "korean": "귀", "uzbek": "quloq", "russian": "ухо", "english": "ear" },
-      { "korean": "얼굴", "uzbek": "yuz", "russian": "лицо", "english": "face" },
-      { "korean": "기침을 하다", "uzbek": "yo’talmoq", "russian": "кашлять", "english": "cough" },
-      { "korean": "감기에 걸리다", "uzbek": "shamollamoq", "russian": "простудиться", "english": "catch a cold" },
-      { "korean": "약", "uzbek": "dori", "russian": "лекарство", "english": "medicine" },
-      { "korean": "푹 쉬다", "uzbek": "miriqib dam olmoq", "russian": "хорошо отдохнуть", "english": "rest well" },
-      { "korean": "결혼하다", "uzbek": "turmush qurmoq", "russian": "жениться", "english": "marry" },
-      { "korean": "괜찮다", "uzbek": "durust bo’lmoq", "russian": "нормально", "english": "okay" },
-      { "korean": "걱정", "uzbek": "havotir", "russian": "беспокойство", "english": "worry" },
-      { "korean": "금연", "uzbek": "chekish taqiqlanadi", "russian": "не курить", "english": "no smoking" },
-      { "korean": "주차금지", "uzbek": "mashina qo’yish taqiqlanadi", "russian": "парковка запрещена", "english": "no parking" }
-    ]
-  },
-  {
-    "book": "1B",
-    "unit": "12과",
-    "cards": [
-      { "korean": "전화번호", "uzbek": "telefon raqam", "russian": "номер телефона", "english": "phone number" },
-      { "korean": "문자를 받다", "uzbek": "sms olmoq", "russian": "получить SMS", "english": "receive a text" },
-      { "korean": "문자를 보내다", "uzbek": "sms jo’natmoq", "russian": "отправить SMS", "english": "send a text" },
-      { "korean": "전화를 받다", "uzbek": "qo’ng’iroq kelmoq", "russian": "получить звонок", "english": "receive a call" },
-      { "korean": "전화(를)하다", "uzbek": "telefon qilmoq", "russian": "звонить", "english": "call" },
-      { "korean": "오랜만이에요", "uzbek": "ko’rishmaganimizga ancha bo’ldi", "russian": "давно не виделись", "english": "long time no see" },
-      { "korean": "늦잠", "uzbek": "uxlab qolmoq", "russian": "проспать", "english": "oversleep" },
-      { "korean": "여행사", "uzbek": "sayohat agentligi", "russian": "турагентство", "english": "travel agency" },
-      { "korean": "불이 나다", "uzbek": "olov chiqmoq", "russian": "пожар", "english": "fire" },
-      { "korean": "사고가 나다", "uzbek": "avariya hosil bo’lmoq", "russian": "авария", "english": "accident" }
-    ]
-  },
-  {
-    "book": "1B",
-    "unit": "13과",
-    "cards": [
-      { "korean": "버스", "uzbek": "avtobus", "russian": "автобус", "english": "bus" },
-      { "korean": "기차", "uzbek": "poyezd", "russian": "поезд", "english": "train" },
-      { "korean": "비행기", "uzbek": "samalyot", "russian": "самолет", "english": "airplane" },
-      { "korean": "배", "uzbek": "qayiq/kema", "russian": "лодка/корабль", "english": "boat/ship" },
-      { "korean": "택시", "uzbek": "taksi", "russian": "такси", "english": "taxi" },
-      { "korean": "자전거", "uzbek": "velosiped", "russian": "велосипед", "english": "bicycle" },
-      { "korean": "지하철", "uzbek": "metro", "russian": "метро", "english": "subway" },
-      { "korean": "오토바이", "uzbek": "mototsikl", "russian": "мотоцикл", "english": "motorcycle" },
-      { "korean": "갈아타다", "uzbek": "almashib chiqmoq", "russian": "пересаживаться", "english": "transfer" },
-      { "korean": "내리다", "uzbek": "tushmoq", "russian": "выходить", "english": "get off" },
-      { "korean": "돕다", "uzbek": "yordam bermoq", "russian": "помогать", "english": "help" },
-      { "korean": "편리하다", "uzbek": "qulay", "russian": "удобный", "english": "convenient" },
-      { "korean": "요금", "uzbek": "to’lov", "russian": "плата", "english": "fare" }
-    ]
-  },
-  {
-    "book": "1B",
-    "unit": "14과",
-    "cards": [
-      { "korean": "셔츠", "uzbek": "ko’ylak", "russian": "рубашка", "english": "shirt" },
-      { "korean": "모자", "uzbek": "bosh kiyim", "russian": "шляпа", "english": "hat" },
-      { "korean": "바지", "uzbek": "shim", "russian": "брюки", "english": "pants" },
-      { "korean": "치마", "uzbek": "yubka", "russian": "юбка", "english": "skirt" },
-      { "korean": "코트", "uzbek": "palto", "russian": "пальто", "english": "coat" },
-      { "korean": "원피스", "uzbek": "ko’ylak", "russian": "платье", "english": "dress" },
-      { "korean": "구두", "uzbek": "tufli", "russian": "туфли", "english": "shoes" },
-      { "korean": "운동화", "uzbek": "krasovka", "russian": "кроссовки", "english": "sneakers" },
-      { "korean": "입다", "uzbek": "kiymoq", "russian": "носить", "english": "wear" },
-      { "korean": "신다", "uzbek": "kiymoq(poyabzal)", "russian": "носить(обувь)", "english": "wear (shoes)" },
-      { "korean": "크다", "uzbek": "katta", "russian": "большой", "english": "big" },
-      { "korean": "작다", "uzbek": "kichkina", "russian": "маленький", "english": "small" },
-      { "korean": "비싸다", "uzbek": "qimmat", "russian": "дорогой", "english": "expensive" },
-      { "korean": "싸다", "uzbek": "arzon", "russian": "дешевый", "english": "cheap" },
-      { "korean": "편하다", "uzbek": "qulay", "russian": "удобный", "english": "comfortable" }
-    ]
-  },
-  {
-    "book": "1B",
-    "unit": "15과",
-    "cards": [
-      { "korean": "돈을 바꾸다", "uzbek": "pul almashtirmoq", "russian": "обменять деньги", "english": "exchange money" },
-      { "korean": "비행기표를 예매하다", "uzbek": "samalyot biletini zakaz qilmoq", "russian": "забронировать билет на самолет", "english": "book a flight" },
-      { "korean": "여권을 만들다", "uzbek": "passport tayyorlamoq", "russian": "сделать паспорт", "english": "make a passport" },
-      { "korean": "호텔을 예약하다", "uzbek": "mehmonxona bron qilmoq", "russian": "забронировать отель", "english": "book a hotel" },
-      { "korean": "도착하다", "uzbek": "yetib bormoq", "russian": "прибыть", "english": "arrive" },
-      { "korean": "돌아오다", "uzbek": "qaytib kelmoq", "russian": "вернуться", "english": "return" },
-      { "korean": "여행하다", "uzbek": "sayohat qilmoq", "russian": "путешествовать", "english": "travel" },
-      { "korean": "출발하다", "uzbek": "jo’nab ketmoq", "russian": "отправиться", "english": "depart" },
-      { "korean": "휴가", "uzbek": "ta’til", "russian": "отпуск", "english": "vacation" },
-      { "korean": "계획하다", "uzbek": "reja qilmoq", "russian": "планировать", "english": "plan" },
-      { "korean": "준비하다", "uzbek": "tayyorlanmoq", "russian": "подготовить", "english": "prepare" },
-      { "korean": "초대하다", "uzbek": "taklif qilmoq", "russian": "пригласить", "english": "invite" },
-      { "korean": "축하하다", "uzbek": "tabriklamoq", "russian": "поздравить", "english": "congratulate" },
-      { "korean": "빨리", "uzbek": "tez", "russian": "быстро", "english": "fast" },
-      { "korean": "천천히", "uzbek": "sekin", "russian": "медленно", "english": "slowly" }
-    ]
-  }
+﻿[
+    {
+        "book":  "1A",
+        "unit":  "Hangul",
+        "cards":  [
+                      {
+                          "korean":  "오",
+                          "uzbek":  "besh"
+                      },
+                      {
+                          "korean":  "이",
+                          "uzbek":  "bu/tish"
+                      },
+                      {
+                          "korean":  "아우",
+                          "uzbek":  "bola"
+                      },
+                      {
+                          "korean":  "아이",
+                          "uzbek":  "bola"
+                      },
+                      {
+                          "korean":  "오이",
+                          "uzbek":  "bodring"
+                      },
+                      {
+                          "korean":  "가수",
+                          "uzbek":  "qo\u0027shiqchi"
+                      },
+                      {
+                          "korean":  "고기",
+                          "uzbek":  "go\u0027sht"
+                      },
+                      {
+                          "korean":  "구두",
+                          "uzbek":  "tufli"
+                      },
+                      {
+                          "korean":  "나라",
+                          "uzbek":  "davlat"
+                      },
+                      {
+                          "korean":  "나무",
+                          "uzbek":  "daraxt"
+                      },
+                      {
+                          "korean":  "다리",
+                          "uzbek":  "oyoq"
+                      },
+                      {
+                          "korean":  "라디오",
+                          "uzbek":  "radio"
+                      },
+                      {
+                          "korean":  "머리",
+                          "uzbek":  "bosh"
+                      },
+                      {
+                          "korean":  "바나나",
+                          "uzbek":  "banan"
+                      },
+                      {
+                          "korean":  "바지",
+                          "uzbek":  "shim"
+                      },
+                      {
+                          "korean":  "소",
+                          "uzbek":  "sigir"
+                      },
+                      {
+                          "korean":  "아기",
+                          "uzbek":  "chaqaloq"
+                      },
+                      {
+                          "korean":  "어머니",
+                          "uzbek":  "ona"
+                      },
+                      {
+                          "korean":  "지도",
+                          "uzbek":  "xarita"
+                      },
+                      {
+                          "korean":  "모자",
+                          "uzbek":  "bosh kiyim"
+                      },
+                      {
+                          "korean":  "아버지",
+                          "uzbek":  "ota"
+                      },
+                      {
+                          "korean":  "허리",
+                          "uzbek":  "bel"
+                      },
+                      {
+                          "korean":  "지하",
+                          "uzbek":  "yer osti"
+                      },
+                      {
+                          "korean":  "야구",
+                          "uzbek":  "beyzbol"
+                      },
+                      {
+                          "korean":  "야자수",
+                          "uzbek":  "palma"
+                      },
+                      {
+                          "korean":  "이야기",
+                          "uzbek":  "suhbat"
+                      },
+                      {
+                          "korean":  "여자",
+                          "uzbek":  "ayol"
+                      },
+                      {
+                          "korean":  "벼",
+                          "uzbek":  "guruch"
+                      },
+                      {
+                          "korean":  "혀",
+                          "uzbek":  "til"
+                      },
+                      {
+                          "korean":  "요가",
+                          "uzbek":  "yoga"
+                      },
+                      {
+                          "korean":  "요리",
+                          "uzbek":  "ovqat pishirih"
+                      },
+                      {
+                          "korean":  "교수",
+                          "uzbek":  "professor"
+                      },
+                      {
+                          "korean":  "유리",
+                          "uzbek":  "shisha"
+                      },
+                      {
+                          "korean":  "휴지",
+                          "uzbek":  "tualet qog\u0027ozi"
+                      },
+                      {
+                          "korean":  "우유",
+                          "uzbek":  "sut"
+                      },
+                      {
+                          "korean":  "카드",
+                          "uzbek":  "karta"
+                      },
+                      {
+                          "korean":  "코",
+                          "uzbek":  "burun"
+                      },
+                      {
+                          "korean":  "키",
+                          "uzbek":  "balandlik"
+                      },
+                      {
+                          "korean":  "타조",
+                          "uzbek":  "tuyaqush"
+                      },
+                      {
+                          "korean":  "토마토",
+                          "uzbek":  "pomidor"
+                      },
+                      {
+                          "korean":  "투우수",
+                          "uzbek":  "matador"
+                      },
+                      {
+                          "korean":  "파리",
+                          "uzbek":  "Parij"
+                      },
+                      {
+                          "korean":  "포도",
+                          "uzbek":  "uzum"
+                      },
+                      {
+                          "korean":  "우표",
+                          "uzbek":  "pochta markasi"
+                      },
+                      {
+                          "korean":  "차",
+                          "uzbek":  "choy"
+                      },
+                      {
+                          "korean":  "치마",
+                          "uzbek":  "yubka"
+                      },
+                      {
+                          "korean":  "고추",
+                          "uzbek":  "qalampir"
+                      },
+                      {
+                          "korean":  "커피",
+                          "uzbek":  "kofe"
+                      },
+                      {
+                          "korean":  "코트",
+                          "uzbek":  "palto"
+                      },
+                      {
+                          "korean":  "기차표",
+                          "uzbek":  "poyezd bilet"
+                      },
+                      {
+                          "korean":  "까치",
+                          "uzbek":  "zog\u0027cha"
+                      },
+                      {
+                          "korean":  "꼬리",
+                          "uzbek":  "dum"
+                      },
+                      {
+                          "korean":  "코끼리",
+                          "uzbek":  "fil"
+                      },
+                      {
+                          "korean":  "따다",
+                          "uzbek":  "uzmoq"
+                      },
+                      {
+                          "korean":  "뜨다",
+                          "uzbek":  "suzmoq"
+                      },
+                      {
+                          "korean":  "머리띠",
+                          "uzbek":  "abadok"
+                      },
+                      {
+                          "korean":  "뿌리",
+                          "uzbek":  "tomir,ildiz"
+                      },
+                      {
+                          "korean":  "뼈",
+                          "uzbek":  "suyak"
+                      },
+                      {
+                          "korean":  "아빠",
+                          "uzbek":  "ota"
+                      },
+                      {
+                          "korean":  "싸다",
+                          "uzbek":  "arzon"
+                      },
+                      {
+                          "korean":  "쓰다",
+                          "uzbek":  "yozmoq/foydalanmoq"
+                      },
+                      {
+                          "korean":  "아저씨",
+                          "uzbek":  "ko\u0027chadagi amaki"
+                      },
+                      {
+                          "korean":  "짜다",
+                          "uzbek":  "sho\u0027r"
+                      },
+                      {
+                          "korean":  "찌다",
+                          "uzbek":  "bug\u0027lamoq"
+                      },
+                      {
+                          "korean":  "가짜",
+                          "uzbek":  "qalbaki"
+                      },
+                      {
+                          "korean":  "개미",
+                          "uzbek":  "chumoli"
+                      },
+                      {
+                          "korean":  "배",
+                          "uzbek":  "qayiq"
+                      },
+                      {
+                          "korean":  "새",
+                          "uzbek":  "qush"
+                      },
+                      {
+                          "korean":  "해",
+                          "uzbek":  "quyosh"
+                      },
+                      {
+                          "korean":  "게",
+                          "uzbek":  "qisqichbaqa"
+                      },
+                      {
+                          "korean":  "세수",
+                          "uzbek":  "yuvinish"
+                      },
+                      {
+                          "korean":  "그네",
+                          "uzbek":  "arg\u0027imchoq"
+                      },
+                      {
+                          "korean":  "카메라",
+                          "uzbek":  "kamera"
+                      },
+                      {
+                          "korean":  "얘기",
+                          "uzbek":  "suhbat"
+                      },
+                      {
+                          "korean":  "예쁘다",
+                          "uzbek":  "chiroyli"
+                      },
+                      {
+                          "korean":  "서예",
+                          "uzbek":  "xattotlik"
+                      },
+                      {
+                          "korean":  "시계",
+                          "uzbek":  "soat apparati"
+                      },
+                      {
+                          "korean":  "과자",
+                          "uzbek":  "pishiriq"
+                      },
+                      {
+                          "korean":  "와이셔츠",
+                          "uzbek":  "ko\u0027ylak"
+                      },
+                      {
+                          "korean":  "화가",
+                          "uzbek":  "jahl"
+                      },
+                      {
+                          "korean":  "사과",
+                          "uzbek":  "olma"
+                      },
+                      {
+                          "korean":  "뭐",
+                          "uzbek":  "nima"
+                      },
+                      {
+                          "korean":  "더워요",
+                          "uzbek":  "issiq"
+                      },
+                      {
+                          "korean":  "추워요",
+                          "uzbek":  "sovuq"
+                      },
+                      {
+                          "korean":  "돼지",
+                          "uzbek":  "cho\u0027chqa"
+                      },
+                      {
+                          "korean":  "왜",
+                          "uzbek":  "nimaga"
+                      },
+                      {
+                          "korean":  "웨이터",
+                          "uzbek":  "ofitsant"
+                      },
+                      {
+                          "korean":  "스웨터",
+                          "uzbek":  "svitr"
+                      },
+                      {
+                          "korean":  "쇠고기",
+                          "uzbek":  "mol go\u0027shti"
+                      },
+                      {
+                          "korean":  "외우다",
+                          "uzbek":  "yodlamoq"
+                      },
+                      {
+                          "korean":  "회사",
+                          "uzbek":  "firma"
+                      },
+                      {
+                          "korean":  "두뇌",
+                          "uzbek":  "miyya"
+                      },
+                      {
+                          "korean":  "귀",
+                          "uzbek":  "quloq"
+                      },
+                      {
+                          "korean":  "쉬다",
+                          "uzbek":  "dam olmoq"
+                      },
+                      {
+                          "korean":  "쥐",
+                          "uzbek":  "sichqon"
+                      },
+                      {
+                          "korean":  "가위",
+                          "uzbek":  "qaychi"
+                      },
+                      {
+                          "korean":  "의사",
+                          "uzbek":  "doktor"
+                      },
+                      {
+                          "korean":  "의자",
+                          "uzbek":  "stul"
+                      },
+                      {
+                          "korean":  "여의도",
+                          "uzbek":  "Yoi oroli"
+                      },
+                      {
+                          "korean":  "회의",
+                          "uzbek":  "majliz"
+                      },
+                      {
+                          "korean":  "수박",
+                          "uzbek":  "tarvuz"
+                      },
+                      {
+                          "korean":  "책",
+                          "uzbek":  "kitob"
+                      },
+                      {
+                          "korean":  "부엌",
+                          "uzbek":  "uy oshxonasi/kuxnya"
+                      },
+                      {
+                          "korean":  "밖",
+                          "uzbek":  "tashqari"
+                      },
+                      {
+                          "korean":  "돈",
+                          "uzbek":  "pul"
+                      },
+                      {
+                          "korean":  "레몬",
+                          "uzbek":  "limon"
+                      },
+                      {
+                          "korean":  "신문",
+                          "uzbek":  "gazeta"
+                      },
+                      {
+                          "korean":  "우산",
+                          "uzbek":  "zontik"
+                      },
+                      {
+                          "korean":  "곧",
+                          "uzbek":  "yaqinda"
+                      },
+                      {
+                          "korean":  "밑",
+                          "uzbek":  "osti"
+                      },
+                      {
+                          "korean":  "빗",
+                          "uzbek":  "taroq"
+                      },
+                      {
+                          "korean":  "옷",
+                          "uzbek":  "kiyim"
+                      },
+                      {
+                          "korean":  "낮",
+                          "uzbek":  "kunduzi"
+                      },
+                      {
+                          "korean":  "꽃",
+                          "uzbek":  "gul"
+                      },
+                      {
+                          "korean":  "빛",
+                          "uzbek":  "nur"
+                      },
+                      {
+                          "korean":  "히읗",
+                          "uzbek":  "h"
+                      },
+                      {
+                          "korean":  "딸기",
+                          "uzbek":  "qulupnay"
+                      },
+                      {
+                          "korean":  "물",
+                          "uzbek":  "suv"
+                      },
+                      {
+                          "korean":  "발",
+                          "uzbek":  "oyoq"
+                      },
+                      {
+                          "korean":  "연필",
+                          "uzbek":  "qalam"
+                      },
+                      {
+                          "korean":  "곰",
+                          "uzbek":  "ayiq"
+                      },
+                      {
+                          "korean":  "남자",
+                          "uzbek":  "erkak"
+                      },
+                      {
+                          "korean":  "엄마",
+                          "uzbek":  "ona"
+                      },
+                      {
+                          "korean":  "컴퓨터",
+                          "uzbek":  "kompyuter"
+                      },
+                      {
+                          "korean":  "밥",
+                          "uzbek":  "qaynatilgan guruch"
+                      },
+                      {
+                          "korean":  "입",
+                          "uzbek":  "og\u0027iz"
+                      },
+                      {
+                          "korean":  "무릎",
+                          "uzbek":  "tizza"
+                      },
+                      {
+                          "korean":  "숲",
+                          "uzbek":  "o\u0027rmon"
+                      },
+                      {
+                          "korean":  "가방",
+                          "uzbek":  "sumka"
+                      },
+                      {
+                          "korean":  "공",
+                          "uzbek":  "koptok"
+                      },
+                      {
+                          "korean":  "냉장고",
+                          "uzbek":  "muzlatkich"
+                      },
+                      {
+                          "korean":  "창문",
+                          "uzbek":  "deraza"
+                      }
+                  ]
+    },
+    {
+        "book":  "1A",
+        "unit":  "1과",
+        "cards":  [
+                      {
+                          "korean":  "나라",
+                          "uzbek":  "davlat"
+                      },
+                      {
+                          "korean":  "중국",
+                          "uzbek":  "Xitoy"
+                      },
+                      {
+                          "korean":  "일본",
+                          "uzbek":  "Yaponiya"
+                      },
+                      {
+                          "korean":  "미국",
+                          "uzbek":  "AQSH"
+                      },
+                      {
+                          "korean":  "한국",
+                          "uzbek":  "Koreya"
+                      },
+                      {
+                          "korean":  "프랑스",
+                          "uzbek":  "Fransiya"
+                      },
+                      {
+                          "korean":  "독일",
+                          "uzbek":  "Germaniya"
+                      },
+                      {
+                          "korean":  "호주",
+                          "uzbek":  "Avstraliya"
+                      },
+                      {
+                          "korean":  "영국",
+                          "uzbek":  "Angliya"
+                      },
+                      {
+                          "korean":  "빈칸",
+                          "uzbek":  "bo\u0027sh joy"
+                      },
+                      {
+                          "korean":  "알맞다",
+                          "uzbek":  "mos"
+                      },
+                      {
+                          "korean":  "단어",
+                          "uzbek":  "so\u0027z"
+                      },
+                      {
+                          "korean":  "선생님",
+                          "uzbek":  "o\u0027qituvchi"
+                      },
+                      {
+                          "korean":  "학생",
+                          "uzbek":  "o\u0027quvchi"
+                      },
+                      {
+                          "korean":  "의사",
+                          "uzbek":  "doktor"
+                      },
+                      {
+                          "korean":  "회사원",
+                          "uzbek":  "firma ishchisi"
+                      },
+                      {
+                          "korean":  "요리사",
+                          "uzbek":  "oshpaz"
+                      },
+                      {
+                          "korean":  "기자",
+                          "uzbek":  "muxbir"
+                      },
+                      {
+                          "korean":  "가수",
+                          "uzbek":  "qo\u0027shiqchi"
+                      },
+                      {
+                          "korean":  "군인",
+                          "uzbek":  "askar"
+                      },
+                      {
+                          "korean":  "인사말",
+                          "uzbek":  "salomlashish gapi"
+                      },
+                      {
+                          "korean":  "만나다",
+                          "uzbek":  "uchrashmoq"
+                      },
+                      {
+                          "korean":  "반갑다",
+                          "uzbek":  "xursand bo\u0027lmoq"
+                      },
+                      {
+                          "korean":  "한국말",
+                          "uzbek":  "koreys tili"
+                      },
+                      {
+                          "korean":  "그림",
+                          "uzbek":  "surat (chizilgan)"
+                      },
+                      {
+                          "korean":  "이야기하다",
+                          "uzbek":  "suhbatlashmoq"
+                      },
+                      {
+                          "korean":  "저",
+                          "uzbek":  "men/anavi"
+                      },
+                      {
+                          "korean":  "씨",
+                          "uzbek":  "janob/xonim"
+                      },
+                      {
+                          "korean":  "네",
+                          "uzbek":  "ha"
+                      },
+                      {
+                          "korean":  "주부",
+                          "uzbek":  "uy bekasi"
+                      },
+                      {
+                          "korean":  "말하기",
+                          "uzbek":  "gaplashish"
+                      },
+                      {
+                          "korean":  "어느",
+                          "uzbek":  "qaysi"
+                      },
+                      {
+                          "korean":  "캐나다",
+                          "uzbek":  "Kanada"
+                      },
+                      {
+                          "korean":  "국적",
+                          "uzbek":  "millat"
+                      },
+                      {
+                          "korean":  "묻다",
+                          "uzbek":  "so\u0027ramoq"
+                      },
+                      {
+                          "korean":  "인도",
+                          "uzbek":  "Hindiston"
+                      },
+                      {
+                          "korean":  "직업",
+                          "uzbek":  "kasb"
+                      },
+                      {
+                          "korean":  "아니요",
+                          "uzbek":  "yo\u0027q"
+                      },
+                      {
+                          "korean":  "여러분",
+                          "uzbek":  "sizlar/azizlar"
+                      },
+                      {
+                          "korean":  "무엇",
+                          "uzbek":  "nima"
+                      },
+                      {
+                          "korean":  "러시아",
+                          "uzbek":  "Rossiya"
+                      },
+                      {
+                          "korean":  "파키스탄",
+                          "uzbek":  "Pokiston"
+                      },
+                      {
+                          "korean":  "친구",
+                          "uzbek":  "do\u0027st"
+                      },
+                      {
+                          "korean":  "명함",
+                          "uzbek":  "ism karta"
+                      },
+                      {
+                          "korean":  "이름",
+                          "uzbek":  "ism"
+                      },
+                      {
+                          "korean":  "전화번호",
+                          "uzbek":  "telefon raqam"
+                      },
+                      {
+                          "korean":  "영어",
+                          "uzbek":  "ingliz tili"
+                      },
+                      {
+                          "korean":  "블로그",
+                          "uzbek":  "internetdagi blog"
+                      },
+                      {
+                          "korean":  "찾다",
+                          "uzbek":  "qidirmoq"
+                      },
+                      {
+                          "korean":  "과제",
+                          "uzbek":  "topshiriq"
+                      },
+                      {
+                          "korean":  "문화",
+                          "uzbek":  "madaniyat"
+                      }
+                  ]
+    },
+    {
+        "book":  "1A",
+        "unit":  "2과",
+        "cards":  [
+                      {
+                          "korean":  "책상",
+                          "uzbek":  "parta"
+                      },
+                      {
+                          "korean":  "의자",
+                          "uzbek":  "stul"
+                      },
+                      {
+                          "korean":  "책",
+                          "uzbek":  "kitob"
+                      },
+                      {
+                          "korean":  "공책",
+                          "uzbek":  "daftar"
+                      },
+                      {
+                          "korean":  "볼펜",
+                          "uzbek":  "ruchka"
+                      },
+                      {
+                          "korean":  "연필",
+                          "uzbek":  "qalam"
+                      },
+                      {
+                          "korean":  "가방",
+                          "uzbek":  "sumka"
+                      },
+                      {
+                          "korean":  "지우개",
+                          "uzbek":  "ochirg\u0027ich"
+                      },
+                      {
+                          "korean":  "시계",
+                          "uzbek":  "soat"
+                      },
+                      {
+                          "korean":  "모자",
+                          "uzbek":  "bosh kiyim"
+                      },
+                      {
+                          "korean":  "우산",
+                          "uzbek":  "soyabon"
+                      },
+                      {
+                          "korean":  "신문",
+                          "uzbek":  "gazeta"
+                      },
+                      {
+                          "korean":  "사전",
+                          "uzbek":  "lug\u0027at"
+                      },
+                      {
+                          "korean":  "안경",
+                          "uzbek":  "ko\u0027zoynak"
+                      },
+                      {
+                          "korean":  "휴대폰",
+                          "uzbek":  "telefon"
+                      },
+                      {
+                          "korean":  "남자친구",
+                          "uzbek":  "yigit o\u0027rtoq"
+                      },
+                      {
+                          "korean":  "동전",
+                          "uzbek":  "tanga"
+                      },
+                      {
+                          "korean":  "차",
+                          "uzbek":  "mashina"
+                      },
+                      {
+                          "korean":  "한국어",
+                          "uzbek":  "koreys tili"
+                      },
+                      {
+                          "korean":  "여자",
+                          "uzbek":  "친구 qiz o\u0027rtoq"
+                      },
+                      {
+                          "korean":  "뭐",
+                          "uzbek":  "nima"
+                      },
+                      {
+                          "korean":  "창문",
+                          "uzbek":  "deraza"
+                      },
+                      {
+                          "korean":  "지도",
+                          "uzbek":  "xarita"
+                      },
+                      {
+                          "korean":  "필통",
+                          "uzbek":  "penal/qalamdon"
+                      },
+                      {
+                          "korean":  "전자사전",
+                          "uzbek":  "elektron lug\u0027at"
+                      },
+                      {
+                          "korean":  "한국어로",
+                          "uzbek":  "koreys tilida"
+                      },
+                      {
+                          "korean":  "자",
+                          "uzbek":  "chizg\u0027ich"
+                      },
+                      {
+                          "korean":  "잡지",
+                          "uzbek":  "jurnal"
+                      },
+                      {
+                          "korean":  "지갑",
+                          "uzbek":  "hamyon"
+                      },
+                      {
+                          "korean":  "여기",
+                          "uzbek":  "있어요 marhamat"
+                      },
+                      {
+                          "korean":  "커피",
+                          "uzbek":  "kofe"
+                      },
+                      {
+                          "korean":  "좀",
+                          "uzbek":  "iltimos"
+                      },
+                      {
+                          "korean":  "콜라",
+                          "uzbek":  "kola"
+                      },
+                      {
+                          "korean":  "주스",
+                          "uzbek":  "sharbat"
+                      },
+                      {
+                          "korean":  "교통카드",
+                          "uzbek":  "transport kartasi"
+                      },
+                      {
+                          "korean":  "휴지",
+                          "uzbek":  "salfetka"
+                      },
+                      {
+                          "korean":  "물",
+                          "uzbek":  "suv"
+                      },
+                      {
+                          "korean":  "어서",
+                          "uzbek":  "오세요 xush kelibsiz"
+                      },
+                      {
+                          "korean":  "사과",
+                          "uzbek":  "olma"
+                      },
+                      {
+                          "korean":  "오랜지",
+                          "uzbek":  "apelsin"
+                      },
+                      {
+                          "korean":  "영화",
+                          "uzbek":  "kino"
+                      },
+                      {
+                          "korean":  "우유",
+                          "uzbek":  "sut"
+                      },
+                      {
+                          "korean":  "바나나",
+                          "uzbek":  "banan"
+                      },
+                      {
+                          "korean":  "딸기",
+                          "uzbek":  "qulupnay"
+                      },
+                      {
+                          "korean":  "텔레비전",
+                          "uzbek":  "televizor"
+                      },
+                      {
+                          "korean":  "방",
+                          "uzbek":  "xona"
+                      },
+                      {
+                          "korean":  "서울대학교",
+                          "uzbek":  "Seul universiteti"
+                      },
+                      {
+                          "korean":  "제",
+                          "uzbek":  "mening"
+                      },
+                      {
+                          "korean":  "침대",
+                          "uzbek":  "kravat"
+                      },
+                      {
+                          "korean":  "룸메으트",
+                          "uzbek":  "xonadosh"
+                      },
+                      {
+                          "korean":  "에어컨",
+                          "uzbek":  "konditsioner"
+                      },
+                      {
+                          "korean":  "물건",
+                          "uzbek":  "narsa"
+                      },
+                      {
+                          "korean":  "팀",
+                          "uzbek":  "jamoa"
+                      },
+                      {
+                          "korean":  "나누다",
+                          "uzbek":  "bo\u0027lishmoq"
+                      },
+                      {
+                          "korean":  "받다",
+                          "uzbek":  "olmoq"
+                      },
+                      {
+                          "korean":  "붙이다",
+                          "uzbek":  "yopishtirmoq"
+                      }
+                  ]
+    },
+    {
+        "book":  "1A",
+        "unit":  "3과",
+        "cards":  [
+                      {
+                          "korean":  "자다",
+                          "uzbek":  "uxlamoq"
+                      },
+                      {
+                          "korean":  "공부하다",
+                          "uzbek":  "o\u0027qimoq/o\u0027rganmoq"
+                      },
+                      {
+                          "korean":  "일하다",
+                          "uzbek":  "ishlamoq"
+                      },
+                      {
+                          "korean":  "운동하다",
+                          "uzbek":  "sport bilan shug\u0027ullanmoq"
+                      },
+                      {
+                          "korean":  "숙제를",
+                          "uzbek":  "하다 uy vazifa qilmoq"
+                      },
+                      {
+                          "korean":  "옷을",
+                          "uzbek":  "사다 kiyim sotib olmoq"
+                      },
+                      {
+                          "korean":  "영화를",
+                          "uzbek":  "보다 kino ko\u0027rmoq"
+                      },
+                      {
+                          "korean":  "친구를",
+                          "uzbek":  "만나다 do\u0027sti bilan uchrashmoq"
+                      },
+                      {
+                          "korean":  "태권도를",
+                          "uzbek":  "배우다 tekvando o\u0027rganmoq"
+                      },
+                      {
+                          "korean":  "밥을",
+                          "uzbek":  "먹다 ovqat yemoq"
+                      },
+                      {
+                          "korean":  "커피를",
+                          "uzbek":  "마시다 kofe ichmoq"
+                      },
+                      {
+                          "korean":  "책을",
+                          "uzbek":  "읽다 kitob o\u0027qimoq"
+                      },
+                      {
+                          "korean":  "도서관",
+                          "uzbek":  "kutubxona"
+                      },
+                      {
+                          "korean":  "집",
+                          "uzbek":  "uy"
+                      },
+                      {
+                          "korean":  "백화점",
+                          "uzbek":  "univermag"
+                      },
+                      {
+                          "korean":  "시장",
+                          "uzbek":  "bozor"
+                      },
+                      {
+                          "korean":  "공원",
+                          "uzbek":  "park/bog\u0027"
+                      },
+                      {
+                          "korean":  "커피숍",
+                          "uzbek":  "kafe"
+                      },
+                      {
+                          "korean":  "극장",
+                          "uzbek":  "kinoteatr"
+                      },
+                      {
+                          "korean":  "학교",
+                          "uzbek":  "maktab"
+                      },
+                      {
+                          "korean":  "식당",
+                          "uzbek":  "oshxona"
+                      },
+                      {
+                          "korean":  "회사",
+                          "uzbek":  "firma"
+                      },
+                      {
+                          "korean":  "지금",
+                          "uzbek":  "hozir"
+                      },
+                      {
+                          "korean":  "하다",
+                          "uzbek":  "qilmoq"
+                      },
+                      {
+                          "korean":  "쉬다",
+                          "uzbek":  "dam olmoq"
+                      },
+                      {
+                          "korean":  "피자",
+                          "uzbek":  "pitsa"
+                      },
+                      {
+                          "korean":  "보다",
+                          "uzbek":  "ko\u0027rmoq"
+                      },
+                      {
+                          "korean":  "사다",
+                          "uzbek":  "sotib olmoq"
+                      },
+                      {
+                          "korean":  "먹다",
+                          "uzbek":  "yemoq"
+                      },
+                      {
+                          "korean":  "마시다",
+                          "uzbek":  "ichmoq"
+                      },
+                      {
+                          "korean":  "읽다",
+                          "uzbek":  "o\u0027qimoq"
+                      },
+                      {
+                          "korean":  "배우다",
+                          "uzbek":  "o\u0027rganmoq"
+                      },
+                      {
+                          "korean":  "일본어",
+                          "uzbek":  "yapon tili"
+                      },
+                      {
+                          "korean":  "아르바이트하다",
+                          "uzbek":  "qo\u0027shimcha ish qilmoq"
+                      },
+                      {
+                          "korean":  "요리",
+                          "uzbek":  "pishirish"
+                      },
+                      {
+                          "korean":  "만나다",
+                          "uzbek":  "uchrashmoq"
+                      },
+                      {
+                          "korean":  "오늘",
+                          "uzbek":  "bugun"
+                      },
+                      {
+                          "korean":  "그리고",
+                          "uzbek":  "va"
+                      },
+                      {
+                          "korean":  "어디",
+                          "uzbek":  "qayer"
+                      },
+                      {
+                          "korean":  "고기",
+                          "uzbek":  "go\u0027sht"
+                      },
+                      {
+                          "korean":  "프랑스어",
+                          "uzbek":  "fransuz tili"
+                      },
+                      {
+                          "korean":  "드라마",
+                          "uzbek":  "serial/dorama"
+                      },
+                      {
+                          "korean":  "그럼",
+                          "uzbek":  "unday bo\u0027lsa"
+                      },
+                      {
+                          "korean":  "스포츠",
+                          "uzbek":  "센터 sport markazi"
+                      },
+                      {
+                          "korean":  "차",
+                          "uzbek":  "choy"
+                      },
+                      {
+                          "korean":  "가르치다",
+                          "uzbek":  "o\u0027qitmoq"
+                      },
+                      {
+                          "korean":  "언어교육원",
+                          "uzbek":  "til markazi"
+                      },
+                      {
+                          "korean":  "불고기",
+                          "uzbek":  "pulgogi"
+                      },
+                      {
+                          "korean":  "노래방",
+                          "uzbek":  "karaoke"
+                      }
+                  ]
+    },
+    {
+        "book":  "1A",
+        "unit":  "4과",
+        "cards":  [
+                      {
+                          "korean":  "공항",
+                          "uzbek":  "aeroport"
+                      },
+                      {
+                          "korean":  "우체국",
+                          "uzbek":  "pochta"
+                      },
+                      {
+                          "korean":  "대사관",
+                          "uzbek":  "elchixona"
+                      },
+                      {
+                          "korean":  "은행",
+                          "uzbek":  "bank"
+                      },
+                      {
+                          "korean":  "가게",
+                          "uzbek":  "magazin"
+                      },
+                      {
+                          "korean":  "약국",
+                          "uzbek":  "apteka"
+                      },
+                      {
+                          "korean":  "병원",
+                          "uzbek":  "kasalxona"
+                      },
+                      {
+                          "korean":  "미용실",
+                          "uzbek":  "sartaroshxona"
+                      },
+                      {
+                          "korean":  "앞",
+                          "uzbek":  "oldi"
+                      },
+                      {
+                          "korean":  "뒤",
+                          "uzbek":  "orqasi"
+                      },
+                      {
+                          "korean":  "옆",
+                          "uzbek":  "yoni"
+                      },
+                      {
+                          "korean":  "안",
+                          "uzbek":  "ichi"
+                      },
+                      {
+                          "korean":  "아래/",
+                          "uzbek":  "밑 osti/tagi"
+                      },
+                      {
+                          "korean":  "위",
+                          "uzbek":  "usti"
+                      },
+                      {
+                          "korean":  "인사동",
+                          "uzbek":  "Insadong"
+                      },
+                      {
+                          "korean":  "서울타워",
+                          "uzbek":  "Seul minorasi"
+                      },
+                      {
+                          "korean":  "명동",
+                          "uzbek":  "Myongdong"
+                      },
+                      {
+                          "korean":  "청계천",
+                          "uzbek":  "Chonkechon"
+                      },
+                      {
+                          "korean":  "대학로",
+                          "uzbek":  "Seuldagi attraksion"
+                      },
+                      {
+                          "korean":  "남산",
+                          "uzbek":  "Nam tog\u0027i"
+                      },
+                      {
+                          "korean":  "교실",
+                          "uzbek":  "sinf xona"
+                      },
+                      {
+                          "korean":  "찻집",
+                          "uzbek":  "choyxona"
+                      },
+                      {
+                          "korean":  "서울",
+                          "uzbek":  "Seul"
+                      },
+                      {
+                          "korean":  "시내",
+                          "uzbek":  "shahar markazi"
+                      },
+                      {
+                          "korean":  "구경하다",
+                          "uzbek":  "tomosha qilmoq"
+                      },
+                      {
+                          "korean":  "쇼핑하다",
+                          "uzbek":  "xarid qilmoq"
+                      },
+                      {
+                          "korean":  "연극",
+                          "uzbek":  "teatr"
+                      },
+                      {
+                          "korean":  "알다",
+                          "uzbek":  "bimoq"
+                      },
+                      {
+                          "korean":  "어머니",
+                          "uzbek":  "ona"
+                      },
+                      {
+                          "korean":  "아버지",
+                          "uzbek":  "ota"
+                      },
+                      {
+                          "korean":  "잘",
+                          "uzbek":  "지내다 ishlari yaxshi bo\u0027lmoq"
+                      },
+                      {
+                          "korean":  "기숙사",
+                          "uzbek":  "yotoqxona"
+                      },
+                      {
+                          "korean":  "사진",
+                          "uzbek":  "rasm"
+                      },
+                      {
+                          "korean":  "매일",
+                          "uzbek":  "harb kuni"
+                      },
+                      {
+                          "korean":  "그",
+                          "uzbek":  "u"
+                      },
+                      {
+                          "korean":  "반",
+                          "uzbek":  "sinf"
+                      },
+                      {
+                          "korean":  "사랑하다",
+                          "uzbek":  "sevmoq"
+                      },
+                      {
+                          "korean":  "서점",
+                          "uzbek":  "kitob do\u0027koni"
+                      },
+                      {
+                          "korean":  "빵집",
+                          "uzbek":  "nonvoyxona"
+                      },
+                      {
+                          "korean":  "화장실",
+                          "uzbek":  "hojatxona"
+                      },
+                      {
+                          "korean":  "음식",
+                          "uzbek":  "ovqat/taom"
+                      },
+                      {
+                          "korean":  "가념품",
+                          "uzbek":  "suvenir"
+                      },
+                      {
+                          "korean":  "그림",
+                          "uzbek":  "rasm"
+                      }
+                  ]
+    },
+    {
+        "book":  "1A",
+        "unit":  "5과",
+        "cards":  [
+                      {
+                          "korean":  "숫자",
+                          "uzbek":  "raqam,son"
+                      },
+                      {
+                          "korean":  "월요일",
+                          "uzbek":  "dushanba"
+                      },
+                      {
+                          "korean":  "화요일",
+                          "uzbek":  "seshanba"
+                      },
+                      {
+                          "korean":  "수요일",
+                          "uzbek":  "chorshanba"
+                      },
+                      {
+                          "korean":  "목요일",
+                          "uzbek":  "payshanba"
+                      },
+                      {
+                          "korean":  "금요일",
+                          "uzbek":  "juma"
+                      },
+                      {
+                          "korean":  "토요일",
+                          "uzbek":  "shanba"
+                      },
+                      {
+                          "korean":  "일요일",
+                          "uzbek":  "yakshanba"
+                      },
+                      {
+                          "korean":  "주말",
+                          "uzbek":  "hafta oxiri"
+                      },
+                      {
+                          "korean":  "날짜",
+                          "uzbek":  "sana"
+                      },
+                      {
+                          "korean":  "요일",
+                          "uzbek":  "hafta kuni"
+                      },
+                      {
+                          "korean":  "며칠",
+                          "uzbek":  "qaysi kun"
+                      },
+                      {
+                          "korean":  "시험",
+                          "uzbek":  "imtixon"
+                      },
+                      {
+                          "korean":  "언제",
+                          "uzbek":  "qachon"
+                      },
+                      {
+                          "korean":  "무슨",
+                          "uzbek":  "qaysi"
+                      },
+                      {
+                          "korean":  "생일",
+                          "uzbek":  "tug\u0027ilgan kun"
+                      },
+                      {
+                          "korean":  "하고",
+                          "uzbek":  "bilan"
+                      },
+                      {
+                          "korean":  "크리스마스",
+                          "uzbek":  "krismas"
+                      },
+                      {
+                          "korean":  "파티",
+                          "uzbek":  "bazm"
+                      },
+                      {
+                          "korean":  "시간",
+                          "uzbek":  "vaqt"
+                      },
+                      {
+                          "korean":  "미안하다",
+                          "uzbek":  "uzr so\u0027ramoq"
+                      },
+                      {
+                          "korean":  "약속",
+                          "uzbek":  "uchrashuv/vada"
+                      },
+                      {
+                          "korean":  "같이",
+                          "uzbek":  "birga"
+                      },
+                      {
+                          "korean":  "어제",
+                          "uzbek":  "kecha"
+                      },
+                      {
+                          "korean":  "코엑스몰",
+                          "uzbek":  "Seuldagi savdo markazi"
+                      },
+                      {
+                          "korean":  "카드",
+                          "uzbek":  "karta"
+                      },
+                      {
+                          "korean":  "선물",
+                          "uzbek":  "sovg\u0027a"
+                      },
+                      {
+                          "korean":  "세수하다",
+                          "uzbek":  "yuvinmoq"
+                      },
+                      {
+                          "korean":  "이를",
+                          "uzbek":  "닦다 tish yuvmoq"
+                      },
+                      {
+                          "korean":  "거기",
+                          "uzbek":  "u joy"
+                      },
+                      {
+                          "korean":  "산책하다",
+                          "uzbek":  "sayr qilmoq"
+                      },
+                      {
+                          "korean":  "사진을",
+                          "uzbek":  "찍다 rasm olmoq"
+                      },
+                      {
+                          "korean":  "누구",
+                          "uzbek":  "kim"
+                      },
+                      {
+                          "korean":  "혼자",
+                          "uzbek":  "yolg\u0027iz"
+                      },
+                      {
+                          "korean":  "끝나다",
+                          "uzbek":  "tugamoq"
+                      },
+                      {
+                          "korean":  "강남역",
+                          "uzbek":  "Gangnam bekati"
+                      },
+                      {
+                          "korean":  "그래서",
+                          "uzbek":  "shuning uchun"
+                      },
+                      {
+                          "korean":  "내일",
+                          "uzbek":  "ertaga"
+                      },
+                      {
+                          "korean":  "스케줄",
+                          "uzbek":  "kun tartibi"
+                      },
+                      {
+                          "korean":  "지난주",
+                          "uzbek":  "o\u0027tgan hafta"
+                      },
+                      {
+                          "korean":  "양력",
+                          "uzbek":  "quyosh kalendari"
+                      },
+                      {
+                          "korean":  "음력",
+                          "uzbek":  "oy kalendari"
+                      },
+                      {
+                          "korean":  "설날",
+                          "uzbek":  "yangi yil"
+                      },
+                      {
+                          "korean":  "세배를",
+                          "uzbek":  "하다 tazim qilmoq"
+                      },
+                      {
+                          "korean":  "떡국",
+                          "uzbek":  "tokkuk"
+                      },
+                      {
+                          "korean":  "추석",
+                          "uzbek":  "hosil bayrami/shukronalik kuni"
+                      },
+                      {
+                          "korean":  "차례를",
+                          "uzbek":  "지내다 marosim o\u0027tkazmoq"
+                      },
+                      {
+                          "korean":  "송편",
+                          "uzbek":  "guruchli pishiriq"
+                      }
+                  ]
+    },
+    {
+        "book":  "1A",
+        "unit":  "6과",
+        "cards":  [
+                      {
+                          "korean":  "샌드위치",
+                          "uzbek":  "sendvich"
+                      },
+                      {
+                          "korean":  "스파게티",
+                          "uzbek":  "spagetti"
+                      },
+                      {
+                          "korean":  "피자",
+                          "uzbek":  "pitsa"
+                      },
+                      {
+                          "korean":  "햄버거",
+                          "uzbek":  "gamburger"
+                      },
+                      {
+                          "korean":  "귤",
+                          "uzbek":  "mandarin"
+                      },
+                      {
+                          "korean":  "딸기",
+                          "uzbek":  "qulupnay"
+                      },
+                      {
+                          "korean":  "사과",
+                          "uzbek":  "olma"
+                      },
+                      {
+                          "korean":  "수박",
+                          "uzbek":  "tarvuz"
+                      },
+                      {
+                          "korean":  "앉다",
+                          "uzbek":  "o\u0027tirmoq"
+                      },
+                      {
+                          "korean":  "주다",
+                          "uzbek":  "bermoq"
+                      },
+                      {
+                          "korean":  "잠깐만",
+                          "uzbek":  "biroz"
+                      },
+                      {
+                          "korean":  "기다리다",
+                          "uzbek":  "kutmoq"
+                      },
+                      {
+                          "korean":  "빵",
+                          "uzbek":  "non"
+                      },
+                      {
+                          "korean":  "몇",
+                          "uzbek":  "qancha/necha"
+                      },
+                      {
+                          "korean":  "아이스크림",
+                          "uzbek":  "muzqaymoq"
+                      },
+                      {
+                          "korean":  "주스",
+                          "uzbek":  "sharbat"
+                      },
+                      {
+                          "korean":  "녹차",
+                          "uzbek":  "ko\u0027k choy"
+                      },
+                      {
+                          "korean":  "콜라",
+                          "uzbek":  "kola"
+                      },
+                      {
+                          "korean":  "메뉴",
+                          "uzbek":  "menyu"
+                      },
+                      {
+                          "korean":  "좋아하다",
+                          "uzbek":  "yaxshi ko\u0027rmoq"
+                      },
+                      {
+                          "korean":  "우동",
+                          "uzbek":  "udon taomi"
+                      },
+                      {
+                          "korean":  "맥주",
+                          "uzbek":  "pivo"
+                      },
+                      {
+                          "korean":  "물건",
+                          "uzbek":  "narsa"
+                      },
+                      {
+                          "korean":  "게수",
+                          "uzbek":  "sanoq"
+                      },
+                      {
+                          "korean":  "그래요",
+                          "uzbek":  "shunday"
+                      },
+                      {
+                          "korean":  "여기요",
+                          "uzbek":  "kechirasiz (birovni chaqirganda)"
+                      },
+                      {
+                          "korean":  "맛있다",
+                          "uzbek":  "mazali"
+                      },
+                      {
+                          "korean":  "좋다",
+                          "uzbek":  "yaxshi"
+                      },
+                      {
+                          "korean":  "싸다",
+                          "uzbek":  "arzon"
+                      },
+                      {
+                          "korean":  "길",
+                          "uzbek":  "yo\u0027l"
+                      },
+                      {
+                          "korean":  "복잡하다",
+                          "uzbek":  "tiqilinch"
+                      },
+                      {
+                          "korean":  "노래",
+                          "uzbek":  "qo\u0027shiq"
+                      },
+                      {
+                          "korean":  "아리랑",
+                          "uzbek":  "koreya folkor musiqasi"
+                      },
+                      {
+                          "korean":  "바지",
+                          "uzbek":  "shim"
+                      },
+                      {
+                          "korean":  "운동화",
+                          "uzbek":  "krossovka"
+                      },
+                      {
+                          "korean":  "아저씨",
+                          "uzbek":  "amaki"
+                      },
+                      {
+                          "korean":  "모두",
+                          "uzbek":  "hammasi"
+                      },
+                      {
+                          "korean":  "또",
+                          "uzbek":  "yana"
+                      },
+                      {
+                          "korean":  "키위",
+                          "uzbek":  "kivi"
+                      },
+                      {
+                          "korean":  "파인애플",
+                          "uzbek":  "ananas"
+                      },
+                      {
+                          "korean":  "박스",
+                          "uzbek":  "quti"
+                      },
+                      {
+                          "korean":  "멜론",
+                          "uzbek":  "qovun"
+                      },
+                      {
+                          "korean":  "과자",
+                          "uzbek":  "pishiriq"
+                      },
+                      {
+                          "korean":  "달걀",
+                          "uzbek":  "tuxum"
+                      },
+                      {
+                          "korean":  "휴지",
+                          "uzbek":  "salfetka"
+                      },
+                      {
+                          "korean":  "케이크",
+                          "uzbek":  "tort"
+                      },
+                      {
+                          "korean":  "아이스커피",
+                          "uzbek":  "muzli kofe"
+                      },
+                      {
+                          "korean":  "에스프래소",
+                          "uzbek":  "espresso"
+                      },
+                      {
+                          "korean":  "돈가스",
+                          "uzbek":  "kotlet"
+                      },
+                      {
+                          "korean":  "점심",
+                          "uzbek":  "tushlik"
+                      },
+                      {
+                          "korean":  "급",
+                          "uzbek":  "daraja"
+                      },
+                      {
+                          "korean":  "팔다",
+                          "uzbek":  "sotmoq"
+                      },
+                      {
+                          "korean":  "인지",
+                          "uzbek":  "inch (o\u0027lchov birlik)"
+                      },
+                      {
+                          "korean":  "아주",
+                          "uzbek":  "juda"
+                      },
+                      {
+                          "korean":  "리모컨",
+                          "uzbek":  "pult"
+                      },
+                      {
+                          "korean":  "깨끗하다",
+                          "uzbek":  "toza"
+                      },
+                      {
+                          "korean":  "많다",
+                          "uzbek":  "ko\u0027p"
+                      },
+                      {
+                          "korean":  "권",
+                          "uzbek":  "kitoblarga –ta"
+                      },
+                      {
+                          "korean":  "전화하다",
+                          "uzbek":  "telefon qilmoq"
+                      },
+                      {
+                          "korean":  "비싸다",
+                          "uzbek":  "qimmat"
+                      },
+                      {
+                          "korean":  "깎아",
+                          "uzbek":  "주다 arzon qilmoq"
+                      },
+                      {
+                          "korean":  "백김치",
+                          "uzbek":  "oq kimchi"
+                      },
+                      {
+                          "korean":  "깍두기",
+                          "uzbek":  "rediskali kimchi"
+                      },
+                      {
+                          "korean":  "오이김치",
+                          "uzbek":  "bodrng kimchi"
+                      },
+                      {
+                          "korean":  "물김치",
+                          "uzbek":  "suvli kimchi"
+                      },
+                      {
+                          "korean":  "이런",
+                          "uzbek":  "bunday"
+                      },
+                      {
+                          "korean":  "김치볶음밥",
+                          "uzbek":  "qovurilgan guruch"
+                      },
+                      {
+                          "korean":  "김치전",
+                          "uzbek":  "kimchi quymoq"
+                      },
+                      {
+                          "korean":  "얼마",
+                          "uzbek":  "qancha"
+                      },
+                      {
+                          "korean":  "십 원",
+                          "uzbek":  "10 von"
+                      },
+                      {
+                          "korean":  "오십",
+                          "uzbek":  "원 50 von"
+                      },
+                      {
+                          "korean":  "백",
+                          "uzbek":  "원 100 von"
+                      },
+                      {
+                          "korean":  "오백",
+                          "uzbek":  "원 500 von"
+                      },
+                      {
+                          "korean":  "천",
+                          "uzbek":  "원 1000 von"
+                      },
+                      {
+                          "korean":  "오천",
+                          "uzbek":  "원 5000 von"
+                      },
+                      {
+                          "korean":  "만",
+                          "uzbek":  "원 10.000 von"
+                      },
+                      {
+                          "korean":  "오만",
+                          "uzbek":  "원 50.000 von"
+                      }
+                  ]
+    },
+    {
+        "book":  "1A",
+        "unit":  "7과",
+        "cards":  [
+                      {
+                          "korean":  "흐리다",
+                          "uzbek":  "bulutl"
+                      },
+                      {
+                          "korean":  "맑다",
+                          "uzbek":  "havo ochiq"
+                      },
+                      {
+                          "korean":  "덥다",
+                          "uzbek":  "issiq"
+                      },
+                      {
+                          "korean":  "춥다",
+                          "uzbek":  "sovuq"
+                      },
+                      {
+                          "korean":  "따뜻하다",
+                          "uzbek":  "iliq"
+                      },
+                      {
+                          "korean":  "시원하다",
+                          "uzbek":  "salqin"
+                      },
+                      {
+                          "korean":  "비가",
+                          "uzbek":  "오다 yomg\u0027ir yog\u0027moq"
+                      },
+                      {
+                          "korean":  "눈이",
+                          "uzbek":  "오다 qor yog\u0027moq"
+                      },
+                      {
+                          "korean":  "계절",
+                          "uzbek":  "fasl"
+                      },
+                      {
+                          "korean":  "봄",
+                          "uzbek":  "bahor"
+                      },
+                      {
+                          "korean":  "여름",
+                          "uzbek":  "yoz"
+                      },
+                      {
+                          "korean":  "가을",
+                          "uzbek":  "kuz"
+                      },
+                      {
+                          "korean":  "겨울",
+                          "uzbek":  "qish"
+                      },
+                      {
+                          "korean":  "쉽다",
+                          "uzbek":  "oson"
+                      },
+                      {
+                          "korean":  "어렵다",
+                          "uzbek":  "qiyin"
+                      },
+                      {
+                          "korean":  "맵다",
+                          "uzbek":  "achchiq"
+                      },
+                      {
+                          "korean":  "가볍다",
+                          "uzbek":  "yengil"
+                      },
+                      {
+                          "korean":  "무겁다",
+                          "uzbek":  "og\u0027ir"
+                      },
+                      {
+                          "korean":  "불규칙",
+                          "uzbek":  "qoidaga tushmaslik"
+                      },
+                      {
+                          "korean":  "날씨",
+                          "uzbek":  "ob havo"
+                      },
+                      {
+                          "korean":  "어때요?",
+                          "uzbek":  "Qanday?"
+                      },
+                      {
+                          "korean":  "재미있다",
+                          "uzbek":  "qiziqarli"
+                      },
+                      {
+                          "korean":  "동생",
+                          "uzbek":  "uka"
+                      },
+                      {
+                          "korean":  "떡붂이",
+                          "uzbek":  "tokpukki"
+                      },
+                      {
+                          "korean":  "재미없다",
+                          "uzbek":  "qiziq emas"
+                      },
+                      {
+                          "korean":  "도쿄",
+                          "uzbek":  "Tokyo"
+                      },
+                      {
+                          "korean":  "조심해서",
+                          "uzbek":  "오세요 ehtiyot bo\u0027lib keling"
+                      },
+                      {
+                          "korean":  "런던",
+                          "uzbek":  "London"
+                      },
+                      {
+                          "korean":  "싱가포르",
+                          "uzbek":  "Singapur"
+                      },
+                      {
+                          "korean":  "모스크바",
+                          "uzbek":  "Moskva"
+                      },
+                      {
+                          "korean":  "카이로",
+                          "uzbek":  "Qohira"
+                      },
+                      {
+                          "korean":  "시드니",
+                          "uzbek":  "Sidney"
+                      },
+                      {
+                          "korean":  "뉴욕",
+                          "uzbek":  "Nyu York"
+                      },
+                      {
+                          "korean":  "베이징",
+                          "uzbek":  "Pekin"
+                      },
+                      {
+                          "korean":  "어떻다",
+                          "uzbek":  "qanday"
+                      },
+                      {
+                          "korean":  "파리",
+                          "uzbek":  "Parij"
+                      },
+                      {
+                          "korean":  "요즘",
+                          "uzbek":  "shu kunlarda"
+                      },
+                      {
+                          "korean":  "쉬는",
+                          "uzbek":  "시간 dam olish vaqti"
+                      },
+                      {
+                          "korean":  "이야기하다",
+                          "uzbek":  "suhbatlashmoq"
+                      },
+                      {
+                          "korean":  "고향",
+                          "uzbek":  "vatan"
+                      },
+                      {
+                          "korean":  "스키장",
+                          "uzbek":  "chang\u0027i kompleksi"
+                      },
+                      {
+                          "korean":  "단풍",
+                          "uzbek":  "xazonrezgirlik"
+                      },
+                      {
+                          "korean":  "수영장",
+                          "uzbek":  "suzish kompleksi"
+                      },
+                      {
+                          "korean":  "꽃",
+                          "uzbek":  "gul"
+                      },
+                      {
+                          "korean":  "바다",
+                          "uzbek":  "dengiz"
+                      },
+                      {
+                          "korean":  "생선",
+                          "uzbek":  "baliqli taom"
+                      },
+                      {
+                          "korean":  "부산",
+                          "uzbek":  "Pusan"
+                      },
+                      {
+                          "korean":  "질문",
+                          "uzbek":  "savol"
+                      },
+                      {
+                          "korean":  "작년",
+                          "uzbek":  "o\u0027tgan yili"
+                      },
+                      {
+                          "korean":  "브라질",
+                          "uzbek":  "Braziliya"
+                      },
+                      {
+                          "korean":  "에서",
+                          "uzbek":  "…dan"
+                      },
+                      {
+                          "korean":  "브라질리아",
+                          "uzbek":  "Brazilia"
+                      },
+                      {
+                          "korean":  "항상",
+                          "uzbek":  "doim"
+                      },
+                      {
+                          "korean":  "처음",
+                          "uzbek":  "ilk bor"
+                      },
+                      {
+                          "korean":  "눈사람",
+                          "uzbek":  "qor odam"
+                      },
+                      {
+                          "korean":  "만들다",
+                          "uzbek":  "tayyorlamoq"
+                      },
+                      {
+                          "korean":  "필요하다",
+                          "uzbek":  "zarur bo\u0027moq"
+                      },
+                      {
+                          "korean":  "놓다",
+                          "uzbek":  "배\u0027ymoq"
+                      },
+                      {
+                          "korean":  "각각",
+                          "uzbek":  "har bir"
+                      },
+                      {
+                          "korean":  "태국",
+                          "uzbek":  "Tailand"
+                      },
+                      {
+                          "korean":  "수영하다",
+                          "uzbek":  "suzmoq"
+                      },
+                      {
+                          "korean":  "망고",
+                          "uzbek":  "mango"
+                      },
+                      {
+                          "korean":  "선글라스",
+                          "uzbek":  "ko\u0027zoynak (quyosh)"
+                      },
+                      {
+                          "korean":  "부채",
+                          "uzbek":  "fen"
+                      },
+                      {
+                          "korean":  "슬리퍼",
+                          "uzbek":  "shippak/tapochka"
+                      },
+                      {
+                          "korean":  "삼계탕",
+                          "uzbek":  "samketang"
+                      },
+                      {
+                          "korean":  "들",
+                          "uzbek":  "…lar"
+                      }
+                  ]
+    },
+    {
+        "book":  "1A",
+        "unit":  "8과",
+        "cards":  [
+                      {
+                          "korean":  "골프",
+                          "uzbek":  "golf"
+                      },
+                      {
+                          "korean":  "자전거",
+                          "uzbek":  "velosiped"
+                      },
+                      {
+                          "korean":  "게임",
+                          "uzbek":  "o\u0027yin"
+                      },
+                      {
+                          "korean":  "테니스",
+                          "uzbek":  "tennis"
+                      },
+                      {
+                          "korean":  "농구",
+                          "uzbek":  "basketbol"
+                      },
+                      {
+                          "korean":  "피아노",
+                          "uzbek":  "pianino"
+                      },
+                      {
+                          "korean":  "당구",
+                          "uzbek":  "billiard"
+                      },
+                      {
+                          "korean":  "스키",
+                          "uzbek":  "chang\u0027i"
+                      },
+                      {
+                          "korean":  "기타",
+                          "uzbek":  "gitara"
+                      },
+                      {
+                          "korean":  "스케이트",
+                          "uzbek":  "skeyt"
+                      },
+                      {
+                          "korean":  "축구",
+                          "uzbek":  "futbol"
+                      },
+                      {
+                          "korean":  "치다",
+                          "uzbek":  "o\u0027ynamoq,chalmoq"
+                      },
+                      {
+                          "korean":  "타다",
+                          "uzbek":  "minmoq/uchmoq"
+                      },
+                      {
+                          "korean":  "하다",
+                          "uzbek":  "qilmoq"
+                      },
+                      {
+                          "korean":  "낮잠을",
+                          "uzbek":  "자다 kunduzgi uyqu uxlamoq"
+                      },
+                      {
+                          "korean":  "등산을",
+                          "uzbek":  "하다tog\u0027ga chiqmoq"
+                      },
+                      {
+                          "korean":  "산책을",
+                          "uzbek":  "하다 sayr qlmoq"
+                      },
+                      {
+                          "korean":  "여행을",
+                          "uzbek":  "하다 sayohat qilmoq"
+                      },
+                      {
+                          "korean":  "노래방에",
+                          "uzbek":  "가다 karaokega bormoq"
+                      },
+                      {
+                          "korean":  "찜질바에",
+                          "uzbek":  "가다 saunaga bormoq"
+                      },
+                      {
+                          "korean":  "걷다",
+                          "uzbek":  "yurmoq"
+                      },
+                      {
+                          "korean":  "버스",
+                          "uzbek":  "avtobus"
+                      },
+                      {
+                          "korean":  "걸어서",
+                          "uzbek":  "가다 piyoda yurib bormoq"
+                      },
+                      {
+                          "korean":  "음악",
+                          "uzbek":  "musiqa"
+                      },
+                      {
+                          "korean":  "듣다",
+                          "uzbek":  "eshitmoq"
+                      },
+                      {
+                          "korean":  "뉴스",
+                          "uzbek":  "yangilik"
+                      },
+                      {
+                          "korean":  "라디오",
+                          "uzbek":  "radio"
+                      },
+                      {
+                          "korean":  "잘",
+                          "uzbek":  "yaxshi"
+                      },
+                      {
+                          "korean":  "생활",
+                          "uzbek":  "hayot"
+                      },
+                      {
+                          "korean":  "조금",
+                          "uzbek":  "biroz"
+                      },
+                      {
+                          "korean":  "심심하다",
+                          "uzbek":  "zerikarli"
+                      },
+                      {
+                          "korean":  "한강",
+                          "uzbek":  "Han daryosi"
+                      },
+                      {
+                          "korean":  "그런데",
+                          "uzbek":  "lekin"
+                      },
+                      {
+                          "korean":  "어떻게",
+                          "uzbek":  "qanday qilib"
+                      },
+                      {
+                          "korean":  "가깝다",
+                          "uzbek":  "yaqin"
+                      },
+                      {
+                          "korean":  "관악산",
+                          "uzbek":  "Gvanak tog\u0027i"
+                      },
+                      {
+                          "korean":  "시청",
+                          "uzbek":  "shahar markazi"
+                      },
+                      {
+                          "korean":  "정말",
+                          "uzbek":  "haqiqatdan"
+                      },
+                      {
+                          "korean":  "많다",
+                          "uzbek":  "ko\u0027p"
+                      },
+                      {
+                          "korean":  "자주",
+                          "uzbek":  "tez tez"
+                      },
+                      {
+                          "korean":  "그래요",
+                          "uzbek":  "shunday/rostdan"
+                      },
+                      {
+                          "korean":  "다음",
+                          "uzbek":  "kelasi"
+                      },
+                      {
+                          "korean":  "피곤하다",
+                          "uzbek":  "charchamoq"
+                      },
+                      {
+                          "korean":  "크다",
+                          "uzbek":  "katta"
+                      },
+                      {
+                          "korean":  "식혜",
+                          "uzbek":  "guruchli ichimlik"
+                      },
+                      {
+                          "korean":  "저기",
+                          "uzbek":  "anavi yer"
+                      },
+                      {
+                          "korean":  "수업",
+                          "uzbek":  "dars"
+                      },
+                      {
+                          "korean":  "오후",
+                          "uzbek":  "tushdan so\u0027ng"
+                      },
+                      {
+                          "korean":  "운동장",
+                          "uzbek":  "sport maydoni"
+                      },
+                      {
+                          "korean":  "번",
+                          "uzbek":  "nomer"
+                      },
+                      {
+                          "korean":  "보통",
+                          "uzbek":  "odatda"
+                      },
+                      {
+                          "korean":  "미팅",
+                          "uzbek":  "uchrashuv"
+                      },
+                      {
+                          "korean":  "소개하다",
+                          "uzbek":  "tanishtirmoq"
+                      },
+                      {
+                          "korean":  "소개팅",
+                          "uzbek":  "tanishuv uchrashuvi"
+                      },
+                      {
+                          "korean":  "웃어른",
+                          "uzbek":  "katta odam"
+                      },
+                      {
+                          "korean":  "선을 보다",
+                          "uzbek":  "sovchilar orqali uchrashmoq"
+                      }
+                  ]
+    },
+    {
+        "book":  "1B",
+        "unit":  "9과",
+        "cards":  [
+                      {
+                          "korean":  "할머니",
+                          "uzbek":  "buvi",
+                          "russian":  "бабушка",
+                          "english":  "grandmother"
+                      },
+                      {
+                          "korean":  "할아버지",
+                          "uzbek":  "buva",
+                          "russian":  "дедушка",
+                          "english":  "grandfather"
+                      },
+                      {
+                          "korean":  "어머니",
+                          "uzbek":  "ona",
+                          "russian":  "мама",
+                          "english":  "mother"
+                      },
+                      {
+                          "korean":  "아버지",
+                          "uzbek":  "ota",
+                          "russian":  "отец",
+                          "english":  "father"
+                      },
+                      {
+                          "korean":  "누나",
+                          "uzbek":  "opa(o\u0027g\u0027il bolalar uchun)",
+                          "russian":  "сестра (для мальчиков)",
+                          "english":  "older sister (for males)"
+                      },
+                      {
+                          "korean":  "형",
+                          "uzbek":  "aka (o\u0027g\u0027il bolalarga)",
+                          "russian":  "старший брат (для мальчиков)",
+                          "english":  "older brother (for males)"
+                      },
+                      {
+                          "korean":  "언니",
+                          "uzbek":  "opa (qizlarga)",
+                          "russian":  "старшая сестра (для девочек)",
+                          "english":  "older sister (for females)"
+                      },
+                      {
+                          "korean":  "오빠",
+                          "uzbek":  "aka(qizlarga)",
+                          "russian":  "старший брат (для девочек)",
+                          "english":  "older brother (for females)"
+                      },
+                      {
+                          "korean":  "여동생",
+                          "uzbek":  "singil",
+                          "russian":  "младшая сестра",
+                          "english":  "younger sister"
+                      },
+                      {
+                          "korean":  "남동생",
+                          "uzbek":  "uka",
+                          "russian":  "младший брат",
+                          "english":  "younger brother"
+                      },
+                      {
+                          "korean":  "아내",
+                          "uzbek":  "xotin",
+                          "russian":  "жена",
+                          "english":  "wife"
+                      },
+                      {
+                          "korean":  "남편",
+                          "uzbek":  "er",
+                          "russian":  "муж",
+                          "english":  "husband"
+                      },
+                      {
+                          "korean":  "딸",
+                          "uzbek":  "qiz farzand",
+                          "russian":  "дочь",
+                          "english":  "daughter"
+                      },
+                      {
+                          "korean":  "아들",
+                          "uzbek":  "o\u0027g\u0027il farzand",
+                          "russian":  "сын",
+                          "english":  "son"
+                      },
+                      {
+                          "korean":  "열",
+                          "uzbek":  "10",
+                          "russian":  "десять",
+                          "english":  "ten"
+                      },
+                      {
+                          "korean":  "스물",
+                          "uzbek":  "20",
+                          "russian":  "двадцать",
+                          "english":  "twenty"
+                      },
+                      {
+                          "korean":  "서른",
+                          "uzbek":  "30",
+                          "russian":  "тридцать",
+                          "english":  "thirty"
+                      },
+                      {
+                          "korean":  "마흔",
+                          "uzbek":  "40",
+                          "russian":  "сорок",
+                          "english":  "forty"
+                      },
+                      {
+                          "korean":  "쉰",
+                          "uzbek":  "50",
+                          "russian":  "пятьдесят",
+                          "english":  "fifty"
+                      },
+                      {
+                          "korean":  "예순",
+                          "uzbek":  "60",
+                          "russian":  "шестьдесят",
+                          "english":  "sixty"
+                      },
+                      {
+                          "korean":  "일흔",
+                          "uzbek":  "70",
+                          "russian":  "семьдесят",
+                          "english":  "seventy"
+                      },
+                      {
+                          "korean":  "여든",
+                          "uzbek":  "80",
+                          "russian":  "восемьдесят",
+                          "english":  "eighty"
+                      },
+                      {
+                          "korean":  "아흔",
+                          "uzbek":  "90",
+                          "russian":  "девяносто",
+                          "english":  "ninety"
+                      },
+                      {
+                          "korean":  "백",
+                          "uzbek":  "100",
+                          "russian":  "сто",
+                          "english":  "hundred"
+                      },
+                      {
+                          "korean":  "이름/성함",
+                          "uzbek":  "ism",
+                          "russian":  "имя (веж.)",
+                          "english":  "name (hon.)"
+                      },
+                      {
+                          "korean":  "집/댁",
+                          "uzbek":  "uy",
+                          "russian":  "дом/жилище",
+                          "english":  "house/home"
+                      },
+                      {
+                          "korean":  "사람/명/분",
+                          "uzbek":  "odam",
+                          "russian":  "человек",
+                          "english":  "person"
+                      },
+                      {
+                          "korean":  "나이/연세",
+                          "uzbek":  "yosh",
+                          "russian":  "возраст (веж.)",
+                          "english":  "age (hon.)"
+                      },
+                      {
+                          "korean":  "있다/계시다",
+                          "uzbek":  "bor bo\u0027lmoq",
+                          "russian":  "быть/находиться",
+                          "english":  "to be/exist"
+                      },
+                      {
+                          "korean":  "먹다/마시다/드시다",
+                          "uzbek":  "yemoq",
+                          "russian":  "есть/пить",
+                          "english":  "eat/drink"
+                      },
+                      {
+                          "korean":  "자다/주무시다",
+                          "uzbek":  "uxlamoq",
+                          "russian":  "спать",
+                          "english":  "sleep"
+                      },
+                      {
+                          "korean":  "상자",
+                          "uzbek":  "quti",
+                          "russian":  "коробка",
+                          "english":  "box"
+                      },
+                      {
+                          "korean":  "꺼내다",
+                          "uzbek":  "sug\u0027urmoq",
+                          "russian":  "вынимать",
+                          "english":  "take out"
+                      },
+                      {
+                          "korean":  "운전",
+                          "uzbek":  "haydamoq",
+                          "russian":  "вождение",
+                          "english":  "driving"
+                      },
+                      {
+                          "korean":  "수학",
+                          "uzbek":  "matematika",
+                          "russian":  "математика",
+                          "english":  "mathematics"
+                      },
+                      {
+                          "korean":  "인사하다",
+                          "uzbek":  "salomlashmoq",
+                          "russian":  "приветствовать",
+                          "english":  "greet"
+                      },
+                      {
+                          "korean":  "이쪽",
+                          "uzbek":  "bu",
+                          "russian":  "сюда",
+                          "english":  "this way"
+                      },
+                      {
+                          "korean":  "한테서",
+                          "uzbek":  "-dan",
+                          "russian":  "от",
+                          "english":  "from"
+                      },
+                      {
+                          "korean":  "뭘요",
+                          "uzbek":  "unchalik emas",
+                          "russian":  "да что вы",
+                          "english":  "not at all"
+                      },
+                      {
+                          "korean":  "동아리",
+                          "uzbek":  "to\u0027garak",
+                          "russian":  "клуб/кружок",
+                          "english":  "club"
+                      },
+                      {
+                          "korean":  "같은과",
+                          "uzbek":  "o\u0027xshash daraja",
+                          "russian":  "один факультет",
+                          "english":  "same department"
+                      },
+                      {
+                          "korean":  "윗사람",
+                          "uzbek":  "o\u0027zidan katta odam",
+                          "russian":  "старший",
+                          "english":  "senior"
+                      },
+                      {
+                          "korean":  "역사",
+                          "uzbek":  "tarix",
+                          "russian":  "история",
+                          "english":  "history"
+                      },
+                      {
+                          "korean":  "이분",
+                          "uzbek":  "bu kishi",
+                          "russian":  "этот человек (веж.)",
+                          "english":  "this person (hon.)"
+                      },
+                      {
+                          "korean":  "우리",
+                          "uzbek":  "biz/bizning",
+                          "russian":  "мы/наш",
+                          "english":  "we/our"
+                      },
+                      {
+                          "korean":  "반친구",
+                          "uzbek":  "xonadosh",
+                          "russian":  "одноклассник",
+                          "english":  "classmate"
+                      },
+                      {
+                          "korean":  "다니다",
+                          "uzbek":  "qatnamoq",
+                          "russian":  "ходить/посещать",
+                          "english":  "attend/go"
+                      },
+                      {
+                          "korean":  "친절하다",
+                          "uzbek":  "mehribon",
+                          "russian":  "добрый",
+                          "english":  "kind"
+                      },
+                      {
+                          "korean":  "사장님",
+                          "uzbek":  "direktor",
+                          "russian":  "директор/начальник",
+                          "english":  "boss"
+                      },
+                      {
+                          "korean":  "전에",
+                          "uzbek":  "oldin",
+                          "russian":  "раньше",
+                          "english":  "before"
+                      },
+                      {
+                          "korean":  "멋있다",
+                          "uzbek":  "kelishgan",
+                          "russian":  "классный/красивый",
+                          "english":  "cool/handsome"
+                      },
+                      {
+                          "korean":  "부모님",
+                          "uzbek":  "ota-ona",
+                          "russian":  "родители",
+                          "english":  "parents"
+                      },
+                      {
+                          "korean":  "미인",
+                          "uzbek":  "chiroyli ayol",
+                          "russian":  "красавица",
+                          "english":  "beauty"
+                      },
+                      {
+                          "korean":  "대학교",
+                          "uzbek":  "universitet",
+                          "russian":  "университет",
+                          "english":  "university"
+                      },
+                      {
+                          "korean":  "신문사",
+                          "uzbek":  "bosmaxona",
+                          "russian":  "редакция/издательство",
+                          "english":  "newspaper company"
+                      },
+                      {
+                          "korean":  "중학교",
+                          "uzbek":  "o\u0027rta maktab",
+                          "russian":  "средняя школа",
+                          "english":  "middle school"
+                      },
+                      {
+                          "korean":  "공손하다",
+                          "uzbek":  "kamtar",
+                          "russian":  "вежливый",
+                          "english":  "polite"
+                      },
+                      {
+                          "korean":  "강아지",
+                          "uzbek":  "kuchukcha",
+                          "russian":  "щенок",
+                          "english":  "puppy"
+                      },
+                      {
+                          "korean":  "가족사진",
+                          "uzbek":  "oilaviy rasm",
+                          "russian":  "семейное фото",
+                          "english":  "family photo"
+                      },
+                      {
+                          "korean":  "웃다",
+                          "uzbek":  "kulmoq",
+                          "russian":  "смеяться",
+                          "english":  "laugh"
+                      },
+                      {
+                          "korean":  "취미",
+                          "uzbek":  "hobby",
+                          "russian":  "хобби",
+                          "english":  "hobby"
+                      },
+                      {
+                          "korean":  "아기",
+                          "uzbek":  "chaqaloq",
+                          "russian":  "младенец",
+                          "english":  "baby"
+                      },
+                      {
+                          "korean":  "태어나다",
+                          "uzbek":  "tug\u0027ilmoq",
+                          "russian":  "родиться",
+                          "english":  "be born"
+                      },
+                      {
+                          "korean":  "다른나라",
+                          "uzbek":  "boshqa davlat",
+                          "russian":  "другая страна",
+                          "english":  "another country"
+                      },
+                      {
+                          "korean":  "되다",
+                          "uzbek":  "bo\u0027lmoq",
+                          "russian":  "становиться/быть",
+                          "english":  "become/be"
+                      }
+                  ]
+    },
+    {
+        "book":  "1B",
+        "unit":  "10과",
+        "cards":  [
+                      {
+                          "korean":  "새벽",
+                          "uzbek":  "sahar",
+                          "russian":  "рассвет",
+                          "english":  "dawn"
+                      },
+                      {
+                          "korean":  "아침",
+                          "uzbek":  "ertalab",
+                          "russian":  "утро",
+                          "english":  "morning"
+                      },
+                      {
+                          "korean":  "낮",
+                          "uzbek":  "kunduzi",
+                          "russian":  "день",
+                          "english":  "daytime"
+                      },
+                      {
+                          "korean":  "저녁",
+                          "uzbek":  "kechki payt",
+                          "russian":  "вечер",
+                          "english":  "evening"
+                      },
+                      {
+                          "korean":  "밤",
+                          "uzbek":  "tun",
+                          "russian":  "ночь",
+                          "english":  "night"
+                      },
+                      {
+                          "korean":  "오전",
+                          "uzbek":  "obeddan oldin",
+                          "russian":  "до полудня",
+                          "english":  "AM"
+                      },
+                      {
+                          "korean":  "오후",
+                          "uzbek":  "obeddan keyin",
+                          "russian":  "после полудня",
+                          "english":  "PM"
+                      },
+                      {
+                          "korean":  "일어나다",
+                          "uzbek":  "uyg\u0027onmoq",
+                          "russian":  "просыпаться",
+                          "english":  "wake up"
+                      },
+                      {
+                          "korean":  "버스를 기다리다",
+                          "uzbek":  "avtobus kutmoq",
+                          "russian":  "ждать автобус",
+                          "english":  "wait for the bus"
+                      },
+                      {
+                          "korean":  "운전하다",
+                          "uzbek":  "mashina minmoq",
+                          "russian":  "вести машину",
+                          "english":  "drive"
+                      },
+                      {
+                          "korean":  "버스를 타다",
+                          "uzbek":  "avtobusga minmoq",
+                          "russian":  "садиться на автобус",
+                          "english":  "take the bus"
+                      },
+                      {
+                          "korean":  "세수하다",
+                          "uzbek":  "yuvinmoq",
+                          "russian":  "умываться",
+                          "english":  "wash face"
+                      },
+                      {
+                          "korean":  "청소하다",
+                          "uzbek":  "uy tozalamoq",
+                          "russian":  "убираться",
+                          "english":  "clean"
+                      },
+                      {
+                          "korean":  "회의하다",
+                          "uzbek":  "majlis o\u0027tkizmoq",
+                          "russian":  "проводить собрание",
+                          "english":  "have a meeting"
+                      },
+                      {
+                          "korean":  "빨래하다",
+                          "uzbek":  "kir yuvmoq",
+                          "russian":  "стирать",
+                          "english":  "do laundry"
+                      },
+                      {
+                          "korean":  "전화하다",
+                          "uzbek":  "telefon qilmoq",
+                          "russian":  "звонить",
+                          "english":  "call"
+                      },
+                      {
+                          "korean":  "컴퓨터를 하다",
+                          "uzbek":  "kompyuterda ishlamoq",
+                          "russian":  "работать за компьютером",
+                          "english":  "use the computer"
+                      },
+                      {
+                          "korean":  "요리하다",
+                          "uzbek":  "ovqat pishirmoq",
+                          "russian":  "готовить",
+                          "english":  "cook"
+                      },
+                      {
+                          "korean":  "샤워하다",
+                          "uzbek":  "dush qabul qilmoq",
+                          "russian":  "принимать душ",
+                          "english":  "shower"
+                      },
+                      {
+                          "korean":  "시",
+                          "uzbek":  "soat",
+                          "russian":  "час",
+                          "english":  "hour"
+                      },
+                      {
+                          "korean":  "분",
+                          "uzbek":  "minut",
+                          "russian":  "минута",
+                          "english":  "minute"
+                      },
+                      {
+                          "korean":  "반",
+                          "uzbek":  "yarim",
+                          "russian":  "половина",
+                          "english":  "half"
+                      },
+                      {
+                          "korean":  "쯤",
+                          "uzbek":  "taxminan",
+                          "russian":  "примерно",
+                          "english":  "about"
+                      },
+                      {
+                          "korean":  "아침",
+                          "uzbek":  "nonushta",
+                          "russian":  "завтрак",
+                          "english":  "breakfast"
+                      },
+                      {
+                          "korean":  "저녁",
+                          "uzbek":  "kechki ovqat",
+                          "russian":  "ужин",
+                          "english":  "dinner"
+                      },
+                      {
+                          "korean":  "수업을 하다",
+                          "uzbek":  "dars qilmoq",
+                          "russian":  "проводить урок",
+                          "english":  "have class"
+                      },
+                      {
+                          "korean":  "시험을 보다",
+                          "uzbek":  "imtixon topshirmoq",
+                          "russian":  "сдавать экзамен",
+                          "english":  "take an exam"
+                      },
+                      {
+                          "korean":  "그리다",
+                          "uzbek":  "rasm chizmoq",
+                          "russian":  "рисовать",
+                          "english":  "draw"
+                      },
+                      {
+                          "korean":  "이번",
+                          "uzbek":  "bu safar",
+                          "russian":  "в этот раз",
+                          "english":  "this time"
+                      },
+                      {
+                          "korean":  "방학",
+                          "uzbek":  "ta\u0027til",
+                          "russian":  "каникулы",
+                          "english":  "vacation"
+                      },
+                      {
+                          "korean":  "조금 후",
+                          "uzbek":  "birozdan so\u0027ng",
+                          "russian":  "через некоторое время",
+                          "english":  "a little later"
+                      },
+                      {
+                          "korean":  "주말 잘 보내다",
+                          "uzbek":  "dam olish kunini yaxshi o\u0027tkazmoq",
+                          "russian":  "хорошо провести выходные",
+                          "english":  "have a good weekend"
+                      },
+                      {
+                          "korean":  "데이트하다",
+                          "uzbek":  "uchrashuvga chiqmoq",
+                          "russian":  "ходить на свидание",
+                          "english":  "go on a date"
+                      },
+                      {
+                          "korean":  "강남",
+                          "uzbek":  "Gangnam",
+                          "russian":  "Каннам",
+                          "english":  "Gangnam"
+                      },
+                      {
+                          "korean":  "여의도",
+                          "uzbek":  "Yoyido",
+                          "russian":  "Йоидо",
+                          "english":  "Yeouido"
+                      },
+                      {
+                          "korean":  "박물관",
+                          "uzbek":  "muzey",
+                          "russian":  "музей",
+                          "english":  "museum"
+                      },
+                      {
+                          "korean":  "연습",
+                          "uzbek":  "mashq",
+                          "russian":  "практика",
+                          "english":  "practice"
+                      },
+                      {
+                          "korean":  "인천",
+                          "uzbek":  "Inchon",
+                          "russian":  "Инчхон",
+                          "english":  "Incheon"
+                      },
+                      {
+                          "korean":  "전통",
+                          "uzbek":  "milliy",
+                          "russian":  "традиционный",
+                          "english":  "traditional"
+                      },
+                      {
+                          "korean":  "이메일",
+                          "uzbek":  "e-mail",
+                          "russian":  "электронная почта",
+                          "english":  "email"
+                      },
+                      {
+                          "korean":  "출입국관리사무소",
+                          "uzbek":  "muhojirlar markazi",
+                          "russian":  "иммиграционная служба",
+                          "english":  "immigration office"
+                      },
+                      {
+                          "korean":  "그렇지만",
+                          "uzbek":  "lekin",
+                          "russian":  "но",
+                          "english":  "but"
+                      }
+                  ]
+    },
+    {
+        "book":  "1B",
+        "unit":  "11과",
+        "cards":  [
+                      {
+                          "korean":  "머리",
+                          "uzbek":  "bosh",
+                          "russian":  "голова",
+                          "english":  "head"
+                      },
+                      {
+                          "korean":  "목",
+                          "uzbek":  "bo\u0027yin",
+                          "russian":  "шея",
+                          "english":  "neck"
+                      },
+                      {
+                          "korean":  "어깨",
+                          "uzbek":  "yelka",
+                          "russian":  "плечо",
+                          "english":  "shoulder"
+                      },
+                      {
+                          "korean":  "팔",
+                          "uzbek":  "qo\u0027l",
+                          "russian":  "рука",
+                          "english":  "arm"
+                      },
+                      {
+                          "korean":  "손",
+                          "uzbek":  "qo\u0027l",
+                          "russian":  "рука",
+                          "english":  "hand"
+                      },
+                      {
+                          "korean":  "가슴",
+                          "uzbek":  "ko\u0027krak",
+                          "russian":  "грудь",
+                          "english":  "chest"
+                      },
+                      {
+                          "korean":  "배",
+                          "uzbek":  "qorin",
+                          "russian":  "живот",
+                          "english":  "stomach"
+                      },
+                      {
+                          "korean":  "허리",
+                          "uzbek":  "bel",
+                          "russian":  "поясница/талия",
+                          "english":  "waist"
+                      },
+                      {
+                          "korean":  "다리",
+                          "uzbek":  "oyoq",
+                          "russian":  "нога",
+                          "english":  "leg"
+                      },
+                      {
+                          "korean":  "무릎",
+                          "uzbek":  "tizza",
+                          "russian":  "колено",
+                          "english":  "knee"
+                      },
+                      {
+                          "korean":  "발",
+                          "uzbek":  "oyoq",
+                          "russian":  "ступня",
+                          "english":  "foot"
+                      },
+                      {
+                          "korean":  "눈",
+                          "uzbek":  "ko\u0027z",
+                          "russian":  "глаз",
+                          "english":  "eye"
+                      },
+                      {
+                          "korean":  "코",
+                          "uzbek":  "burun",
+                          "russian":  "нос",
+                          "english":  "nose"
+                      },
+                      {
+                          "korean":  "입",
+                          "uzbek":  "og\u0027iz",
+                          "russian":  "рот",
+                          "english":  "mouth"
+                      },
+                      {
+                          "korean":  "귀",
+                          "uzbek":  "quloq",
+                          "russian":  "ухо",
+                          "english":  "ear"
+                      },
+                      {
+                          "korean":  "얼굴",
+                          "uzbek":  "yuz,aft,bet",
+                          "russian":  "лицо",
+                          "english":  "face"
+                      },
+                      {
+                          "korean":  "기침을 하다",
+                          "uzbek":  "yo\u0027talmoq",
+                          "russian":  "кашлять",
+                          "english":  "cough"
+                      },
+                      {
+                          "korean":  "목이 아프다",
+                          "uzbek":  "tomog\u0027I og\u0027rimoq",
+                          "russian":  "болит горло",
+                          "english":  "have a sore throat"
+                      },
+                      {
+                          "korean":  "열이 나다",
+                          "uzbek":  "isitma chiqmoq",
+                          "russian":  "поднялась температура",
+                          "english":  "have a fever"
+                      },
+                      {
+                          "korean":  "콧물이 나다",
+                          "uzbek":  "burun oqmoq",
+                          "russian":  "насморк",
+                          "english":  "have a runny nose"
+                      },
+                      {
+                          "korean":  "바쁘다",
+                          "uzbek":  "band bo\u0027lmoq",
+                          "russian":  "занят",
+                          "english":  "busy"
+                      },
+                      {
+                          "korean":  "배고프다",
+                          "uzbek":  "qorni ochmoq",
+                          "russian":  "голодный",
+                          "english":  "hungry"
+                      },
+                      {
+                          "korean":  "예쁘다",
+                          "uzbek":  "chiroyli",
+                          "russian":  "красивый",
+                          "english":  "pretty"
+                      },
+                      {
+                          "korean":  "편지",
+                          "uzbek":  "xat",
+                          "russian":  "письмо",
+                          "english":  "letter"
+                      },
+                      {
+                          "korean":  "쓰다",
+                          "uzbek":  "yozmoq",
+                          "russian":  "писать",
+                          "english":  "write"
+                      },
+                      {
+                          "korean":  "나쁘다",
+                          "uzbek":  "yomon",
+                          "russian":  "плохой",
+                          "english":  "bad"
+                      },
+                      {
+                          "korean":  "담배를 피우다",
+                          "uzbek":  "sigaret chekmoq",
+                          "russian":  "курить",
+                          "english":  "smoke"
+                      },
+                      {
+                          "korean":  "알겠다",
+                          "uzbek":  "tushunarli",
+                          "russian":  "понятно",
+                          "english":  "understand"
+                      },
+                      {
+                          "korean":  "늦다",
+                          "uzbek":  "kechikmoq",
+                          "russian":  "опаздывать",
+                          "english":  "be late"
+                      },
+                      {
+                          "korean":  "감기에 걸리다",
+                          "uzbek":  "shamollamoq",
+                          "russian":  "простудиться",
+                          "english":  "catch a cold"
+                      },
+                      {
+                          "korean":  "유행이다",
+                          "uzbek":  "urf bol\u0027moq",
+                          "russian":  "быть в моде",
+                          "english":  "be in fashion"
+                      },
+                      {
+                          "korean":  "약",
+                          "uzbek":  "dori",
+                          "russian":  "лекарство",
+                          "english":  "medicine"
+                      },
+                      {
+                          "korean":  "푹 쉬다",
+                          "uzbek":  "miriqib dam olmoq",
+                          "russian":  "хорошо отдохнуть",
+                          "english":  "rest well"
+                      },
+                      {
+                          "korean":  "말(을) 하다",
+                          "uzbek":  "gapirmoq",
+                          "russian":  "говорить",
+                          "english":  "speak"
+                      },
+                      {
+                          "korean":  "오래",
+                          "uzbek":  "uzoq vaqt",
+                          "russian":  "долго",
+                          "english":  "for a long time"
+                      },
+                      {
+                          "korean":  "목욕하다",
+                          "uzbek":  "hammom qilmoq",
+                          "russian":  "купаться",
+                          "english":  "bathe"
+                      },
+                      {
+                          "korean":  "술",
+                          "uzbek":  "aroq",
+                          "russian":  "алкоголь",
+                          "english":  "alcohol"
+                      },
+                      {
+                          "korean":  "환자",
+                          "uzbek":  "bemor",
+                          "russian":  "пациент",
+                          "english":  "patient"
+                      },
+                      {
+                          "korean":  "의사",
+                          "uzbek":  "doktor",
+                          "russian":  "врач",
+                          "english":  "doctor"
+                      },
+                      {
+                          "korean":  "씻다",
+                          "uzbek":  "yuvmoq",
+                          "russian":  "мыть",
+                          "english":  "wash"
+                      },
+                      {
+                          "korean":  "따뜻한 물",
+                          "uzbek":  "iliq suv",
+                          "russian":  "тёплая вода",
+                          "english":  "warm water"
+                      },
+                      {
+                          "korean":  "얼음물",
+                          "uzbek":  "muzli suv",
+                          "russian":  "ледяная вода",
+                          "english":  "ice water"
+                      },
+                      {
+                          "korean":  "손님",
+                          "uzbek":  "mehmon",
+                          "russian":  "гость",
+                          "english":  "guest"
+                      },
+                      {
+                          "korean":  "내년",
+                          "uzbek":  "kelasi yil",
+                          "russian":  "в следующем году",
+                          "english":  "next year"
+                      },
+                      {
+                          "korean":  "결혼하다",
+                          "uzbek":  "turmush qurmoq",
+                          "russian":  "жениться/выйти замуж",
+                          "english":  "marry"
+                      },
+                      {
+                          "korean":  "괜찮다",
+                          "uzbek":  "durust bo\u0027lmoq",
+                          "russian":  "нормально",
+                          "english":  "okay"
+                      },
+                      {
+                          "korean":  "다행이다",
+                          "uzbek":  "hudoga shukur",
+                          "russian":  "к счастью",
+                          "english":  "fortunately"
+                      },
+                      {
+                          "korean":  "걱정",
+                          "uzbek":  "havotir",
+                          "russian":  "беспокойство",
+                          "english":  "worry"
+                      },
+                      {
+                          "korean":  "휴대전화 사용 금지",
+                          "uzbek":  "telefondan foydalanish taqiqlanadi",
+                          "russian":  "запрещено пользоваться телефоном",
+                          "english":  "no mobile phones"
+                      },
+                      {
+                          "korean":  "금연",
+                          "uzbek":  "chekish taqiqlanadi",
+                          "russian":  "не курить",
+                          "english":  "no smoking"
+                      },
+                      {
+                          "korean":  "주차금지",
+                          "uzbek":  "mashina qo\u0027yish taqiqlanadi",
+                          "russian":  "парковка запрещена",
+                          "english":  "no parking"
+                      }
+                  ]
+    },
+    {
+        "book":  "1B",
+        "unit":  "12과",
+        "cards":  [
+                      {
+                          "korean":  "전화번호",
+                          "uzbek":  "telefon raqam",
+                          "russian":  "номер телефона",
+                          "english":  "phone number"
+                      },
+                      {
+                          "korean":  "문자를 받다",
+                          "uzbek":  "sms olmoq",
+                          "russian":  "получить SMS",
+                          "english":  "receive a text"
+                      },
+                      {
+                          "korean":  "문자를 보내다",
+                          "uzbek":  "sms jo\u0027natmoq",
+                          "russian":  "отправить SMS",
+                          "english":  "send a text"
+                      },
+                      {
+                          "korean":  "전화를 받다",
+                          "uzbek":  "qo\u0027ng\u0027iroq kelmoq",
+                          "russian":  "получить звонок",
+                          "english":  "receive a call"
+                      },
+                      {
+                          "korean":  "전화(를)하다",
+                          "uzbek":  "telefon qilmoq",
+                          "russian":  "звонить",
+                          "english":  "call"
+                      },
+                      {
+                          "korean":  "그렇습니다",
+                          "uzbek":  "shunday",
+                          "russian":  "так",
+                          "english":  "that\u0027s right"
+                      },
+                      {
+                          "korean":  "오랜만이에요",
+                          "uzbek":  "ko\u0027rishmaganimizga ancha bo\u0027ldi",
+                          "russian":  "давно не виделись",
+                          "english":  "long time no see"
+                      },
+                      {
+                          "korean":  "일",
+                          "uzbek":  "ish",
+                          "russian":  "работа",
+                          "english":  "work"
+                      },
+                      {
+                          "korean":  "사무실",
+                          "uzbek":  "ofis",
+                          "russian":  "офис",
+                          "english":  "office"
+                      },
+                      {
+                          "korean":  "맛없다",
+                          "uzbek":  "bemaza",
+                          "russian":  "невкусно",
+                          "english":  "not tasty"
+                      },
+                      {
+                          "korean":  "왜",
+                          "uzbek":  "nimaga",
+                          "russian":  "почему",
+                          "english":  "why"
+                      },
+                      {
+                          "korean":  "조금 전",
+                          "uzbek":  "biroz oldin",
+                          "russian":  "только что",
+                          "english":  "a little while ago"
+                      },
+                      {
+                          "korean":  "늦잠",
+                          "uzbek":  "uxlab qolmoq",
+                          "russian":  "проспать",
+                          "english":  "oversleep"
+                      },
+                      {
+                          "korean":  "여행사",
+                          "uzbek":  "sayohat agentligi",
+                          "russian":  "турагентство",
+                          "english":  "travel agency"
+                      },
+                      {
+                          "korean":  "아까",
+                          "uzbek":  "biroz oldin",
+                          "russian":  "только что",
+                          "english":  "a little while ago"
+                      },
+                      {
+                          "korean":  "그럼요",
+                          "uzbek":  "albatta",
+                          "russian":  "конечно",
+                          "english":  "of course"
+                      },
+                      {
+                          "korean":  "이따",
+                          "uzbek":  "keyinroq",
+                          "russian":  "позже",
+                          "english":  "later"
+                      },
+                      {
+                          "korean":  "다른",
+                          "uzbek":  "boshqa",
+                          "russian":  "другой",
+                          "english":  "different"
+                      },
+                      {
+                          "korean":  "다",
+                          "uzbek":  "hammasi",
+                          "russian":  "всё",
+                          "english":  "all"
+                      },
+                      {
+                          "korean":  "장소",
+                          "uzbek":  "joy",
+                          "russian":  "место",
+                          "english":  "place"
+                      },
+                      {
+                          "korean":  "도둑이 들다",
+                          "uzbek":  "o\u0027g\u0027ri kirmoq",
+                          "russian":  "вломился вор",
+                          "english":  "a thief broke in"
+                      },
+                      {
+                          "korean":  "사고가 나다",
+                          "uzbek":  "avariya hosil bo\u0027lmoq",
+                          "russian":  "произошла авария",
+                          "english":  "an accident happened"
+                      },
+                      {
+                          "korean":  "불이 나다",
+                          "uzbek":  "olov chiqmoq",
+                          "russian":  "пожар",
+                          "english":  "fire"
+                      }
+                  ]
+    },
+    {
+        "book":  "1B",
+        "unit":  "13과",
+        "cards":  [
+                      {
+                          "korean":  "버스",
+                          "uzbek":  "avtobus",
+                          "russian":  "автобус",
+                          "english":  "bus"
+                      },
+                      {
+                          "korean":  "기차",
+                          "uzbek":  "poyezd",
+                          "russian":  "поезд",
+                          "english":  "train"
+                      },
+                      {
+                          "korean":  "비행기",
+                          "uzbek":  "samalyot",
+                          "russian":  "самолёт",
+                          "english":  "airplane"
+                      },
+                      {
+                          "korean":  "배",
+                          "uzbek":  "qayiq/kema",
+                          "russian":  "лодка/корабль",
+                          "english":  "boat/ship"
+                      },
+                      {
+                          "korean":  "택시",
+                          "uzbek":  "taksi",
+                          "russian":  "такси",
+                          "english":  "taxi"
+                      },
+                      {
+                          "korean":  "자전거",
+                          "uzbek":  "velosiped",
+                          "russian":  "велосипед",
+                          "english":  "bicycle"
+                      },
+                      {
+                          "korean":  "지하철",
+                          "uzbek":  "metro",
+                          "russian":  "метро",
+                          "english":  "subway"
+                      },
+                      {
+                          "korean":  "오토바이",
+                          "uzbek":  "mototsikl",
+                          "russian":  "мотоцикл",
+                          "english":  "motorcycle"
+                      },
+                      {
+                          "korean":  "타다",
+                          "uzbek":  "minmoq",
+                          "russian":  "садиться/ехать",
+                          "english":  "ride/take"
+                      },
+                      {
+                          "korean":  "갈아타다",
+                          "uzbek":  "almashib chiqmoq",
+                          "russian":  "пересаживаться",
+                          "english":  "transfer"
+                      },
+                      {
+                          "korean":  "내리다",
+                          "uzbek":  "tushmoq",
+                          "russian":  "выходить",
+                          "english":  "get off"
+                      },
+                      {
+                          "korean":  "버스 정류장",
+                          "uzbek":  "avtobus bekati",
+                          "russian":  "автобусная остановка",
+                          "english":  "bus stop"
+                      },
+                      {
+                          "korean":  "기차역",
+                          "uzbek":  "poyezd bekati",
+                          "russian":  "вокзал",
+                          "english":  "train station"
+                      },
+                      {
+                          "korean":  "고속버스터미널",
+                          "uzbek":  "tez yurar avtobi terminali",
+                          "russian":  "автовокзал (межгород)",
+                          "english":  "express bus terminal"
+                      },
+                      {
+                          "korean":  "지하철역",
+                          "uzbek":  "metro bekati",
+                          "russian":  "станция метро",
+                          "english":  "subway station"
+                      },
+                      {
+                          "korean":  "닫다",
+                          "uzbek":  "yopmoq",
+                          "russian":  "закрывать",
+                          "english":  "close"
+                      },
+                      {
+                          "korean":  "돕다",
+                          "uzbek":  "yordam bermoq",
+                          "russian":  "помогать",
+                          "english":  "help"
+                      },
+                      {
+                          "korean":  "얼마 전",
+                          "uzbek":  "bir necha vaqt oldin",
+                          "russian":  "недавно",
+                          "english":  "a while ago"
+                      },
+                      {
+                          "korean":  "편리하다",
+                          "uzbek":  "qulay",
+                          "russian":  "удобный",
+                          "english":  "convenient"
+                      },
+                      {
+                          "korean":  "사용하다",
+                          "uzbek":  "foydalanmoq",
+                          "russian":  "использовать",
+                          "english":  "use"
+                      },
+                      {
+                          "korean":  "요금",
+                          "uzbek":  "to\u0027lov",
+                          "russian":  "плата",
+                          "english":  "fare"
+                      },
+                      {
+                          "korean":  "안에",
+                          "uzbek":  "ichida",
+                          "russian":  "внутри",
+                          "english":  "inside"
+                      },
+                      {
+                          "korean":  "그러면",
+                          "uzbek":  "u holda",
+                          "russian":  "тогда",
+                          "english":  "then"
+                      },
+                      {
+                          "korean":  "깎다",
+                          "uzbek":  "chegirma qilmoq;qirqmoq",
+                          "russian":  "скидка/резать",
+                          "english":  "discount/cut"
+                      },
+                      {
+                          "korean":  "나",
+                          "uzbek":  "yo/yoki",
+                          "russian":  "или",
+                          "english":  "or"
+                      }
+                  ]
+    },
+    {
+        "book":  "1B",
+        "unit":  "14과",
+        "cards":  [
+                      {
+                          "korean":  "셔츠",
+                          "uzbek":  "ko\u0027ylak",
+                          "russian":  "рубашка",
+                          "english":  "shirt"
+                      },
+                      {
+                          "korean":  "모자",
+                          "uzbek":  "bosh kiyim",
+                          "russian":  "шляпа",
+                          "english":  "hat"
+                      },
+                      {
+                          "korean":  "바지",
+                          "uzbek":  "shim",
+                          "russian":  "брюки",
+                          "english":  "pants"
+                      },
+                      {
+                          "korean":  "치마",
+                          "uzbek":  "yubka",
+                          "russian":  "юбка",
+                          "english":  "skirt"
+                      },
+                      {
+                          "korean":  "코트",
+                          "uzbek":  "palto",
+                          "russian":  "пальто",
+                          "english":  "coat"
+                      },
+                      {
+                          "korean":  "원피스",
+                          "uzbek":  "ko\u0027ylak",
+                          "russian":  "платье",
+                          "english":  "dress"
+                      },
+                      {
+                          "korean":  "구두",
+                          "uzbek":  "tufli",
+                          "russian":  "туфли",
+                          "english":  "shoes"
+                      },
+                      {
+                          "korean":  "운동화",
+                          "uzbek":  "krasovka",
+                          "russian":  "кроссовки",
+                          "english":  "sneakers"
+                      },
+                      {
+                          "korean":  "양복",
+                          "uzbek":  "kostyum",
+                          "russian":  "костюм",
+                          "english":  "suit"
+                      },
+                      {
+                          "korean":  "입다",
+                          "uzbek":  "kiymoq",
+                          "russian":  "носить (одежду)",
+                          "english":  "wear (clothes)"
+                      },
+                      {
+                          "korean":  "신다",
+                          "uzbek":  "kiymoq(poyabzal)",
+                          "russian":  "носить (обувь)",
+                          "english":  "wear (shoes)"
+                      },
+                      {
+                          "korean":  "쓰다",
+                          "uzbek":  "bosh kiyim kiymoq",
+                          "russian":  "надевать (головной убор)",
+                          "english":  "wear (hat)"
+                      },
+                      {
+                          "korean":  "크다",
+                          "uzbek":  "katta",
+                          "russian":  "большой",
+                          "english":  "big"
+                      },
+                      {
+                          "korean":  "작다",
+                          "uzbek":  "kichkina",
+                          "russian":  "маленький",
+                          "english":  "small"
+                      },
+                      {
+                          "korean":  "길다",
+                          "uzbek":  "uzun",
+                          "russian":  "длинный",
+                          "english":  "long"
+                      },
+                      {
+                          "korean":  "짧다",
+                          "uzbek":  "kalta",
+                          "russian":  "короткий",
+                          "english":  "short"
+                      },
+                      {
+                          "korean":  "높다",
+                          "uzbek":  "baland",
+                          "russian":  "высокий",
+                          "english":  "high"
+                      },
+                      {
+                          "korean":  "낮다",
+                          "uzbek":  "past",
+                          "russian":  "низкий",
+                          "english":  "low"
+                      },
+                      {
+                          "korean":  "비싸다",
+                          "uzbek":  "qimmat",
+                          "russian":  "дорогой",
+                          "english":  "expensive"
+                      },
+                      {
+                          "korean":  "싸다",
+                          "uzbek":  "arzon",
+                          "russian":  "дешёвый",
+                          "english":  "cheap"
+                      },
+                      {
+                          "korean":  "불편하다",
+                          "uzbek":  "noqulay",
+                          "russian":  "неудобный",
+                          "english":  "uncomfortable"
+                      },
+                      {
+                          "korean":  "편하다",
+                          "uzbek":  "qulay",
+                          "russian":  "удобный",
+                          "english":  "comfortable"
+                      },
+                      {
+                          "korean":  "두껍다",
+                          "uzbek":  "qalin",
+                          "russian":  "толстый",
+                          "english":  "thick"
+                      },
+                      {
+                          "korean":  "얇다",
+                          "uzbek":  "yupqa",
+                          "russian":  "тонкий",
+                          "english":  "thin"
+                      },
+                      {
+                          "korean":  "어떤",
+                          "uzbek":  "qanday",
+                          "russian":  "какой",
+                          "english":  "what kind"
+                      },
+                      {
+                          "korean":  "키",
+                          "uzbek":  "bo\u0027y",
+                          "russian":  "рост",
+                          "english":  "height"
+                      },
+                      {
+                          "korean":  "청바지",
+                          "uzbek":  "ko\u0027k shim",
+                          "russian":  "джинсы",
+                          "english":  "jeans"
+                      },
+                      {
+                          "korean":  "선물하다",
+                          "uzbek":  "sovg\u0027a qilmoq",
+                          "russian":  "подарить",
+                          "english":  "give a present"
+                      },
+                      {
+                          "korean":  "보내다",
+                          "uzbek":  "jo\u0027natmoq",
+                          "russian":  "отправлять",
+                          "english":  "send"
+                      },
+                      {
+                          "korean":  "드리다",
+                          "uzbek":  "bermoq(hurmat)",
+                          "russian":  "давать (веж.)",
+                          "english":  "give (hon.)"
+                      },
+                      {
+                          "korean":  "기쁘다",
+                          "uzbek":  "hursand bo\u0027lmoq",
+                          "russian":  "радостный",
+                          "english":  "happy"
+                      },
+                      {
+                          "korean":  "먼저",
+                          "uzbek":  "birinchi navbatta",
+                          "russian":  "сначала",
+                          "english":  "first"
+                      }
+                  ]
+    },
+    {
+        "book":  "1B",
+        "unit":  "15과",
+        "cards":  [
+                      {
+                          "korean":  "돈을 바꾸다",
+                          "uzbek":  "pul almashtirmoq",
+                          "russian":  "обменять деньги",
+                          "english":  "exchange money"
+                      },
+                      {
+                          "korean":  "비행기표를 예매하다",
+                          "uzbek":  "samalyot biletini zakaz qilmoq",
+                          "russian":  "забронировать билет",
+                          "english":  "book a flight"
+                      },
+                      {
+                          "korean":  "여권을 만들다",
+                          "uzbek":  "passport tayyorlamoq",
+                          "russian":  "сделать паспорт",
+                          "english":  "make a passport"
+                      },
+                      {
+                          "korean":  "호텔을 예약하다",
+                          "uzbek":  "mehmonxona bron qilmoq",
+                          "russian":  "забронировать отель",
+                          "english":  "book a hotel"
+                      },
+                      {
+                          "korean":  "도착하다",
+                          "uzbek":  "yetib bormoq",
+                          "russian":  "прибыть",
+                          "english":  "arrive"
+                      },
+                      {
+                          "korean":  "돌아오다",
+                          "uzbek":  "qaytib kelmoq",
+                          "russian":  "вернуться",
+                          "english":  "return"
+                      },
+                      {
+                          "korean":  "여행하다",
+                          "uzbek":  "sayohat qilmoq",
+                          "russian":  "путешествовать",
+                          "english":  "travel"
+                      },
+                      {
+                          "korean":  "출발하다",
+                          "uzbek":  "jo\u0027nat ketmoq",
+                          "russian":  "отправиться",
+                          "english":  "depart"
+                      },
+                      {
+                          "korean":  "떠나다",
+                          "uzbek":  "tashlab ketmoq",
+                          "russian":  "уезжать",
+                          "english":  "leave"
+                      },
+                      {
+                          "korean":  "즐겁다",
+                          "uzbek":  "zavqli",
+                          "russian":  "весёлый",
+                          "english":  "enjoyable"
+                      },
+                      {
+                          "korean":  "휴가",
+                          "uzbek":  "ta\u0027til",
+                          "russian":  "отпуск",
+                          "english":  "vacation"
+                      },
+                      {
+                          "korean":  "계획하다",
+                          "uzbek":  "reja qilmoq",
+                          "russian":  "планировать",
+                          "english":  "plan"
+                      },
+                      {
+                          "korean":  "선물하다",
+                          "uzbek":  "sovg\u0027a qilmoq",
+                          "russian":  "подарить",
+                          "english":  "give a present"
+                      },
+                      {
+                          "korean":  "식사하다",
+                          "uzbek":  "ovqatlanmoq",
+                          "russian":  "поесть",
+                          "english":  "have a meal"
+                      },
+                      {
+                          "korean":  "연락하다",
+                          "uzbek":  "telefon qilmoq",
+                          "russian":  "связаться",
+                          "english":  "contact"
+                      },
+                      {
+                          "korean":  "준비하다",
+                          "uzbek":  "tayyorlanmoq",
+                          "russian":  "готовиться",
+                          "english":  "prepare"
+                      },
+                      {
+                          "korean":  "초대하다",
+                          "uzbek":  "taklif qilmoq",
+                          "russian":  "пригласить",
+                          "english":  "invite"
+                      },
+                      {
+                          "korean":  "축하하다",
+                          "uzbek":  "tabriklamoq",
+                          "russian":  "поздравить",
+                          "english":  "congratulate"
+                      },
+                      {
+                          "korean":  "많이",
+                          "uzbek":  "ko\u0027p",
+                          "russian":  "много",
+                          "english":  "a lot"
+                      },
+                      {
+                          "korean":  "빨리",
+                          "uzbek":  "tez",
+                          "russian":  "быстро",
+                          "english":  "quickly"
+                      },
+                      {
+                          "korean":  "일찍",
+                          "uzbek":  "vaqtli,erta",
+                          "russian":  "рано",
+                          "english":  "early"
+                      },
+                      {
+                          "korean":  "잘",
+                          "uzbek":  "yaxshi",
+                          "russian":  "хорошо",
+                          "english":  "well"
+                      },
+                      {
+                          "korean":  "조금",
+                          "uzbek":  "bir oz",
+                          "russian":  "немного",
+                          "english":  "a little"
+                      },
+                      {
+                          "korean":  "천천히",
+                          "uzbek":  "sekin sekin",
+                          "russian":  "медленно",
+                          "english":  "slowly"
+                      },
+                      {
+                          "korean":  "이메일 주소",
+                          "uzbek":  "email address",
+                          "russian":  "адрес эл. почты",
+                          "english":  "email address"
+                      },
+                      {
+                          "korean":  "세계",
+                          "uzbek":  "dunyo",
+                          "russian":  "мир",
+                          "english":  "world"
+                      },
+                      {
+                          "korean":  "세제",
+                          "uzbek":  "poroshok",
+                          "russian":  "моющее средство",
+                          "english":  "detergent"
+                      },
+                      {
+                          "korean":  "부자",
+                          "uzbek":  "boy",
+                          "russian":  "богач",
+                          "english":  "rich person"
+                      }
+                  ]
+    }
 ]
