@@ -10,16 +10,20 @@ import { translations } from '../../lib/translations';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
 import MobileNav from '../../components/MobileNav';
 import flashcardsData from '../../data/flashcardsData.json';
-import { getAllUnits, getListeningExercisesByUnit } from '../../data/listeningExercises';
-import { getAllReadingUnits, getReadingExercisesByUnit } from '../../data/readingExercises';
+import { getAllUnits, getAllBooks, getListeningExercisesByUnit } from '../../data/listeningExercises';
+import { getAllReadingUnits, getAllReadingBooks, getReadingExercisesByUnit } from '../../data/readingExercises';
 
 type HubTab = 'flashcards' | 'listening' | 'reading';
 
-const BOOKS = ['1A', '1B'] as const;
-type Book = (typeof BOOKS)[number];
+type Book = string;
+
+const getBookLabel = (t: Record<string, string>, book: string): string => {
+  const key = `book${book}`;
+  return (t as unknown as Record<string, string>)[key] || book;
+};
 
 type FlashcardsDataEntry = {
-  book: '1A' | '1B';
+  book: string;
   unit: string;
   cards: Array<{
     korean: string;
@@ -65,15 +69,33 @@ export default function ExercisesPage() {
 
   const t = translations[lang];
 
+  const books = useMemo(() => {
+    const merged = new Set<string>();
+
+    const entries = flashcardsData as unknown as FlashcardsDataEntry[];
+    for (const e of entries) {
+      if (!e || !e.book) continue;
+      merged.add(e.book);
+    }
+
+    for (const b of getAllBooks()) merged.add(b);
+    for (const b of getAllReadingBooks()) merged.add(b);
+
+    return Array.from(merged)
+      .filter((b) => typeof b === 'string' && b.length > 0)
+      .sort((a, b) => a.localeCompare(b));
+  }, []);
+
   const initialTab = (searchParams.get('tab') as HubTab | null) ?? null;
-  const initialBookParam = (searchParams.get('book') as Book | null) ?? null;
+  const initialBookParam = searchParams.get('book');
   const initialUnitParam = searchParams.get('unit');
   const [activeTab, setActiveTab] = useState<HubTab>(
     initialTab === 'flashcards' || initialTab === 'listening' || initialTab === 'reading' ? initialTab : 'flashcards'
   );
-  const [modalBook, setModalBook] = useState<Book | null>(
-    initialBookParam === '1A' || initialBookParam === '1B' ? initialBookParam : null
-  );
+  const [modalBook, setModalBook] = useState<Book | null>(() => {
+    if (initialBookParam && books.includes(initialBookParam)) return initialBookParam;
+    return null;
+  });
   const [modalUnit, setModalUnit] = useState<string | null>(initialUnitParam);
 
   const handleLogout = async () => {
@@ -114,34 +136,38 @@ export default function ExercisesPage() {
 
   const flashcardsUnitsByBook = useMemo(() => {
     const entries = flashcardsData as unknown as FlashcardsDataEntry[];
-    const keys: Record<Book, Set<string>> = { '1A': new Set(), '1B': new Set() };
+    const keys: Record<string, Set<string>> = {};
     const cardsByBookUnit = new Map<string, number>();
 
     for (const entry of entries) {
       if (!entry || !entry.book || !entry.unit || !Array.isArray(entry.cards)) continue;
-      if (entry.book !== '1A' && entry.book !== '1B') continue;
+      if (!keys[entry.book]) keys[entry.book] = new Set();
       keys[entry.book].add(entry.unit);
       cardsByBookUnit.set(`${entry.book}:${entry.unit}`, entry.cards.length);
     }
 
+    const units: Record<string, string[]> = {};
+    for (const [book, set] of Object.entries(keys)) {
+      units[book] = Array.from(set).sort((a, b) => unitSortKey(a) - unitSortKey(b));
+    }
+
     return {
-      units: {
-        '1A': Array.from(keys['1A']).sort((a, b) => unitSortKey(a) - unitSortKey(b)),
-        '1B': Array.from(keys['1B']).sort((a, b) => unitSortKey(a) - unitSortKey(b))
-      } as Record<Book, string[]>,
+      units,
       cardsByBookUnit
     };
   }, []);
 
   const listeningCounts = useMemo(() => {
+    const bs = getAllBooks();
     return {
-      unitCount: getAllUnits('1A').length + getAllUnits('1B').length
+      unitCount: bs.reduce((sum, b) => sum + getAllUnits(b).length, 0)
     };
   }, []);
 
   const readingCounts = useMemo(() => {
+    const bs = getAllReadingBooks();
     return {
-      unitCount: getAllReadingUnits('1A').length + getAllReadingUnits('1B').length
+      unitCount: bs.reduce((sum, b) => sum + getAllReadingUnits(b).length, 0)
     };
   }, []);
 
@@ -207,17 +233,24 @@ export default function ExercisesPage() {
     router.replace(`/exercises?tab=${activeTab}&book=${modalBook}&unit=${encodeURIComponent(unit)}`);
   };
 
-  const books = useMemo(() => {
-    return [
-      { key: '1A' as const, label: t.book1A, icon: '📗', isNew: false },
-      { key: '1B' as const, label: t.book1B, icon: '📘', isNew: true }
-    ];
-  }, [t.book1A, t.book1B]);
+  const bookCards = useMemo(() => {
+    const common = t as unknown as Record<string, string>;
+    return books.map((book) => {
+      const icon = book.endsWith('B') ? '📘' : '📗';
+      return { key: book, label: getBookLabel(common, book), icon, isNew: false };
+    });
+  }, [books, t]);
 
   const unitsByBookForTab = useMemo(() => {
     if (activeTab === 'flashcards') return flashcardsUnitsByBook.units;
-    if (activeTab === 'listening') return { '1A': getAllUnits('1A'), '1B': getAllUnits('1B') } as Record<Book, string[]>;
-    return { '1A': getAllReadingUnits('1A'), '1B': getAllReadingUnits('1B') } as Record<Book, string[]>;
+    if (activeTab === 'listening') {
+      const out: Record<string, string[]> = {};
+      for (const b of getAllBooks()) out[b] = getAllUnits(b);
+      return out;
+    }
+    const out: Record<string, string[]> = {};
+    for (const b of getAllReadingBooks()) out[b] = getAllReadingUnits(b);
+    return out;
   }, [activeTab, flashcardsUnitsByBook.units]);
 
   const getUnitHref = (tab: HubTab, book: Book, unit: string) => {
@@ -405,7 +438,6 @@ export default function ExercisesPage() {
                       </div>
                       <div className="mt-1 text-xs text-white/50">{t.selectUnit}</div>
                     </div>
-
                     <div className="rounded-xl border border-white/10 bg-black/20 p-4">
                       <div className="text-xs font-semibold text-white/60">{t.mastered}</div>
                       <div className="mt-1 text-2xl font-bold text-white">
@@ -414,87 +446,86 @@ export default function ExercisesPage() {
                       <div className="mt-1 text-xs text-white/50">{activeTab === 'flashcards' ? t.flashcards : t.comingSoon}</div>
                     </div>
                   </div>
+
+                  {/* Book accordions */}
+                  <div className="mt-6 space-y-4">
+                    {bookCards.map((book) => {
+                      const unitKeys = unitsByBookForTab[book.key] || [];
+                      const totalInBook = unitKeys.reduce((sum, unit) => sum + getUnitCount(activeTab, book.key, unit), 0);
+
+                      return (
+                        <details
+                          key={book.key}
+                          className="group rounded-2xl border border-white/10 bg-white/5 overflow-hidden"
+                        >
+                          <summary className="cursor-pointer list-none select-none p-5 flex items-center justify-between gap-3">
+                            <div className="flex items-center gap-3">
+                              <div className="h-10 w-10 rounded-xl bg-black/20 border border-white/10 flex items-center justify-center text-xl">
+                                {book.icon}
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <div className="text-lg font-bold text-white">{t.selectBook}: {book.label}</div>
+                                  {book.isNew && (
+                                    <span className="inline-flex items-center rounded-full bg-orange-500/15 border border-orange-500/30 px-2.5 py-1 text-xs font-semibold text-orange-200">
+                                      {t.newBadge}
+                                    </span>
+                                  )}
+                                </div>
+                                <div className="mt-1 text-sm text-white/60">
+                                  {t.statsUnits}: {unitKeys.length} • {t.available}: {totalInBook}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  openBookModal(book.key);
+                                }}
+                                className="hidden sm:inline-flex items-center rounded-xl border border-white/10 bg-black/20 hover:bg-white/5 px-3 py-2 text-sm font-semibold text-white transition"
+                              >
+                                {t.selectUnit}
+                              </button>
+
+                              <div className="h-9 w-9 rounded-xl border border-white/10 bg-black/20 flex items-center justify-center text-white/70 transition group-open:rotate-180">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                              </div>
+                            </div>
+                          </summary>
+
+                          <div className="px-5 pb-5">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                              {unitKeys.map((unit) => {
+                                const count = getUnitCount(activeTab, book.key, unit);
+                                return (
+                                  <Link
+                                    key={unit}
+                                    href={getUnitHref(activeTab, book.key, unit)}
+                                    className="rounded-xl border border-white/10 bg-black/20 hover:bg-white/5 transition p-4"
+                                  >
+                                    <div className="text-sm font-bold text-white">{unit}</div>
+                                    <div className="mt-1 text-xs text-white/60">{count} • {t.getStartedShort}</div>
+                                  </Link>
+                                );
+                              })}
+                            </div>
+
+                            {unitKeys.length === 0 && (
+                              <div className="text-sm text-white/60 py-6">{t.comingSoon}</div>
+                            )}
+                          </div>
+                        </details>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
-
-              {/* Book accordions */}
-              <div className="mt-6 space-y-4">
-                {books.map((book) => {
-                  const unitKeys = unitsByBookForTab[book.key] || [];
-                  const totalInBook = unitKeys.reduce((sum, unit) => sum + getUnitCount(activeTab, book.key, unit), 0);
-
-                  return (
-                    <details
-                      key={book.key}
-                      className="group rounded-2xl border border-white/10 bg-white/5 overflow-hidden"
-                    >
-                      <summary className="cursor-pointer list-none select-none p-5 flex items-center justify-between gap-3">
-                        <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 rounded-xl bg-black/20 border border-white/10 flex items-center justify-center text-xl">
-                            {book.icon}
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <div className="text-lg font-bold text-white">{t.selectBook}: {book.label}</div>
-                              {book.isNew && (
-                                <span className="inline-flex items-center rounded-full bg-orange-500/15 border border-orange-500/30 px-2.5 py-1 text-xs font-semibold text-orange-200">
-                                  {t.newBadge}
-                                </span>
-                              )}
-                            </div>
-                            <div className="mt-1 text-sm text-white/60">
-                              {t.statsUnits}: {unitKeys.length} • {t.available}: {totalInBook}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              openBookModal(book.key);
-                            }}
-                            className="hidden sm:inline-flex items-center rounded-xl border border-white/10 bg-black/20 hover:bg-white/5 px-3 py-2 text-sm font-semibold text-white transition"
-                          >
-                            {t.selectUnit}
-                          </button>
-
-                          <div className="h-9 w-9 rounded-xl border border-white/10 bg-black/20 flex items-center justify-center text-white/70 transition group-open:rotate-180">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                            </svg>
-                          </div>
-                        </div>
-                      </summary>
-
-                      <div className="px-5 pb-5">
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                          {unitKeys.map((unit) => {
-                            const count = getUnitCount(activeTab, book.key, unit);
-                            return (
-                              <Link
-                                key={unit}
-                                href={getUnitHref(activeTab, book.key, unit)}
-                                className="rounded-xl border border-white/10 bg-black/20 hover:bg-white/5 transition p-4"
-                              >
-                                <div className="text-sm font-bold text-white">{unit}</div>
-                                <div className="mt-1 text-xs text-white/60">{count} • {t.getStartedShort}</div>
-                              </Link>
-                            );
-                          })}
-                        </div>
-
-                        {unitKeys.length === 0 && (
-                          <div className="text-sm text-white/60 py-6">{t.comingSoon}</div>
-                        )}
-                      </div>
-                    </details>
-                  );
-                })}
-              </div>
-            </div>
 
             {/* Unit modal */}
             {modalBook && (

@@ -20,7 +20,7 @@ type Card = {
 type Units = Record<string, Card[]>;
 
 type FlashcardsDataEntry = {
-  book: '1A' | '1B';
+  book: string;
   unit: string;
   cards: Array<{
     korean: string;
@@ -50,8 +50,12 @@ type FlashcardsProgressV1 = {
 
 const FLASHCARDS_PROGRESS_KEY = 'koreancha_flashcards_progress_v1';
 
-const BOOKS = ['1A', '1B'] as const;
-type Book = (typeof BOOKS)[number];
+type Book = string;
+
+const getBookLabel = (t: Record<string, string>, book: string): string => {
+  const key = `book${book}`;
+  return (t as unknown as Record<string, string>)[key] || book;
+};
 
 const unitSortKey = (unit: string): number => {
   if (unit === 'Hangul') return 0;
@@ -59,27 +63,37 @@ const unitSortKey = (unit: string): number => {
   return Number.isFinite(n) ? n : Number.MAX_SAFE_INTEGER;
 };
 
-const unitKeysByBook: Record<Book, string[]> = (() => {
-  const keys: Record<Book, Set<string>> = { '1A': new Set(), '1B': new Set() };
-  const entries = flashcardsData as unknown as FlashcardsDataEntry[];
-  for (const entry of entries) {
+const flashcardsEntries = flashcardsData as unknown as FlashcardsDataEntry[];
+
+const BOOKS: string[] = Array.from(
+  new Set(
+    flashcardsEntries
+      .map((e) => e?.book)
+      .filter((b): b is string => typeof b === 'string' && b.length > 0)
+  )
+).sort((a, b) => a.localeCompare(b));
+
+const unitKeysByBook: Record<string, string[]> = (() => {
+  const keys: Record<string, Set<string>> = {};
+  for (const entry of flashcardsEntries) {
     if (!entry || !entry.book || !entry.unit) continue;
-    if (entry.book !== '1A' && entry.book !== '1B') continue;
+    if (!keys[entry.book]) keys[entry.book] = new Set();
     keys[entry.book].add(entry.unit);
   }
-  return {
-    '1A': Array.from(keys['1A']).sort((a, b) => unitSortKey(a) - unitSortKey(b)),
-    '1B': Array.from(keys['1B']).sort((a, b) => unitSortKey(a) - unitSortKey(b))
-  };
+  const out: Record<string, string[]> = {};
+  for (const [book, set] of Object.entries(keys)) {
+    out[book] = Array.from(set).sort((a, b) => unitSortKey(a) - unitSortKey(b));
+  }
+  return out;
 })();
-const units: Units = {};
 
-// Merge JSON-based flashcards data (e.g. 1B) into the existing units map.
+const unitsByBook: Record<string, Units> = {};
+
 (() => {
-  const entries = flashcardsData as unknown as FlashcardsDataEntry[];
-  for (const entry of entries) {
-    if (!entry || !entry.unit || !Array.isArray(entry.cards)) continue;
-    units[entry.unit] = entry.cards.map((c) => ({
+  for (const entry of flashcardsEntries) {
+    if (!entry || !entry.book || !entry.unit || !Array.isArray(entry.cards)) continue;
+    if (!unitsByBook[entry.book]) unitsByBook[entry.book] = {};
+    unitsByBook[entry.book][entry.unit] = entry.cards.map((c) => ({
       korean: c.korean,
       uzbek: c.uzbek,
       russian: c.russian,
@@ -673,8 +687,10 @@ function FlashcardsPageContent() {
   const { lang } = useLanguage();
   const { user, logActivity, isPremium, loading: userLoading, saveFlashcardProgress, loadFlashcardProgress, syncLocalProgress, logout } = useUser();
 
-  const initialBookFromQuery = (searchParams.get('book') as Book | null) ?? null;
-  const [selectedBook, setSelectedBook] = useState<Book>(BOOKS.includes(initialBookFromQuery as Book) ? (initialBookFromQuery as Book) : '1A');
+  const initialBookFromQuery = searchParams.get('book');
+  const [selectedBook, setSelectedBook] = useState<Book>(
+    initialBookFromQuery && BOOKS.includes(initialBookFromQuery) ? initialBookFromQuery : (BOOKS[0] || '1A')
+  );
 
   const unitKeysForBook = useMemo(() => {
     return unitKeysByBook[selectedBook] || [];
@@ -682,17 +698,17 @@ function FlashcardsPageContent() {
 
   const initialUnitFromQuery = searchParams.get('unit');
   const [selectedUnit, setSelectedUnit] = useState<string>(() => {
-    if (initialUnitFromQuery && units[initialUnitFromQuery] && unitKeysForBook.includes(initialUnitFromQuery)) {
+    if (initialUnitFromQuery && unitsByBook[selectedBook]?.[initialUnitFromQuery] && unitKeysForBook.includes(initialUnitFromQuery)) {
       return initialUnitFromQuery;
     }
-    return unitKeysByBook[selectedBook]?.[0] || (selectedBook === '1A' ? '1과' : '9과');
+    return unitKeysByBook[selectedBook]?.[0] || '1과';
   });
 
   const unitProgressKey = useMemo(() => `${selectedBook}:${selectedUnit}`, [selectedBook, selectedUnit]);
 
   useEffect(() => {
     if (!unitKeysForBook.includes(selectedUnit)) {
-      setSelectedUnit(unitKeysForBook[0] || (selectedBook === '1A' ? '1과' : '9과'));
+      setSelectedUnit(unitKeysForBook[0] || '1과');
     }
   }, [selectedBook, selectedUnit, unitKeysForBook]);
 
@@ -708,7 +724,7 @@ function FlashcardsPageContent() {
   }
 
   const cards = useMemo(() => {
-    const base = units[selectedUnit] || [];
+    const base = unitsByBook[selectedBook]?.[selectedUnit] || [];
     const queuesForUnit = unitTranslationQueues[selectedUnit];
     if (!queuesForUnit) return base;
 
@@ -729,7 +745,7 @@ function FlashcardsPageContent() {
         english: t.english
       };
     });
-  }, [selectedUnit]);
+  }, [selectedBook, selectedUnit]);
   const allIndices = useMemo(() => cards.map((_, i) => i), [cards]);
 
   const [deckOrder, setDeckOrder] = useState<number[]>([]);
@@ -1158,11 +1174,14 @@ function FlashcardsPageContent() {
             <div className="text-sm font-semibold text-white/70">{translations[lang].selectBook}</div>
             <select
               value={selectedBook}
-              onChange={(e) => setSelectedBook(e.target.value as Book)}
+              onChange={(e) => setSelectedBook(e.target.value)}
               className="px-4 py-2 rounded-lg border border-white/10 text-sm bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/60"
             >
-              <option value="1A" className="bg-[#0b0f1a]">{translations[lang].book1A}</option>
-              <option value="1B" className="bg-[#0b0f1a]">{translations[lang].book1B}</option>
+              {BOOKS.map((b) => (
+                <option key={b} value={b} className="bg-[#0b0f1a]">
+                  {getBookLabel(translations[lang] as unknown as Record<string, string>, b)}
+                </option>
+              ))}
             </select>
 
             <div className="text-sm font-semibold text-white/70">{translations[lang].selectUnit}</div>

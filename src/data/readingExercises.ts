@@ -3,7 +3,7 @@
 
 export interface ReadingExercise {
   id: string;
-  book?: '1A' | '1B';
+  book?: string;
   unit: string;
   type: 'short-passage' | 'comprehension' | 'true-false' | 'matching';
   difficulty: 'easy' | 'medium' | 'hard';
@@ -984,15 +984,26 @@ export const readingExercises: Record<string, ReadingExercise[]> = {
   ]
 };
 
-export const getReadingExercisesByUnit = (unit: string, book: '1A' | '1B' = '1A'): ReadingExercise[] => {
+export const getReadingExercisesByUnit = (unit: string, book: string = '1A'): ReadingExercise[] => {
   const list = readingExercises[unit] || [];
   return list.filter((ex) => (ex.book ?? '1A') === book);
 };
 
-export const getAllReadingUnits = (book?: '1A' | '1B'): string[] => {
+export const getAllReadingUnits = (book?: string): string[] => {
   if (!book) return Object.keys(readingExercises);
   return Object.keys(readingExercises).filter((unit) => {
     const list = readingExercises[unit] || [];
     return list.some((ex) => (ex.book ?? '1A') === book);
   });
+};
+
+export const getAllReadingBooks = (): string[] => {
+  const books = new Set<string>();
+  for (const unit of Object.keys(readingExercises)) {
+    const list = readingExercises[unit] || [];
+    for (const ex of list) {
+      books.add(ex.book ?? '1A');
+    }
+  }
+  return Array.from(books).sort();
 };

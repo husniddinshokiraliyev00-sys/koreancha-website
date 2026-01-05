@@ -1,12 +1,17 @@
 'use client';
 
-import { useEffect, useMemo, useState, Suspense } from 'react';
+import { useEffect, useMemo, useRef, useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
 import { useLanguage, type Lang, useUser } from '../providers';
 import { translations } from '../../lib/translations';
-import { getListeningExercisesByUnit, getAllUnits, type ListeningExercise } from '../../data/listeningExercises';
+import { getListeningExercisesByUnit, getAllUnits, getAllBooks, type ListeningExercise } from '../../data/listeningExercises';
+
+const getBookLabel = (t: Record<string, string>, book: string): string => {
+  const key = `book${book}`;
+  return (t as unknown as Record<string, string>)[key] || book;
+};
 
 type ListeningTranslations = {
   title: string;
@@ -128,9 +133,10 @@ function ListeningPageContent() {
   const t = listeningTranslations[lang];
   const common = translations[lang];
   
+  const books = useMemo(() => getAllBooks(), []);
   const initialBookFromQuery = searchParams.get('book');
-  const initialBook: '1A' | '1B' = initialBookFromQuery === '1B' ? '1B' : '1A';
-  const [selectedBook, setSelectedBook] = useState<'1A' | '1B'>(initialBook);
+  const initialBook = initialBookFromQuery && books.includes(initialBookFromQuery) ? initialBookFromQuery : (books[0] || '1A');
+  const [selectedBook, setSelectedBook] = useState<string>(initialBook);
 
   const units = useMemo(() => getAllUnits(selectedBook), [selectedBook]);
   const initialUnitFromQuery = searchParams.get('unit');
@@ -155,6 +161,9 @@ function ListeningPageContent() {
   const [completed, setCompleted] = useState(false);
   const [answers, setAnswers] = useState<(number | null)[]>(new Array(exercises.length).fill(null));
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   const currentExercise = exercises[currentExerciseIndex];
 
@@ -219,6 +228,41 @@ function ListeningPageContent() {
     }
   }, [selectedBook, selectedUnit, exercises.length]);
 
+  const stopAudio = () => {
+    if (typeof window === 'undefined') return;
+
+    try {
+      if (utteranceRef.current) {
+        utteranceRef.current.onend = null;
+        utteranceRef.current.onerror = null;
+      }
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    } catch {
+      // ignore
+    }
+
+    if (audioRef.current) {
+      try {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      } catch {
+        // ignore
+      }
+      audioRef.current = null;
+    }
+
+    setIsPlaying(false);
+  };
+
+  useEffect(() => {
+    return () => {
+      stopAudio();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (exercises.length === 0) return;
@@ -257,10 +301,10 @@ function ListeningPageContent() {
 
   const handleNext = () => {
     if (currentExerciseIndex < exercises.length - 1) {
+      stopAudio();
       setCurrentExerciseIndex(currentExerciseIndex + 1);
       setSelectedAnswer(answers[currentExerciseIndex + 1]);
       setShowResult(false);
-      setIsPlaying(false);
     } else {
       setCompleted(true);
     }
@@ -268,29 +312,78 @@ function ListeningPageContent() {
 
   const handlePrevious = () => {
     if (currentExerciseIndex > 0) {
+      stopAudio();
       setCurrentExerciseIndex(currentExerciseIndex - 1);
       setSelectedAnswer(answers[currentExerciseIndex - 1]);
       setShowResult(false);
-      setIsPlaying(false);
     }
   };
 
   const resetExercise = () => {
+    stopAudio();
     setCurrentExerciseIndex(0);
     setSelectedAnswer(null);
     setShowResult(false);
     setScore(0);
     setCompleted(false);
     setAnswers(new Array(exercises.length).fill(null));
-    setIsPlaying(false);
   };
 
   const playAudio = () => {
+    if (typeof window === 'undefined') return;
+    if (!currentExercise) return;
+
+    stopAudio();
     setIsPlaying(true);
-    // Simulate audio playing
-    setTimeout(() => {
-      setIsPlaying(false);
-    }, 3000);
+
+    const speak = () => {
+      if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === 'undefined') {
+        setIsPlaying(false);
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(currentExercise.korean);
+      utterance.lang = 'ko-KR';
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      utterance.onend = () => {
+        setIsPlaying(false);
+      };
+      utterance.onerror = () => {
+        setIsPlaying(false);
+      };
+
+      utteranceRef.current = utterance;
+      try {
+        window.speechSynthesis.cancel();
+      } catch {
+        // ignore
+      }
+      window.speechSynthesis.speak(utterance);
+    };
+
+    if (currentExercise.audioUrl) {
+      const audio = new Audio(currentExercise.audioUrl);
+      audioRef.current = audio;
+      audio.onended = () => {
+        audioRef.current = null;
+        setIsPlaying(false);
+      };
+      audio.onerror = () => {
+        audioRef.current = null;
+        speak();
+      };
+
+      audio
+        .play()
+        .catch(() => {
+          audioRef.current = null;
+          speak();
+        });
+      return;
+    }
+
+    speak();
   };
 
   const getExerciseTypeLabel = (type: string) => {
@@ -382,16 +475,15 @@ function ListeningPageContent() {
           <select
             value={selectedBook}
             onChange={(e) => {
-              setSelectedBook(e.target.value === '1B' ? '1B' : '1A');
+              setSelectedBook(e.target.value);
             }}
             className="px-4 py-2 rounded-lg border border-white/10 text-sm bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 mb-4"
           >
-            <option value="1A" className="bg-[#0b0f1a]">
-              {common.book1A}
-            </option>
-            <option value="1B" className="bg-[#0b0f1a]">
-              {common.book1B}
-            </option>
+            {books.map((b) => (
+              <option key={b} value={b} className="bg-[#0b0f1a]">
+                {getBookLabel(common as unknown as Record<string, string>, b)}
+              </option>
+            ))}
           </select>
           <label className="block text-sm font-medium text-white/70 mb-2">{t.selectUnit}</label>
           <select

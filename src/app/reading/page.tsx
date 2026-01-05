@@ -6,7 +6,12 @@ import { useSearchParams } from 'next/navigation';
 
 import { useLanguage, type Lang, useUser } from '../providers';
 import { translations } from '../../lib/translations';
-import { getReadingExercisesByUnit, getAllReadingUnits, type ReadingExercise } from '../../data/readingExercises';
+import { getReadingExercisesByUnit, getAllReadingUnits, getAllReadingBooks, type ReadingExercise } from '../../data/readingExercises';
+
+const getBookLabel = (t: Record<string, string>, book: string): string => {
+  const key = `book${book}`;
+  return (t as unknown as Record<string, string>)[key] || book;
+};
 
 type ReadingTranslations = {
   title: string;
@@ -140,9 +145,10 @@ function ReadingPageContent() {
   const t = readingTranslations[lang];
   const common = translations[lang];
   
+  const books = useMemo(() => getAllReadingBooks(), []);
   const initialBookFromQuery = searchParams.get('book');
-  const initialBook: '1A' | '1B' = initialBookFromQuery === '1B' ? '1B' : '1A';
-  const [selectedBook, setSelectedBook] = useState<'1A' | '1B'>(initialBook);
+  const initialBook = initialBookFromQuery && books.includes(initialBookFromQuery) ? initialBookFromQuery : (books[0] || '1A');
+  const [selectedBook, setSelectedBook] = useState<string>(initialBook);
 
   const units = useMemo(() => getAllReadingUnits(selectedBook), [selectedBook]);
   const initialUnitFromQuery = searchParams.get('unit');
@@ -382,16 +388,15 @@ function ReadingPageContent() {
           <select
             value={selectedBook}
             onChange={(e) => {
-              setSelectedBook(e.target.value === '1B' ? '1B' : '1A');
+              setSelectedBook(e.target.value);
             }}
             className="px-4 py-2 rounded-lg border border-white/10 text-sm bg-white/5 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/60 mb-4"
           >
-            <option value="1A" className="bg-[#0b0f1a]">
-              {common.book1A}
-            </option>
-            <option value="1B" className="bg-[#0b0f1a]">
-              {common.book1B}
-            </option>
+            {books.map((b) => (
+              <option key={b} value={b} className="bg-[#0b0f1a]">
+                {getBookLabel(common as unknown as Record<string, string>, b)}
+              </option>
+            ))}
           </select>
           <label className="block text-sm font-medium text-white/70 mb-2">{t.selectUnit}</label>
           <select

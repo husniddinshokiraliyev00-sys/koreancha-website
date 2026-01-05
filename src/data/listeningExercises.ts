@@ -3,7 +3,7 @@
 
 export interface ListeningExercise {
   id: string;
-  book?: '1A' | '1B';
+  book?: string;
   unit: string;
   type: 'word-recognition' | 'sentence-comprehension' | 'dialogue' | 'fill-blank';
   difficulty: 'easy' | 'medium' | 'hard';
@@ -1307,15 +1307,26 @@ export const listeningExercises: Record<string, ListeningExercise[]> = {
   ]
 };
 
-export const getListeningExercisesByUnit = (unit: string, book: '1A' | '1B' = '1A'): ListeningExercise[] => {
+export const getListeningExercisesByUnit = (unit: string, book: string = '1A'): ListeningExercise[] => {
   const list = listeningExercises[unit] || [];
   return list.filter((ex) => (ex.book ?? '1A') === book);
 };
 
-export const getAllUnits = (book?: '1A' | '1B'): string[] => {
+export const getAllUnits = (book?: string): string[] => {
   if (!book) return Object.keys(listeningExercises);
   return Object.keys(listeningExercises).filter((unit) => {
     const list = listeningExercises[unit] || [];
     return list.some((ex) => (ex.book ?? '1A') === book);
   });
+};
+
+export const getAllBooks = (): string[] => {
+  const books = new Set<string>();
+  for (const unit of Object.keys(listeningExercises)) {
+    const list = listeningExercises[unit] || [];
+    for (const ex of list) {
+      books.add(ex.book ?? '1A');
+    }
+  }
+  return Array.from(books).sort();
 };
