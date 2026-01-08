@@ -1,0 +1,27 @@
+▲ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 1 errors:
+./src/app/exercises/page.tsx:709:17
+Parsing ecmascript source code failed
+[0m [90m 707 |[39m           [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
+ [90m 708 |[39m         [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
+[31m[1m>[22m[39m[90m 709 |[39m       [33m<[39m[33m/[39m[33msection[39m[33m>[39m
+ [90m     |[39m                 [31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 710 |[39m
+ [90m     |[39m [31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 711 |[39m       {[90m/* Footer */[39m}
+ [90m     |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 712 |[39m       [33m<[39m[33mfooter[39m className[33m=[39m[32m"bg-black/20 border-t border-white/10 py-12 px-4 sm:px-6 lg:px-8"[39m[33m>[39m
+ [90m 713 |[39m         [33m<[39m[33mdiv[39m className[33m=[39m[32m"max-w-7xl mx-auto"[39m[33m>[39m
+ [90m 714 |[39m           [33m<[39m[33mdiv[39m className[33m=[39m[32m"grid md:grid-cols-4 gap-8"[39m[33m>[39m[0m
+
+Expected '</', got 'jsx text (
+
+      )'
+
+
+    at <unknown> (./src/app/exercises/page.tsx:709:17)

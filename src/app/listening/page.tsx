@@ -1,12 +1,15 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, Suspense } from 'react';
+import { useEffect, useMemo, useState, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
 import { useLanguage, type Lang, useUser } from '../providers';
 import { translations } from '../../lib/translations';
+import { listeningTranslations } from '../../lib/listeningTranslations';
+import { createAudioPlayer, resolveAudioSource, type AudioPlayer } from '../../lib/audio';
 import { getListeningExercisesByUnit, getAllUnits, getAllBooks, type ListeningExercise } from '../../data/listeningExercises';
+import { calculateExerciseXp } from '../../lib/xp';
 
 const getBookLabel = (t: Record<string, string>, book: string): string => {
   const key = `book${book}`;
@@ -162,8 +165,7 @@ function ListeningPageContent() {
   const [answers, setAnswers] = useState<(number | null)[]>(new Array(exercises.length).fill(null));
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const playerRef = useRef<AudioPlayer | null>(null);
 
   const currentExercise = exercises[currentExerciseIndex];
 
@@ -232,27 +234,10 @@ function ListeningPageContent() {
     if (typeof window === 'undefined') return;
 
     try {
-      if (utteranceRef.current) {
-        utteranceRef.current.onend = null;
-        utteranceRef.current.onerror = null;
-      }
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
-    } catch {
-      // ignore
-    }
+      playerRef.current?.stop();
+    } catch {}
 
-    if (audioRef.current) {
-      try {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      } catch {
-        // ignore
-      }
-      audioRef.current = null;
-    }
-
+    playerRef.current = null;
     setIsPlaying(false);
   };
 
@@ -289,10 +274,11 @@ function ListeningPageContent() {
     if (isCorrect) {
       setScore(score + 1);
       if (user) {
+        const xp = calculateExerciseXp(2, selectedBook, true);
         logActivity('listening_correct', { 
           unit: `${selectedBook}:${selectedUnit}`,
           exerciseId: currentExercise.id 
-        }, 2);
+        }, xp);
       }
     }
     
@@ -329,61 +315,26 @@ function ListeningPageContent() {
     setAnswers(new Array(exercises.length).fill(null));
   };
 
-  const playAudio = () => {
+  const playAudio = async () => {
     if (typeof window === 'undefined') return;
     if (!currentExercise) return;
 
     stopAudio();
     setIsPlaying(true);
 
-    const speak = () => {
-      if (!window.speechSynthesis || typeof SpeechSynthesisUtterance === 'undefined') {
-        setIsPlaying(false);
-        return;
-      }
+    try {
+      const source = await resolveAudioSource({
+        koreanText: currentExercise.korean,
+        explicitUrl: currentExercise.audioUrl
+      });
 
-      const utterance = new SpeechSynthesisUtterance(currentExercise.korean);
-      utterance.lang = 'ko-KR';
-      utterance.rate = 0.9;
-      utterance.pitch = 1;
-      utterance.onend = () => {
-        setIsPlaying(false);
-      };
-      utterance.onerror = () => {
-        setIsPlaying(false);
-      };
-
-      utteranceRef.current = utterance;
-      try {
-        window.speechSynthesis.cancel();
-      } catch {
-        // ignore
-      }
-      window.speechSynthesis.speak(utterance);
-    };
-
-    if (currentExercise.audioUrl) {
-      const audio = new Audio(currentExercise.audioUrl);
-      audioRef.current = audio;
-      audio.onended = () => {
-        audioRef.current = null;
-        setIsPlaying(false);
-      };
-      audio.onerror = () => {
-        audioRef.current = null;
-        speak();
-      };
-
-      audio
-        .play()
-        .catch(() => {
-          audioRef.current = null;
-          speak();
-        });
-      return;
+      const player = createAudioPlayer(source);
+      playerRef.current = player;
+      await player.play();
+    } finally {
+      playerRef.current = null;
+      setIsPlaying(false);
     }
-
-    speak();
   };
 
   const getExerciseTypeLabel = (type: string) => {

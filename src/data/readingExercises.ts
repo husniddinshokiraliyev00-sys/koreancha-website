@@ -1,6 +1,8 @@
 ﻿﻿// 서울대 한국어 1A (Seoul National University Korean 1A) Reading Exercises
 // Beginner level - 8 units + Hangul introduction
 
+ import flashcardsData from './flashcardsData.json';
+
 export interface ReadingExercise {
   id: string;
   book?: string;
@@ -984,16 +986,320 @@ export const readingExercises: Record<string, ReadingExercise[]> = {
   ]
 };
 
+ type FlashcardsDataEntry = {
+   book: string;
+   unit: string;
+   cards: Array<{
+     korean: string;
+     uzbek: string;
+     russian?: string;
+     english?: string;
+   }>;
+ };
+
+ const flashcardsEntries = flashcardsData as unknown as FlashcardsDataEntry[];
+
+ const getFlashcardsForBookUnit = (book: string, unit: string) => {
+   const entry = flashcardsEntries.find((e) => e?.book === book && e?.unit === unit);
+   return Array.isArray(entry?.cards) ? entry.cards : [];
+ };
+
+ const pickUnique = <T,>(items: T[], count: number, exclude: Set<T> = new Set<T>()): T[] => {
+   const out: T[] = [];
+   for (const it of items) {
+     if (exclude.has(it)) continue;
+     if (out.includes(it)) continue;
+     out.push(it);
+     if (out.length >= count) break;
+   }
+   return out;
+ };
+
+ const normalizeMeaning = (c: { korean: string; uzbek?: string; english?: string; russian?: string }) => {
+   const uz = (c.uzbek || '').trim() || c.english?.trim() || c.russian?.trim() || c.korean;
+   const en = (c.english || '').trim() || uz;
+   const ru = (c.russian || '').trim() || uz;
+   return { uz, en, ru };
+ };
+
+ const generateReadingExercisesFromFlashcards = (book: string, unit: string): ReadingExercise[] => {
+   const cards = getFlashcardsForBookUnit(book, unit)
+     .map((c) => ({ ...c, korean: String(c.korean ?? '').trim() }))
+     .filter((c) => c.korean.length > 0);
+   if (cards.length === 0) return [];
+
+   const bankKo = cards.map((c) => c.korean);
+   const bankUz = cards.map((c) => normalizeMeaning(c).uz);
+   const bankEn = cards.map((c) => normalizeMeaning(c).en);
+   const bankRu = cards.map((c) => normalizeMeaning(c).ru);
+
+   const w = (idx: number) => cards[idx % cards.length];
+
+   const mkMcq = (opts: {
+     id: string;
+     questionUz: string;
+     questionEn: string;
+     questionRu: string;
+     correctUz: string;
+     correctEn: string;
+     correctRu: string;
+     explanationUz: string;
+     explanationEn: string;
+     explanationRu: string;
+   }) => {
+     const distractUz = pickUnique(bankUz, 3, new Set([opts.correctUz]));
+     const distractEn = pickUnique(bankEn, 3, new Set([opts.correctEn]));
+     const distractRu = pickUnique(bankRu, 3, new Set([opts.correctRu]));
+
+     return {
+       id: opts.id,
+       question: opts.questionUz,
+       questionEn: opts.questionEn,
+       questionRu: opts.questionRu,
+       options: [opts.correctUz, ...distractUz].slice(0, 4),
+       optionsEn: [opts.correctEn, ...distractEn].slice(0, 4),
+       optionsRu: [opts.correctRu, ...distractRu].slice(0, 4),
+       correctAnswer: 0,
+       explanation: opts.explanationUz,
+       explanationEn: opts.explanationEn,
+       explanationRu: opts.explanationRu
+     };
+   };
+
+   const ex: ReadingExercise[] = [];
+
+   const shortPassageCount = Math.min(10, Math.max(8, Math.floor(cards.length / 2)));
+   for (let i = 0; i < shortPassageCount; i++) {
+     const a = w(i * 2);
+     const b = w((i * 2 + 1) % cards.length);
+     const am = normalizeMeaning(a);
+     const bm = normalizeMeaning(b);
+
+     const passageKo = `${a.korean} ${b.korean}.`;
+     const passageUz = `${am.uz} ${bm.uz}.`;
+     const passageEn = `${am.en} ${bm.en}.`;
+     const passageRu = `${am.ru} ${bm.ru}.`;
+
+     const distractorsUz = pickUnique(bankUz, 3, new Set([am.uz, bm.uz]));
+     const distractorsEn = pickUnique(bankEn, 3, new Set([am.en, bm.en]));
+     const distractorsRu = pickUnique(bankRu, 3, new Set([am.ru, bm.ru]));
+
+     ex.push({
+       id: `gen-${book}-${unit}-sp-${i + 1}`,
+       book,
+       unit,
+       type: 'short-passage',
+       difficulty: i < 4 ? 'easy' : i < 7 ? 'medium' : 'hard',
+       korean: passageKo,
+       uzbek: passageUz,
+       english: passageEn,
+       russian: passageRu,
+       questions: [
+         {
+           id: `gen-${book}-${unit}-sp-${i + 1}-q1`,
+           question: 'Matnda nima bor?',
+           questionEn: 'What is in the text?',
+           questionRu: 'Что есть в тексте?',
+           options: [am.uz, bm.uz, ...distractorsUz].slice(0, 4),
+           optionsEn: [am.en, bm.en, ...distractorsEn].slice(0, 4),
+           optionsRu: [am.ru, bm.ru, ...distractorsRu].slice(0, 4),
+           correctAnswer: 0,
+           explanation: 'Matnda bor deb aytilgan.',
+           explanationEn: 'The passage says it is there.',
+           explanationRu: 'В тексте сказано, что это есть.'
+         },
+         {
+           id: `gen-${book}-${unit}-sp-${i + 1}-q2`,
+           question: 'Matnda nima yo\'q?',
+           questionEn: 'What is not in the text?',
+           questionRu: 'Чего нет в тексте?',
+           options: [bm.uz, am.uz, ...distractorsUz].slice(0, 4),
+           optionsEn: [bm.en, am.en, ...distractorsEn].slice(0, 4),
+           optionsRu: [bm.ru, am.ru, ...distractorsRu].slice(0, 4),
+           correctAnswer: 1,
+           explanation: 'Matnda yo\'q deb aytilgan.',
+           explanationEn: 'The passage says it is not there.',
+           explanationRu: 'В тексте сказано, что этого нет.'
+         }
+       ],
+       grammarPoint: '~이/가 있어요',
+       vocabulary: [a.korean, b.korean]
+     });
+   }
+
+   const comprehensionCount = Math.min(8, Math.max(6, cards.length));
+   for (let i = 0; i < comprehensionCount; i++) {
+     const a = w(i);
+     const am = normalizeMeaning(a);
+
+     const distractUz = pickUnique(bankUz, 3, new Set([am.uz]));
+     const distractEn = pickUnique(bankEn, 3, new Set([am.en]));
+     const distractRu = pickUnique(bankRu, 3, new Set([am.ru]));
+
+     ex.push({
+       id: `gen-${book}-${unit}-cp-${i + 1}`,
+       book,
+       unit,
+       type: 'comprehension',
+       difficulty: i < 3 ? 'medium' : 'hard',
+       korean: `저는 ${a.korean}을/를 좋아해요. 친구는 ${a.korean}을/를 싫어해요.`,
+       uzbek: `Men ${am.uz}ni yoqtiraman. Do'stim ${am.uz}ni yoqtirmaydi.`,
+       english: `I like ${am.en}. My friend dislikes ${am.en}.`,
+       russian: `Мне нравится ${am.ru}. Мой друг не любит ${am.ru}.`,
+       questions: [
+         {
+           id: `gen-${book}-${unit}-cp-${i + 1}-q1`,
+           question: 'Kim nima yoqtiradi?',
+           questionEn: 'Who likes what?',
+           questionRu: 'Кто что любит?',
+           options: [
+             'Men yoqtiraman, do\'stim yoqtirmaydi.',
+             'Do\'stim yoqtiradi, men yoqtirmayman.',
+             'Ikkalasi ham yoqtiradi.',
+             'Ikkalasi ham yoqtirmaydi.'
+           ],
+           optionsEn: [
+             'I like it, friend dislikes.',
+             'Friend likes, I dislike.',
+             'Both like it.',
+             'Both dislike it.'
+           ],
+           optionsRu: [
+             'Я люблю, друг не любит.',
+             'Друг любит, я не люблю.',
+             'Оба любят.',
+             'Оба не любят.'
+           ],
+           correctAnswer: 0,
+           explanation: 'Matnda "men yoqtiraman" deyilgan.',
+           explanationEn: 'The text says "I like".',
+           explanationRu: 'В тексте сказано "я люблю".'
+         }
+       ],
+       grammarPoint: '~이/가 좋아해요/싫어해요',
+       vocabulary: [a.korean]
+     });
+   }
+
+   const trueFalseCount = Math.min(6, Math.max(4, cards.length));
+   for (let i = 0; i < trueFalseCount; i++) {
+     const a = w(i);
+     const b = w((i + 1) % cards.length);
+     const am = normalizeMeaning(a);
+     const bm = normalizeMeaning(b);
+
+     ex.push({
+       id: `gen-${book}-${unit}-tf-${i + 1}`,
+       book,
+       unit,
+       type: 'true-false',
+       difficulty: 'hard',
+       korean: `${a.korean}과/와 ${b.korean}은/는 같아요.`,
+       uzbek: `${am.uz} va ${bm.uz} bir xil.`,
+       english: `${am.en} and ${bm.en} are the same.`,
+       russian: `${am.ru} и ${bm.ru} - это одно и то же.`,
+       questions: [
+         {
+           id: `gen-${book}-${unit}-tf-${i + 1}-q1`,
+           question: 'Bu gap to\'g\'rimi?',
+           questionEn: 'Is this statement true?',
+           questionRu: 'Это утверждение верно?',
+           correctAnswer: false,
+           explanation: 'Bu ikki xil narsa.',
+           explanationEn: 'These are two different things.',
+           explanationRu: 'Это две разные вещи.'
+         }
+       ],
+       grammarPoint: '~과/와 같아요/달라요',
+       vocabulary: [a.korean, b.korean]
+     });
+   }
+
+   const matchingCount = Math.min(6, Math.max(4, cards.length));
+   for (let i = 0; i < matchingCount; i++) {
+     const a = w(i);
+     const am = normalizeMeaning(a);
+
+     const distractKo = pickUnique(bankKo, 3, new Set([a.korean]));
+     const distractUz = pickUnique(bankUz, 3, new Set([am.uz]));
+     const distractEn = pickUnique(bankEn, 3, new Set([am.en]));
+     const distractRu = pickUnique(bankRu, 3, new Set([am.ru]));
+
+     ex.push({
+       id: `gen-${book}-${unit}-mt-${i + 1}`,
+       book,
+       unit,
+       type: 'matching',
+       difficulty: 'hard',
+       korean: `다음 단어의 뜻을 고르세요: ${a.korean}`,
+       uzbek: `Quyidagi so'zning ma'nosini tanlang: ${a.korean}`,
+       english: `Choose the meaning of: ${a.korean}`,
+       russian: `Выберите значение слова: ${a.korean}`,
+       questions: [
+         {
+           id: `gen-${book}-${unit}-mt-${i + 1}-q1`,
+           question: 'To'g'ri tarjima qaysi?',
+           questionEn: 'Which translation is correct?',
+           questionRu: 'Какой перевод верный?',
+           options: [am.uz, ...distractUz].slice(0, 4),
+           optionsEn: [am.en, ...distractEn].slice(0, 4),
+           optionsRu: [am.ru, ...distractRu].slice(0, 4),
+           correctAnswer: 0,
+           explanation: 'Bu so'zning tarjimasi shu.',
+           explanationEn: 'This is the word's translation.',
+           explanationRu: 'Это перевод слова.'
+         },
+         {
+           id: `gen-${book}-${unit}-mt-${i + 1}-q2`,
+           question: 'Matnda qaysi koreyscha so'z bor?',
+           questionEn: 'Which Korean word is in the text?',
+           questionRu: 'Какое корейское слово есть в тексте?',
+           options: [a.korean, ...distractKo].slice(0, 4),
+           optionsEn: [a.korean, ...distractKo].slice(0, 4),
+           optionsRu: [a.korean, ...distractKo].slice(0, 4),
+           correctAnswer: 0,
+           explanation: 'Matnda shu so'z ko'rsatilgan.',
+           explanationEn: 'That word is shown in the text.',
+           explanationRu: 'Это слово указано в тексте.'
+         }
+       ],
+       grammarPoint: 'Vocabulary check',
+       vocabulary: [a.korean]
+     });
+   }
+
+   return ex;
+ };
+
 export const getReadingExercisesByUnit = (unit: string, book: string = '1A'): ReadingExercise[] => {
-  const list = readingExercises[unit] || [];
-  return list.filter((ex) => (ex.book ?? '1A') === book);
+  const list = (readingExercises[unit] || []).filter((ex) => (ex.book ?? '1A') === book);
+  if (list.length > 0) return list;
+  return generateReadingExercisesFromFlashcards(book, unit);
 };
 
 export const getAllReadingUnits = (book?: string): string[] => {
-  if (!book) return Object.keys(readingExercises);
-  return Object.keys(readingExercises).filter((unit) => {
-    const list = readingExercises[unit] || [];
-    return list.some((ex) => (ex.book ?? '1A') === book);
+  const units = new Set<string>();
+
+  for (const u of Object.keys(readingExercises)) {
+    if (!book) {
+      units.add(u);
+      continue;
+    }
+    const list = readingExercises[u] || [];
+    if (list.some((ex) => (ex.book ?? '1A') === book)) units.add(u);
+  }
+
+  for (const entry of flashcardsEntries) {
+    if (!entry || !entry.book || !entry.unit) continue;
+    if (!book || entry.book === book) units.add(entry.unit);
+  }
+
+  return Array.from(units).sort((a, b) => {
+    const na = a === 'Hangul' ? 0 : Number(a.replace(/\D/g, ''));
+    const nb = b === 'Hangul' ? 0 : Number(b.replace(/\D/g, ''));
+    const ka = Number.isFinite(na) ? na : Number.MAX_SAFE_INTEGER;
+    const kb = Number.isFinite(nb) ? nb : Number.MAX_SAFE_INTEGER;
+    return ka - kb;
   });
 };
 
@@ -1005,5 +1311,10 @@ export const getAllReadingBooks = (): string[] => {
       books.add(ex.book ?? '1A');
     }
   }
+
+  for (const entry of flashcardsEntries) {
+    if (entry?.book) books.add(entry.book);
+  }
+
   return Array.from(books).sort();
 };

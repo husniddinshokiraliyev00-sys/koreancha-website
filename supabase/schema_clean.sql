@@ -24,7 +24,7 @@ create table public.profiles (
 create table public.activity_log (
   id uuid default gen_random_uuid() primary key,
   user_id uuid references public.profiles not null,
-  activity_type text not null check (activity_type in ('flashcard_review', 'quiz_complete', 'daily_login', 'streak_save')),
+  activity_type text not null check (activity_type in ('flashcard_review', 'quiz_complete', 'daily_login', 'streak_save', 'listening_exercise', 'listening_correct', 'reading_exercise', 'reading_correct')),
   metadata jsonb default '{}',
   xp_earned integer default 0,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
@@ -98,6 +98,7 @@ alter table public.flashcard_progress enable row level security;
 create policy "Users can view own profile" on public.profiles for select using (auth.uid() = id);
 create policy "Users can update own profile" on public.profiles for update using (auth.uid() = id);
 create policy "Users can insert own profile" on public.profiles for insert with check (auth.uid() = id);
+create policy "Public leaderboard access" on public.profiles for select using (true);
 
 create policy "Users can view own activity" on public.activity_log for select using (auth.uid() = user_id);
 create policy "Users can insert own activity" on public.activity_log for insert with check (auth.uid() = user_id);
@@ -224,10 +225,26 @@ create trigger update_stats_on_activity
 
 -- Initial badges
 insert into public.badges (slug, name, description, icon, xp_reward, condition_type, condition_value) values
-('first_streak', 'First Streak', 'Complete your first 3-day streak', '🔥', 10, 'streak', 3),
-('week_streak', 'Week Warrior', 'Maintain a 7-day streak', '💪', 25, 'streak', 7),
-('month_streak', 'Monthly Master', 'Keep a 30-day streak', '👑', 100, 'streak', 30),
-('first_xp', 'XP Beginner', 'Earn your first 50 XP', '⭐', 5, 'xp', 50),
-('xp_master', 'XP Expert', 'Accumulate 500 XP', '🏆', 50, 'xp', 500),
-('vocab_starter', 'Vocabulary Starter', 'Review 100 flashcards', '📚', 15, 'flashcards_total', 100),
-('vocab_expert', 'Vocabulary Expert', 'Review 500 flashcards', '🎓', 75, 'flashcards_total', 500);
+('streak_bronze', 'Bronze Streak', 'Complete a 3-day streak', '🥉', 10, 'streak', 3),
+('streak_silver', 'Silver Streak', 'Maintain a 7-day streak', '🥈', 25, 'streak', 7),
+('streak_gold', 'Gold Streak', 'Keep a 14-day streak', '🥇', 50, 'streak', 14),
+('streak_platinum', 'Platinum Streak', 'Achieve a 30-day streak', '💎', 150, 'streak', 30),
+('streak_legend', 'Legendary Streak', 'Reach a 100-day streak', '👑', 500, 'streak', 100),
+('xp_bronze', 'XP Bronze', 'Earn your first 50 XP', '🥉', 5, 'xp', 50),
+('xp_silver', 'XP Silver', 'Accumulate 200 XP', '🥈', 20, 'xp', 200),
+('xp_gold', 'XP Gold', 'Reach 500 XP', '🥇', 50, 'xp', 500),
+('xp_platinum', 'XP Platinum', 'Achieve 1000 XP', '💎', 100, 'xp', 1000),
+('xp_legend', 'XP Legend', 'Master 5000 XP', '👑', 500, 'xp', 5000),
+('vocab_bronze', 'Vocabulary Bronze', 'Review 50 flashcards', '🥉', 10, 'flashcards_total', 50),
+('vocab_silver', 'Vocabulary Silver', 'Review 200 flashcards', '🥈', 30, 'flashcards_total', 200),
+('vocab_gold', 'Vocabulary Gold', 'Review 500 flashcards', '🥇', 75, 'flashcards_total', 500),
+('vocab_platinum', 'Vocabulary Platinum', 'Review 1000 flashcards', '💎', 150, 'flashcards_total', 1000),
+('vocab_legend', 'Vocabulary Legend', 'Review 3000 flashcards', '👑', 500, 'flashcards_total', 3000),
+('unit_1a_master', 'Book 1A Master', 'Master all cards in Book 1A', '📘', 50, 'unit_mastered', 1),
+('unit_1b_master', 'Book 1B Master', 'Master all cards in Book 1B', '📘', 50, 'unit_mastered', 2),
+('unit_2a_master', 'Book 2A Master', 'Master all cards in Book 2A', '📗', 75, 'unit_mastered', 3),
+('unit_2b_master', 'Book 2B Master', 'Master all cards in Book 2B', '📗', 75, 'unit_mastered', 4),
+('unit_3a_master', 'Book 3A Master', 'Master all cards in Book 3A', '📙', 100, 'unit_mastered', 5),
+('unit_3b_master', 'Book 3B Master', 'Master all cards in Book 3B', '📙', 100, 'unit_mastered', 6),
+('unit_4a_master', 'Book 4A Master', 'Master all cards in Book 4A', '📕', 150, 'unit_mastered', 7),
+('unit_4b_master', 'Book 4B Master', 'Master all cards in Book 4B', '📕', 150, 'unit_mastered', 8);

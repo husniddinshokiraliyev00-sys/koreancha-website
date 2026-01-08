@@ -7,6 +7,7 @@ import { useSearchParams } from 'next/navigation';
 import { useLanguage, type Lang, useUser } from '../providers';
 import { translations } from '../../lib/translations';
 import { getReadingExercisesByUnit, getAllReadingUnits, getAllReadingBooks, type ReadingExercise } from '../../data/readingExercises';
+import { calculateExerciseXp } from '../../lib/xp';
 
 const getBookLabel = (t: Record<string, string>, book: string): string => {
   const key = `book${book}`;
@@ -258,11 +259,12 @@ function ReadingPageContent() {
       if (userAnswer === question.correctAnswer) {
         correctCount++;
         if (user) {
+          const xp = calculateExerciseXp(2, selectedBook, true);
           logActivity('reading_correct', { 
             unit: `${selectedBook}:${selectedUnit}`,
             exerciseId: currentExercise.id,
             questionId: question.id 
-          }, 2);
+          }, xp);
         }
       }
     });

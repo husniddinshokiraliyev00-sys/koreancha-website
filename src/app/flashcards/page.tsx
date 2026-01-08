@@ -1036,7 +1036,7 @@ function FlashcardsPageContent() {
       // Save to backend if authenticated
       if (user) {
         saveFlashcardProgress(unitProgressKey, currentIndex, true, false);
-        logActivity('flashcard_review', { unit: unitProgressKey, cardIndex: currentIndex, action: 'mastered' }, 2);
+        logActivity('flashcard_review', { unit: unitProgressKey, cardIndex: currentIndex, action: 'mastered' }, 10);
       }
     }
     setMasteryAnimation('success');

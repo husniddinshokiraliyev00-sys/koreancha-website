@@ -101,6 +101,62 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   const [stats, setStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const calculateLevel = (xp: number) => {
+    const safe = Number.isFinite(xp) ? xp : 0;
+    return Math.floor(1 + safe / 100);
+  };
+
+  const awardBadgesIfEligible = async (nextProfile: UserProfile | null, nextStats: UserStats | null) => {
+    if (!user) return;
+    if (!nextProfile) return;
+
+    const { data: badgesData, error: badgesError } = await supabase
+      .from('badges')
+      .select('id, slug, name, description, icon, xp_reward, condition_type, condition_value');
+
+    if (badgesError || !badgesData) return;
+
+    const { data: userBadgesData, error: userBadgesError } = await supabase
+      .from('user_badges')
+      .select('badge_id')
+      .eq('user_id', user.id);
+
+    if (userBadgesError) return;
+
+    const owned = new Set((userBadgesData || []).map((b) => b.badge_id));
+
+    const reviewed = Number(nextStats?.flashcards_reviewed || 0);
+    const xp = Number(nextProfile.xp || 0);
+    const streak = Number(nextProfile.streak_current || 0);
+
+    const toAward = badgesData.filter((b) => {
+      if (owned.has(b.id)) return false;
+      const v = Number(b.condition_value || 0);
+      if (b.condition_type === 'xp') return xp >= v;
+      if (b.condition_type === 'streak') return streak >= v;
+      if (b.condition_type === 'flashcards_total') return reviewed >= v;
+      return false;
+    });
+
+    if (toAward.length === 0) return;
+
+    await supabase.from('user_badges').insert(
+      toAward.map((b) => ({
+        user_id: user.id,
+        badge_id: b.id
+      }))
+    );
+
+    const reward = toAward.reduce((sum, b) => sum + Number(b.xp_reward || 0), 0);
+    if (reward > 0) {
+      const nextXp = xp + reward;
+      await supabase
+        .from('profiles')
+        .update({ xp: nextXp, level: calculateLevel(nextXp) })
+        .eq('id', user.id);
+    }
+  };
+
   const refreshProfile = async () => {
     if (!user) return;
     
@@ -119,6 +175,12 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
       .single();
     
     if (statsData) setStats(statsData);
+
+    try {
+      await awardBadgesIfEligible(profileData, statsData);
+    } catch {
+      return;
+    }
   };
 
   const logActivity = async (
@@ -128,16 +190,62 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
   ) => {
     if (!user) return;
 
-    const { error } = await supabase.from('activity_log').insert({
+    let insertedType: Database['public']['Tables']['activity_log']['Row']['activity_type'] | null = null;
+
+    const first = await supabase.from('activity_log').insert({
       user_id: user.id,
       activity_type: type,
       metadata,
       xp_earned: xp,
     });
 
-    if (!error) {
-      await refreshProfile();
+    if (!first.error) {
+      insertedType = type;
+    } else {
+      const isListeningOrReading =
+        type === 'listening_exercise' ||
+        type === 'listening_correct' ||
+        type === 'reading_exercise' ||
+        type === 'reading_correct';
+
+      if (isListeningOrReading) {
+        const fallbackMetadata = { ...metadata, subtype: type };
+        const fallback = await supabase.from('activity_log').insert({
+          user_id: user.id,
+          activity_type: 'quiz_complete',
+          metadata: fallbackMetadata,
+          xp_earned: xp,
+        });
+
+        if (!fallback.error) {
+          insertedType = 'quiz_complete';
+        } else {
+          return;
+        }
+      } else {
+        return;
+      }
     }
+
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const field =
+        insertedType === 'flashcard_review'
+          ? 'flashcards_reviewed'
+          : insertedType === 'quiz_complete'
+            ? 'quizzes_taken'
+            : null;
+
+      if (field) {
+        await supabase.rpc('increment_daily_usage', {
+          p_user_id: user.id,
+          p_date: today,
+          p_field: field,
+        });
+      }
+    } catch {}
+
+    await refreshProfile();
   };
 
   const isPremium = useMemo(() => {

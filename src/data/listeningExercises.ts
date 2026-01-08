@@ -1,6 +1,8 @@
 ﻿﻿// 서울대 한국어 1A (Seoul National University Korean 1A) Listening Exercises
 // Beginner level - 8 units + Hangul introduction
 
+ import flashcardsData from './flashcardsData.json';
+
 export interface ListeningExercise {
   id: string;
   book?: string;
@@ -1307,16 +1309,256 @@ export const listeningExercises: Record<string, ListeningExercise[]> = {
   ]
 };
 
+ type FlashcardsDataEntry = {
+   book: string;
+   unit: string;
+   cards: Array<{
+     korean: string;
+     uzbek: string;
+     russian?: string;
+     english?: string;
+   }>;
+ };
+
+ const flashcardsEntries = flashcardsData as unknown as FlashcardsDataEntry[];
+
+ const getFlashcardsForBookUnit = (book: string, unit: string) => {
+   const entry = flashcardsEntries.find((e) => e?.book === book && e?.unit === unit);
+   return Array.isArray(entry?.cards) ? entry.cards : [];
+ };
+
+ const pickUnique = <T,>(items: T[], count: number, exclude: Set<T> = new Set<T>()): T[] => {
+   const out: T[] = [];
+   for (const it of items) {
+     if (exclude.has(it)) continue;
+     if (out.includes(it)) continue;
+     out.push(it);
+     if (out.length >= count) break;
+   }
+   return out;
+ };
+
+ const normalizeMeaning = (c: { korean: string; uzbek?: string; english?: string; russian?: string }) => {
+   const uz = (c.uzbek || '').trim() || c.english?.trim() || c.russian?.trim() || c.korean;
+   const en = (c.english || '').trim() || uz;
+   const ru = (c.russian || '').trim() || uz;
+   return { uz, en, ru };
+ };
+
+ const generateListeningExercisesFromFlashcards = (book: string, unit: string): ListeningExercise[] => {
+   const cards = getFlashcardsForBookUnit(book, unit)
+     .map((c) => ({ ...c, korean: String(c.korean ?? '').trim() }))
+     .filter((c) => c.korean.length > 0);
+
+   if (cards.length === 0) return [];
+
+   const bankUz = cards.map((c) => normalizeMeaning(c).uz);
+   const bankEn = cards.map((c) => normalizeMeaning(c).en);
+   const bankRu = cards.map((c) => normalizeMeaning(c).ru);
+   const bankKo = cards.map((c) => c.korean);
+
+   const exercises: ListeningExercise[] = [];
+
+   // Generate 12-15 word recognition exercises
+   const wordCount = Math.min(15, Math.max(12, cards.length));
+   for (let i = 0; i < wordCount; i++) {
+     const c = cards[i % cards.length];
+     const m = normalizeMeaning(c);
+
+     const distractorsUz = pickUnique(bankUz, 3, new Set([m.uz]));
+     const distractorsEn = pickUnique(bankEn, 3, new Set([m.en]));
+     const distractorsRu = pickUnique(bankRu, 3, new Set([m.ru]));
+
+     const options = [m.uz, ...distractorsUz].slice(0, 4);
+     const optionsEn = [m.en, ...distractorsEn].slice(0, 4);
+     const optionsRu = [m.ru, ...distractorsRu].slice(0, 4);
+
+     exercises.push({
+       id: `gen-${book}-${unit}-wr-${i + 1}`,
+       book,
+       unit,
+       type: 'word-recognition',
+       difficulty: i < 8 ? 'easy' : i < 12 ? 'medium' : 'hard',
+       korean: c.korean,
+       uzbek: m.uz,
+       english: m.en,
+       russian: m.ru,
+       options,
+       optionsEn,
+       optionsRu,
+       correctAnswer: 0,
+       grammarPoint: 'Vocabulary recognition'
+     });
+   }
+
+   // Generate 8-10 sentence comprehension exercises
+   const sentenceCount = Math.min(10, Math.max(8, cards.length));
+   for (let i = 0; i < sentenceCount; i++) {
+     const c = cards[(i + wordCount) % cards.length];
+     const m = normalizeMeaning(c);
+
+     const distractorsUz = pickUnique(bankUz, 3, new Set([m.uz]));
+     const distractorsEn = pickUnique(bankEn, 3, new Set([m.en]));
+     const distractorsRu = pickUnique(bankRu, 3, new Set([m.ru]));
+
+     exercises.push({
+       id: `gen-${book}-${unit}-sc-${i + 1}`,
+       book,
+       unit,
+       type: 'sentence-comprehension',
+       difficulty: i < 4 ? 'medium' : 'hard',
+       korean: `${c.korean}`,
+       uzbek: m.uz,
+       english: m.en,
+       russian: m.ru,
+       options: [m.uz, ...distractorsUz].slice(0, 4),
+       optionsEn: [m.en, ...distractorsEn].slice(0, 4),
+       optionsRu: [m.ru, ...distractorsRu].slice(0, 4),
+       correctAnswer: 0,
+       grammarPoint: 'Meaning selection'
+     });
+   }
+
+   // Generate 6-8 fill-in-the-blank exercises
+   const blankCount = Math.min(8, Math.max(6, bankKo.length));
+   for (let i = 0; i < blankCount; i++) {
+     const answerKo = bankKo[(i * 2) % bankKo.length];
+     const m = normalizeMeaning(cards.find((x) => x.korean === answerKo) ?? { korean: answerKo, uzbek: '' });
+     const distractorsKo = pickUnique(bankKo, 3, new Set([answerKo]));
+
+     const templates = [
+       { ko: `저는 ______을/를 공부해요.`, uz: `Men ______ni o'rganaman.`, en: `I study ______.`, ru: `Я изучаю ______.` },
+       { ko: `저는 ______을/를 좋아해요.`, uz: `Men ______ni yoqtiraman.`, en: `I like ______.`, ru: `Мне нравится ______.` },
+       { ko: `저는 ______을/를 먹어요.`, uz: `Men ______ni yeyman.`, en: `I eat ______.`, ru: `Я ем ______.` },
+       { ko: `저는 ______을/를 봐요.`, uz: `Men ______ni ko'raman.`, en: `I watch ______.`, ru: `Я смотрю ______.` }
+     ];
+     
+     const template = templates[i % templates.length];
+     
+     exercises.push({
+       id: `gen-${book}-${unit}-fb-${i + 1}`,
+       book,
+       unit,
+       type: 'fill-blank',
+       difficulty: i < 3 ? 'medium' : 'hard',
+       korean: template.ko,
+       uzbek: template.uz,
+       english: template.en,
+       russian: template.ru,
+       options: [answerKo, ...distractorsKo].slice(0, 4),
+       correctAnswer: 0,
+       grammarPoint: 'Fill in the blank'
+     });
+   }
+
+   // Generate 2-3 dialogue exercises
+   const dialogueCount = Math.min(3, cards.length);
+   for (let i = 0; i < dialogueCount; i++) {
+     const d1 = cards[i % cards.length];
+     const d2 = cards[(i + 1) % cards.length];
+     const d1m = normalizeMeaning(d1);
+     const d2m = normalizeMeaning(d2);
+     
+     const dialogues = [
+       {
+         ko: `A: 이거 뭐예요? B: ${d1.korean}예요.\nA: 그럼 이건요? B: ${d2.korean}예요.`,
+         uz: `A: Bu nima? B: ${d1m.uz}.\nA: Unda bu-chi? B: ${d2m.uz}.`,
+         en: `A: What is this? B: It's ${d1m.en}.\nA: Then what about this? B: It's ${d2m.en}.`,
+         ru: `A: Что это? B: Это ${d1m.ru}.\nA: А это? B: Это ${d2m.ru}.`,
+         context: 'Ular narsalarni so\'rayapti va nomini aytyapti.',
+         contextEn: 'They ask what something is and name it.',
+         contextRu: 'Они спрашивают, что это, и называют предмет.',
+         grammar: '뭐예요? / ~예요'
+       },
+       {
+         ko: `A: ${d1.korean}이/가 있어요? B: 네, 있어요.\nA: ${d2.korean}은/는요? B: 없어요.`,
+         uz: `A: ${d1m.uz} bormi? B: Ha, bor.\nA: ${d2m.uz}chi? B: Yo'q.`,
+         en: `A: Do you have ${d1m.en}? B: Yes, I do.\nA: What about ${d2m.en}? B: I don't have it.`,
+         ru: `A: У вас есть ${d1m.ru}? B: Да, есть.\nA: А ${d2m.ru}? B: Нет.`,
+         context: 'Bor-yo\'q mavjudligi haqida su\'rash.',
+         contextEn: 'Asking about existence.',
+         contextRu: 'Спрашивают о наличии.',
+         grammar: '~이/가 있어요?'
+       },
+       {
+         ko: `A: ${d1.korean}을/를 좋아해요? B: 네, 좋아해요.\nA: ${d2.korean}은/는요? B: 싫어해요.`,
+         uz: `A: ${d1m.uz}ni yoqtirasizmi? B: Ha, yoqtiraman.\nA: ${d2m.uz}chi? B: Yoqtirmayman.`,
+         en: `A: Do you like ${d1m.en}? B: Yes, I like it.\nA: What about ${d2m.en}? B: I dislike it.`,
+         ru: `A: Вам нравится ${d1m.ru}? B: Да, нравится.\nA: А ${d2m.ru}? B: Не нравится.`,
+         context: 'Yoqtirish-yoqtirmaslik haqida su\'rash.',
+         contextEn: 'Asking about likes and dislikes.',
+         contextRu: 'Спрашивают о предпочтениях.',
+         grammar: '~을/를 좋아해요?'
+       }
+     ];
+     
+     const dialogue = dialogues[i % dialogues.length];
+     
+     exercises.push({
+       id: `gen-${book}-${unit}-dlg-${i + 1}`,
+       book,
+       unit,
+       type: 'dialogue',
+       difficulty: i === 0 ? 'medium' : 'hard',
+       korean: dialogue.ko,
+       uzbek: dialogue.uz,
+       english: dialogue.en,
+       russian: dialogue.ru,
+       options: [
+         dialogue.context,
+         'Ular ob-havo haqida gapiryapti.',
+         'Ular vaqt haqida gapiryapti.',
+         'Ular yo\'l so\'rayapti.'
+       ],
+       optionsEn: [
+         dialogue.contextEn,
+         'They talk about weather.',
+         'They talk about time.',
+         'They ask for directions.'
+       ],
+       optionsRu: [
+         dialogue.contextRu,
+         'Они говорят о погоде.',
+         'Они говорят о времени.',
+         'Они спрашивают дорогу.'
+       ],
+       correctAnswer: 0,
+       grammarPoint: dialogue.grammar
+     });
+   }
+
+   return exercises;
+ };
+
 export const getListeningExercisesByUnit = (unit: string, book: string = '1A'): ListeningExercise[] => {
-  const list = listeningExercises[unit] || [];
-  return list.filter((ex) => (ex.book ?? '1A') === book);
+  const list = (listeningExercises[unit] || []).filter((ex) => (ex.book ?? '1A') === book);
+  if (list.length > 0) return list;
+  return generateListeningExercisesFromFlashcards(book, unit);
 };
 
 export const getAllUnits = (book?: string): string[] => {
-  if (!book) return Object.keys(listeningExercises);
-  return Object.keys(listeningExercises).filter((unit) => {
-    const list = listeningExercises[unit] || [];
-    return list.some((ex) => (ex.book ?? '1A') === book);
+  const units = new Set<string>();
+
+  for (const u of Object.keys(listeningExercises)) {
+    if (!book) {
+      units.add(u);
+      continue;
+    }
+    const list = listeningExercises[u] || [];
+    if (list.some((ex) => (ex.book ?? '1A') === book)) units.add(u);
+  }
+
+  for (const entry of flashcardsEntries) {
+    if (!entry || !entry.book || !entry.unit) continue;
+    if (!book || entry.book === book) units.add(entry.unit);
+  }
+
+  return Array.from(units).sort((a, b) => {
+    const na = a === 'Hangul' ? 0 : Number(a.replace(/\D/g, ''));
+    const nb = b === 'Hangul' ? 0 : Number(b.replace(/\D/g, ''));
+    const ka = Number.isFinite(na) ? na : Number.MAX_SAFE_INTEGER;
+    const kb = Number.isFinite(nb) ? nb : Number.MAX_SAFE_INTEGER;
+    return ka - kb;
   });
 };
 
@@ -1328,5 +1570,10 @@ export const getAllBooks = (): string[] => {
       books.add(ex.book ?? '1A');
     }
   }
+
+  for (const entry of flashcardsEntries) {
+    if (entry?.book) books.add(entry.book);
+  }
+
   return Array.from(books).sort();
 };
